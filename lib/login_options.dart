@@ -84,7 +84,7 @@ class _LoginOptionsState extends State<LoginOptions> {
   }
 
   Widget roomOwnerLoginSheet() => Container(
-        height: 520,
+        height: MediaQuery.of(context).size.height * 0.6,
         decoration: const BoxDecoration(
           color: Color(0xFF1B5B76),
           borderRadius: BorderRadius.only(
@@ -148,11 +148,25 @@ class _LoginOptionsState extends State<LoginOptions> {
               ),
             ),
           ),
+          TextButton(
+            onPressed: () {},
+            child: const Text(
+              'Forgot Password?',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: const Text(
+              'Not Registered Yet?',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
         ]),
       );
 
   Widget customerLoginSheet() => Container(
-        height: 520,
+        height: MediaQuery.of(context).size.height * 0.6,
         decoration: const BoxDecoration(
           color: Color(0xFF1B5B76),
           borderRadius: BorderRadius.only(
@@ -217,6 +231,20 @@ class _LoginOptionsState extends State<LoginOptions> {
                   'Login',
                   style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text(
+                'Forgot Password?',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text(
+                'Not Registered Yet?',
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ],

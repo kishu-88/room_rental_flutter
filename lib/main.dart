@@ -32,8 +32,8 @@ class _MyAppState extends State<MyApp> {
         body: Stack(
           children: [
             Container(
-              height: 600,
-              width: 1000,
+              height: MediaQuery.of(context).size.height * 0.7,
+              width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(150.0),
@@ -49,10 +49,8 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             Container(
-              // padding: const EdgeInsets.all(1),
               margin:
                   const EdgeInsets.only(top: 750.0, bottom: 60.0, left: 130.0),
-
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -79,8 +77,8 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             Positioned(
-              top: 500,
-              left: 110,
+              top: MediaQuery.of(context).size.height * 0.6,
+              left: (MediaQuery.of(context).size.width - 200) / 2,
               child: Container(
                 height: 200,
                 width: 200,
@@ -99,29 +97,24 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ),
                 ),
-                // border1Radius: BorderRadius.circular(16.0),
-                child: const Text(
-                  "nice work",
-                  style: TextStyle(color: Colors.white, fontSize: 30),
-                ),
               ),
             ),
             Positioned(
-              top: 510,
-              left: 85,
+              top: MediaQuery.of(context).size.height * 0.6,
+              left: (MediaQuery.of(context).size.width - 250) / 2,
               child: Image.asset('images/hamro_room_logo.png',
                   height: 100, width: 250),
             ),
             Positioned(
-              top: 580,
-              left: 85,
+              top: MediaQuery.of(context).size.height * 0.7,
+              left: (MediaQuery.of(context).size.width - 250) / 2,
               child: Image.asset('images/hamro_room_logo_text.png',
                   height: 100, width: 250),
             ),
-            const Positioned(
-              top: 670,
-              left: 15,
-              child: Text("Sharing Spaces, Spreading Happiness",
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.8,
+              left: (MediaQuery.of(context).size.width - 375) / 2,
+              child: const Text("Sharing Spaces, Spreading Happiness",
                   style: TextStyle(
                     color: Color(0xFFFFFFFF),
                     fontSize: 22,
