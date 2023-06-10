@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:room_rental/profile.dart';
+import 'package:room_rental/rooms/add_rooms_page.dart';
 
 void main(List<String> args) {
   runApp(const HomePage()); // must include at the beginning
@@ -138,6 +139,32 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
               ),
               ListTile(
+                title: const Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: Color(0xFFFFFFFF),
+                  ),
+                ),
+                onTap: () {
+                 Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfilePage(),
+                          ),
+                        );
+                },
+                leading: const Icon(
+                  Icons.person,
+                  color: Color(0xFFFFFFFF),
+                ),
+              ),
+              const Divider(
+                height: 10,
+                thickness: 1,
+                endIndent: 0,
+                color: Colors.white,
+              ),
+              ListTile(
                   title: const Text(
                     'List Rooms',
                     style: TextStyle(
@@ -148,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                     // Update the state of the app
                     // ...
                     // Then close the drawer
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                   leading: const Icon(
                     Icons.list,
@@ -168,10 +195,12 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
+                 Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AddRoomsPage(),
+                          ),
+                        );
                 },
                 leading: const Badge(
                   child: Icon(
@@ -197,7 +226,7 @@ class _HomePageState extends State<HomePage> {
                     // Update the state of the app
                     // ...
                     // Then close the drawer
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                   leading: const Icon(
                     Icons.arrow_circle_up,
