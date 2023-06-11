@@ -22,15 +22,14 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   ];
 
   // Initial Selected Value
-  String dropdownvalue = 'Item 1';
+  String dropdownvalue = 'Choose Your Preference';
 
   // List of items in our dropdown menu
   var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
+    'Choose Your Preference',
+    'Family',
+    'Student',
+    'Business Person'
   ];
 
   @override
@@ -80,7 +79,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(90.0),
                     ),
-                    labelText: 'Email',
+                    labelText: 'Location',
                   ),
                 ),
               ),
@@ -93,7 +92,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(90.0),
                     ),
-                    labelText: 'Email',
+                    labelText: 'Size(ft)',
                   ),
                 ),
               ),
@@ -106,7 +105,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(90.0),
                     ),
-                    labelText: 'Email',
+                    labelText: 'Floor',
                   ),
                 ),
               ),
