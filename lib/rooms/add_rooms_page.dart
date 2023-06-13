@@ -22,14 +22,39 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   ];
 
   // Initial Selected Value
-  String dropdownvalue = 'Choose Your Preference';
+  String preferenceDropdownvalue = 'Choose Your Preference';
 
-  // List of items in our dropdown menu
-  var items = [
+  String locationDropdownvalue = 'Choose Your Location';
+
+  String roomNumberDropdownvalue = 'No. of rooms';
+
+  // List of preferences items in our dropdown menu
+  var preferenceItems = [
     'Choose Your Preference',
     'Family',
     'Student',
     'Business Person'
+  ];
+
+  // List of preferences items in our dropdown menu
+  var locationItems = [
+    'Choose Your Location',
+    'Manigram',
+    'Nayamill',
+    'Drivertole',
+    'Shankarnagar'
+  ];
+
+  // List of preferences items in our dropdown menu
+  var roomNumbers = [
+    'No. of rooms',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7'
   ];
 
   @override
@@ -96,20 +121,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    // filled: true,
-                    // fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(90.0),
-                    ),
-                    labelText: 'Floor',
-                  ),
-                ),
-              ),
-              Container(
+                Container(
                 width: double.infinity,
                 margin: const EdgeInsets.only(top: 20),
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -117,13 +129,13 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                 //   color: Colors.amber,),
                 child: DropdownButton(
                   // Initial Value
-                  value: dropdownvalue,
+                  value: roomNumberDropdownvalue,
 
                   // Down Arrow Icon
                   icon: const Icon(Icons.keyboard_arrow_down),
 
                   // Array list of items
-                  items: items.map((String items) {
+                  items: roomNumbers.map((String items) {
                     return DropdownMenuItem(
                       value: items,
                       child: Text(items),
@@ -133,9 +145,81 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                   // change button value to selected value
                   onChanged: (String? newValue) {
                     setState(() {
-                      dropdownvalue = newValue!;
+                      roomNumberDropdownvalue = newValue!;
                     });
                   },
+                ),
+              ),
+               Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                // decoration: const BoxDecoration(
+                //   color: Colors.amber,),
+                child: DropdownButton(
+                  // Initial Value
+                  value: locationDropdownvalue,
+
+                  // Down Arrow Icon
+                  icon: const Icon(Icons.keyboard_arrow_down),
+
+                  // Array list of items
+                  items: locationItems.map((String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  }).toList(),
+                  // After selecting the desired option,it will
+                  // change button value to selected value
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      locationDropdownvalue = newValue!;
+                    });
+                  },
+                ),
+              ),
+                Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                // decoration: const BoxDecoration(
+                //   color: Colors.amber,),
+                child: DropdownButton(
+                  // Initial Value
+                  value: preferenceDropdownvalue,
+
+                  // Down Arrow Icon
+                  icon: const Icon(Icons.keyboard_arrow_down),
+
+                  // Array list of items
+                  items: preferenceItems.map((String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  }).toList(),
+                  // After selecting the desired option,it will
+                  // change button value to selected value
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      preferenceDropdownvalue = newValue!;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                child: TextField(
+                  // controller: '_costController',
+                  decoration: InputDecoration(
+                    // filled: true,
+                    // fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(90.0),
+                    ),
+                    labelText: 'Cost(Rs.)',
+                  ),
                 ),
               ),
               Container(

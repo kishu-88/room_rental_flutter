@@ -1,15 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 // import 'home.dart';
 import 'login_options.dart';
 
 void main() {
-  runApp(
-    const MaterialApp(
-      home: MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -24,27 +22,38 @@ class _MyAppState extends State<MyApp> {
     // const HomePage(),
     // const ProfilePage(),
   ];
+
+  @override
+  void initState() {
+  Firebase.initializeApp();
+  super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    return WidgetsApp(
+      title: 'My Flutter App',
+      color: Colors.blue,
+      builder: (context, _) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Stack(
           children: [
-            // Positioned(
-            //   child: Container(
-            //     height: MediaQuery.of(context).size.height * 0.9,
-            //     width: double.infinity,
-            //     decoration: const BoxDecoration(
-            //       borderRadius: BorderRadius.only(
-            //         bottomLeft: Radius.circular(200.0),
-            //         bottomRight: Radius.circular(200.0),
-            //       ),
-            //       color: Colors.amber,
-            //   ),
-            //       child : const Text("nice"),
-            // ),
-            // ),
+            Positioned(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.9,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(200.0),
+                    bottomRight: Radius.circular(200.0),
+                  ),
+                  // color: Colors.amber,
+              ),
+                  child : const Text("nice"),
+            ),
+            ),
             Positioned(
               top: MediaQuery.of(context).size.height * 0.6,
               left: (MediaQuery.of(context).size.width - 200) / 2,
@@ -125,5 +134,8 @@ class _MyAppState extends State<MyApp> {
         backgroundColor: const Color(0xFF2284AE),
       ),
     );
+      }
+  );
   }
 }
+

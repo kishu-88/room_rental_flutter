@@ -156,7 +156,16 @@ class _LoginOptionsState extends State<LoginOptions> {
             ),
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+               showModalBottomSheet(
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(30),
+                        )),
+                        builder: (context) => roomOwnerSignUpSheet(),
+                      );
+            },
             child: const Text(
               'Not Registered Yet?',
               style: TextStyle(color: Colors.white),
@@ -241,7 +250,16 @@ class _LoginOptionsState extends State<LoginOptions> {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                  showModalBottomSheet(
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(30),
+                        )),
+                        builder: (context) => customerSignUpSheet(),
+                      );
+              },
               child: const Text(
                 'Not Registered Yet?',
                 style: TextStyle(color: Colors.white),
@@ -250,4 +268,186 @@ class _LoginOptionsState extends State<LoginOptions> {
           ],
         ),
       );
+
+       Widget roomOwnerSignUpSheet() => Container(
+        height: MediaQuery.of(context).size.height * 6,
+        decoration: const BoxDecoration(
+          color: Color(0xFF1B5B76),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        ),
+        child: Column(children: [
+          Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: const Text(
+              "Sign Up As Room Owner",
+              style: TextStyle(fontSize: 20, color: Colors.white),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(90.0),
+                ),
+                labelText: 'Email',
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(90.0),
+                ),
+                labelText: 'Phone',
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(90.0),
+                ),
+                labelText: 'Password',
+              ),
+            ),
+          ),
+           Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(90.0),
+                ),
+                labelText: 'Confirm Password',
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(15),
+            margin: const EdgeInsets.only(top: 15),
+            child: ElevatedButton(
+              onPressed: () {
+                // Navigate to the new page/screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ),
+                );
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.yellow),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(90.0),
+                  ),
+                ),
+              ),
+              child: const Text(
+                'Register',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+            ),
+          ),
+        ]),
+      );
+
+       Widget customerSignUpSheet() => Container(
+        height: MediaQuery.of(context).size.height * 6,
+        decoration: const BoxDecoration(
+          color: Color(0xFF1B5B76),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        ),
+        child: Column(children: [
+          Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: const Text(
+              "Sign Up As Customer",
+              style: TextStyle(fontSize: 20, color: Colors.white),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(90.0),
+                ),
+                labelText: 'Email',
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(90.0),
+                ),
+                labelText: 'Email',
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(90.0),
+                ),
+                labelText: 'Password',
+              ),
+            ),
+          ),
+           Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(90.0),
+                ),
+                labelText: 'Confirm Password',
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(15),
+            margin: const EdgeInsets.only(top: 15),
+            child: ElevatedButton(
+              onPressed: () {
+                // Navigate to the new page/screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ),
+                );
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.yellow),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(90.0),
+                  ),
+                ),
+              ),
+              child: const Text(
+                'Register',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+            ),
+          ),
+        ]),
+      );
+
+
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:room_rental/profile.dart';
-import 'package:room_rental/rooms/add_rooms_page.dart';
+import 'package:room_rental/rooms/choose_category_page.dart';
 
 void main(List<String> args) {
   runApp(const HomePage()); // must include at the beginning
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                  Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const AddRoomsPage(),
+                            builder: (context) => const ChooseCategoryPage(),
                           ),
                         );
                 },
