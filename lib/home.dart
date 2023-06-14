@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:room_rental/profile.dart';
+import 'package:room_rental/rooms/add_rooms_page.dart';
 import 'package:room_rental/rooms/choose_category_page.dart';
 
 void main(List<String> args) {
@@ -50,19 +51,18 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () {
                 // Perform notifications action
-                 // Navigate to the new page/screen
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ProfilePage(),
-                          ),
-                        );
+                // Navigate to the new page/screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfilePage(),
+                  ),
+                );
               },
             ),
           ],
         ),
-        body: 
-        Container(
+        body: Container(
           margin: const EdgeInsets.all(24),
           width: 1000, // Specify the desired width of the rectangle
           height: 120, // Specify the desired height of the rectangle
@@ -78,26 +78,33 @@ class _HomePageState extends State<HomePage> {
           ),
           // Set the desired color of the rectangle
         ),
-        
         bottomNavigationBar: NavigationBar(
           backgroundColor: const Color.fromARGB(255, 27, 91, 118),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home,color: Color(0xFFFFFFFF),), label: 'Home',),
-          // NavigationDestination(icon: Icon(Icons.send,color: Color(0xFFFFFFFF),), label: 'Messages'),
-          // NavigationDestination(icon: Icon(Icons.notifications,color: Color(0xFFFFFFFF),), label: 'Notifications'),
-          NavigationDestination(icon: Icon(Icons.person,color: Color(0xFFFFFFFF),), label: 'Profile')
-        ],
-        selectedIndex: currentPage,
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPage = index;
-          });
-        },
-      ),
-
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(
+                Icons.home,
+                color: Color(0xFFFFFFFF),
+              ),
+              label: 'Home',
+            ),
+            // NavigationDestination(icon: Icon(Icons.send,color: Color(0xFFFFFFFF),), label: 'Messages'),
+            // NavigationDestination(icon: Icon(Icons.notifications,color: Color(0xFFFFFFFF),), label: 'Notifications'),
+            NavigationDestination(
+                icon: Icon(
+                  Icons.person,
+                  color: Color(0xFFFFFFFF),
+                ),
+                label: 'Profile')
+          ],
+          selectedIndex: currentPage,
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPage = index;
+            });
+          },
+        ),
         backgroundColor: const Color(0xFF2284AE),
-        
-         
         drawer: Drawer(
           backgroundColor: const Color.fromARGB(255, 27, 91, 118),
           // Add a ListView to the drawer. This ensures the user can scroll
@@ -146,12 +153,12 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onTap: () {
-                 Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ProfilePage(),
-                          ),
-                        );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProfilePage(),
+                    ),
+                  );
                 },
                 leading: const Icon(
                   Icons.person,
@@ -195,12 +202,12 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onTap: () {
-                 Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ChooseCategoryPage(),
-                          ),
-                        );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ChooseCategoryPage(),
+                    ),
+                  );
                 },
                 leading: const Badge(
                   child: Icon(
@@ -209,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-               const Divider(
+              const Divider(
                 height: 10,
                 thickness: 1,
                 endIndent: 0,
@@ -232,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                     Icons.arrow_circle_up,
                     color: Color(0xFFFFFFFF),
                   )),
-                   const Divider(
+              const Divider(
                 height: 10,
                 thickness: 1,
                 endIndent: 0,

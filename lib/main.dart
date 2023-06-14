@@ -5,7 +5,13 @@ import 'package:flutter/material.dart';
 import 'login_options.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
+  runApp(
+    const MaterialApp(
+      home: MyApp(),
+    ),
+  );
 }
 
 
@@ -91,7 +97,7 @@ class _MyAppState extends State<MyApp> {
             ),
             Positioned(
               top: MediaQuery.of(context).size.height * 0.7,
-              left: (MediaQuery.of(context).size.width-280) / 2,
+              left: (MediaQuery.of(context).size.width - 280) / 2,
               child: const Text("Sharing Spaces, Spreading Happiness",
                   style: TextStyle(
                     color: Color(0xFFFFFFFF),

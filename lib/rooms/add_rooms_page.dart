@@ -1,11 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:room_rental/home.dart';
-
-import '../profile.dart';
-
-void main(List<String> args) {
-  runApp(const AddRoomsPage()); // must include at the beginning
-}
 
 class AddRoomsPage extends StatefulWidget {
   const AddRoomsPage({super.key});
@@ -15,11 +10,15 @@ class AddRoomsPage extends StatefulWidget {
 }
 
 class _AddRoomsPageState extends State<AddRoomsPage> {
-  int currentPage = 0;
-  List<Widget> pages = [
-    // const ProfilePage(),
-    // const ProfilePage(),
-  ];
+  int _activeStepIndex = 0;
+  final areaController = TextEditingController();
+  final floorController = TextEditingController();
+  final sizeController = TextEditingController();
+  final landmarkController = TextEditingController();
+  TextEditingController pincode = TextEditingController();
+
+     bool agreeToTerms = false;
+
 
   // Initial Selected Value
   String preferenceDropdownvalue = 'Choose Your Preference';
@@ -36,385 +35,266 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
     'Business Person'
   ];
 
-  // List of preferences items in our dropdown menu
-  var locationItems = [
-    'Choose Your Location',
-    'Manigram',
-    'Nayamill',
-    'Drivertole',
-    'Shankarnagar'
-  ];
+  get onStepCancel => null;
+  List<Step> stepList() => [
+        Step(
+          state: _activeStepIndex <= 0 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 0,
+          title: const Text('Details'),
+          content: Container(
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: const Text(
+                            "Room Area (Location)",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: TextField(
+                            controller: areaController,
+                            decoration: InputDecoration(
+                              focusColor: Colors.white,
+                              hoverColor: Colors.white,
+                              // hoverColor: Colors.amber,
+                              // filled: true,
+                              // fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(90.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: const Text(
+                            "Room Size",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: TextField(
+                            controller: sizeController,
+                            decoration: InputDecoration(
+                              focusColor: Colors.white,
+                              hoverColor: Colors.white,
+                              // hoverColor: Colors.amber,
+                              // filled: true,
+                              // fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(90.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: const Text(
+                            "Floor",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: TextField(
+                            controller: floorController,
+                            decoration: InputDecoration(
+                              focusColor: Colors.white,
+                              hoverColor: Colors.white,
+                              // hoverColor: Colors.amber,
+                              // filled: true,
+                              // fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(90.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: const Text(
+                            "Nearest Landmark",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: TextField(
+                            controller: landmarkController,
+                            decoration: InputDecoration(
+                              focusColor: Colors.white,
+                              hoverColor: Colors.white,
+                              // hoverColor: Colors.amber,
+                              // filled: true,
+                              // fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(90.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  // decoration: const BoxDecoration(
+                  //   color: Colors.amber,),
+                  child: DropdownButton(
+                    // Initial Value
+                    value: dropdownvalue,
 
-  // List of preferences items in our dropdown menu
-  var roomNumbers = [
-    'No. of rooms',
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7'
-  ];
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
 
+                    // Array list of items
+                    items: items.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    // After selecting the desired option,it will
+                    // change button value to selected value
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownvalue = newValue!;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Step(
+            state:
+                _activeStepIndex <= 1 ? StepState.editing : StepState.complete,
+            isActive: _activeStepIndex >= 1,
+            title: const Text('Photo'),
+            content: Container(
+              child: Column(
+                children: const [Text("page 1")],
+              ),
+            )),
+        Step(
+          state: StepState.complete,
+          isActive: _activeStepIndex >= 2,
+          title: const Text('Confirm'),
+          content:  Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Checkbox(
+              value: agreeToTerms,
+              onChanged: (bool? value) {
+                setState(() {
+                  agreeToTerms = value ?? false;
+                });
+              },
+            ),
+            const Text(
+              'I agree to the terms and conditions',
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ]
+        )
+        ),
+      ];
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(
-              255, 27, 91, 118), // Set the desired background color here
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(
-                  Icons.menu,
-                  color: Color(0xFFFFFFFF),
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              );
-            },
-          ),
-          title: const Text('Add Room'),
-          centerTitle: true,
-          // actions: [
-          //   IconButton(
-          //     icon: const Icon(
-          //       Icons.logout,
-          //       color: Color(0xFFFFFFFF),
-          //     ),
-          //     onPressed: () {
-          //       // Perform notifications action
-          //     },
-          //   ),
-          // ],
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    // filled: true,
-                    // fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(90.0),
-                    ),
-                    labelText: 'Location',
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    // filled: true,
-                    // fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(90.0),
-                    ),
-                    labelText: 'Size(ft)',
-                  ),
-                ),
-              ),
-                Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(top: 20),
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                // decoration: const BoxDecoration(
-                //   color: Colors.amber,),
-                child: DropdownButton(
-                  // Initial Value
-                  value: roomNumberDropdownvalue,
-
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-
-                  // Array list of items
-                  items: roomNumbers.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(items),
-                    );
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      roomNumberDropdownvalue = newValue!;
-                    });
-                  },
-                ),
-              ),
-               Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(top: 20),
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                // decoration: const BoxDecoration(
-                //   color: Colors.amber,),
-                child: DropdownButton(
-                  // Initial Value
-                  value: locationDropdownvalue,
-
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-
-                  // Array list of items
-                  items: locationItems.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(items),
-                    );
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      locationDropdownvalue = newValue!;
-                    });
-                  },
-                ),
-              ),
-                Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(top: 20),
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                // decoration: const BoxDecoration(
-                //   color: Colors.amber,),
-                child: DropdownButton(
-                  // Initial Value
-                  value: preferenceDropdownvalue,
-
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-
-                  // Array list of items
-                  items: preferenceItems.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(items),
-                    );
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      preferenceDropdownvalue = newValue!;
-                    });
-                  },
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextField(
-                  // controller: '_costController',
-                  decoration: InputDecoration(
-                    // filled: true,
-                    // fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(90.0),
-                    ),
-                    labelText: 'Cost(Rs.)',
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.yellow),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                  ),
-                  child: const Text(
-                    "Add Room",
-                    style: TextStyle(color: Colors.black, fontSize: 20),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: NavigationBar(
-          backgroundColor: const Color.fromARGB(255, 27, 91, 118),
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(
-                Icons.home,
-                color: Color(0xFFFFFFFF),
-              ),
-              label: 'Home',
-            ),
-            // NavigationDestination(icon: Icon(Icons.send,color: Color(0xFFFFFFFF),), label: 'Messages'),
-            // NavigationDestination(icon: Icon(Icons.notifications,color: Color(0xFFFFFFFF),), label: 'Notifications'),
-            NavigationDestination(
-                icon: Icon(
-                  Icons.person,
-                  color: Color(0xFFFFFFFF),
-                ),
-                label: 'Profile')
-          ],
-          onDestinationSelected: (int index) {
-            setState(() {
-              currentPage = index;
-            });
-          },
-          selectedIndex: currentPage,
-        ),
-        backgroundColor: const Color(0xFF2284AE),
-        drawer: Drawer(
-          backgroundColor: const Color.fromARGB(255, 27, 91, 118),
-          // Add a ListView to the drawer. This ensures the user can scroll
-          // through the options in the drawer if there isn't enough vertical
-          // space to fit everything.
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: [
-              Image.asset('images/logo_opaque.png'),
-              // const DrawerHeader(
-
-              //   decoration: BoxDecoration(
-              //     color: Colors.blue,
-              //   ),
-              //   child: Text('Drawer Header'),
-              // ),
-              ListTile(
-                  title: const Text(
-                    'Home',
-                    style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                    ),
-                  ),
-                  onTap: () {
+    return Scaffold(
+      appBar: AppBar(
+        title: Title(color: const Color(0xFFFFFFFF), child: const Text("hi")),
+      ),
+      body: Stepper(
+          type: StepperType.horizontal,
+          currentStep: _activeStepIndex,
+          steps: stepList(),
+          onStepContinue: () {
+            if (_activeStepIndex < (stepList().length - 1)) {
+              setState(() {
+                _activeStepIndex += 1;
+              });
+            } else {
+                 Map<String, dynamic> data = {
+                    "Location": areaController.text,
+                    "Size": sizeController.text,
+                    "Floor": floorController.text,
+                    "Preference": dropdownvalue
+                  };
+                  FirebaseFirestore.instance
+                      .collection("Rooms")
+                      .doc("Room4")
+                      .set(data)
+                      .then((_) {
+                    // Navigation logic to another page on success
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomePage(),
-                      ),
+                      MaterialPageRoute(builder: (context) => const HomePage()),
                     );
-                  },
-                  leading: const Icon(
-                    Icons.home,
-                    color: Color(0xFFFFFFFF),
-                  )),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
-              ListTile(
-                title: const Text(
-                  'Profile',
-                  style: TextStyle(
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfilePage(),
-                    ),
-                  );
-                },
-                leading: const Icon(
-                  Icons.person,
-                  color: Color(0xFFFFFFFF),
-                ),
-              ),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
-              ListTile(
-                  title: const Text(
-                    'List Rooms',
-                    style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                    ),
-                  ),
-                  onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
-                    // Navigator.pop(context);
-                  },
-                  leading: const Icon(
-                    Icons.list,
-                    color: Color(0xFFFFFFFF),
-                  )),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
-              ListTile(
-                title: const Text(
-                  'Add Rooms',
-                  style: TextStyle(
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  // Navigator.pop(context);
-                },
-                leading: const Badge(
-                  child: Icon(
-                    Icons.add,
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-              ),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
-              ListTile(
-                  title: const Text(
-                    'Booking Requests',
-                    style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                    ),
-                  ),
-                  onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
-                    // Navigator.pop(context);
-                  },
-                  leading: const Icon(
-                    Icons.arrow_circle_up,
-                    color: Color(0xFFFFFFFF),
-                  )),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
-            ],
-          ),
-        ),
-      ),
+                  });
+            }
+          },
+          onStepCancel: () {
+            if (_activeStepIndex == 0) {
+              return;
+            }
+            setState(() {
+              _activeStepIndex -= 1;
+            });
+          },
+          onStepTapped: (int index) {
+            setState(() {
+              _activeStepIndex = index;
+            });
+          }),
+      backgroundColor: const Color(0xFF2284AE),
     );
   }
 }
