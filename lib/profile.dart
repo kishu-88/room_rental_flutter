@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:room_rental/home.dart';
+import 'package:room_rental/rooms/add_rooms_page.dart';
 
 void main(List<String> args) {
   runApp(const ProfilePage()); // must include at the beginning
@@ -125,7 +127,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           const Text(
                             "Profile Settings",
-                            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 20),
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                                fontSize: 20),
                           ),
                           IconButton(
                             icon: const Icon(
@@ -139,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     ),
-                      Container(
+                    Container(
                       margin: const EdgeInsets.only(top: 20),
                       height: 60,
                       width: 350,
@@ -161,7 +165,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           const Text(
                             "Billing Information",
-                            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 20),
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                                fontSize: 20),
                           ),
                           IconButton(
                             icon: const Icon(
@@ -175,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     ),
-                         Container(
+                    Container(
                       margin: const EdgeInsets.only(top: 20),
                       height: 60,
                       width: 350,
@@ -197,7 +203,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           const Text(
                             "More Information",
-                            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 20),
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                                fontSize: 20),
                           ),
                           IconButton(
                             icon: const Icon(
@@ -211,7 +219,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     )
-                    
                   ],
                 ),
               )
@@ -270,15 +277,43 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
-                    Navigator.pop(context);
+                    Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
+                        );
                   },
                   leading: const Icon(
                     Icons.home,
                     color: Color(0xFFFFFFFF),
                   )),
+              const Divider(
+                height: 10,
+                thickness: 1,
+                endIndent: 0,
+                color: Colors.white,
+              ),
+              ListTile(
+                title: const Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: Color(0xFFFFFFFF),
+                  ),
+                ),
+                onTap: () {
+                 Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfilePage(),
+                          ),
+                        );
+                },
+                leading: const Icon(
+                  Icons.person,
+                  color: Color(0xFFFFFFFF),
+                ),
+              ),
               const Divider(
                 height: 10,
                 thickness: 1,
@@ -296,7 +331,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     // Update the state of the app
                     // ...
                     // Then close the drawer
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                   leading: const Icon(
                     Icons.list,
@@ -316,10 +351,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
+                 Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AddRoomsPage(),
+                          ),
+                        );
                 },
                 leading: const Badge(
                   child: Icon(
@@ -345,7 +382,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     // Update the state of the app
                     // ...
                     // Then close the drawer
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                   leading: const Icon(
                     Icons.arrow_circle_up,
@@ -357,6 +394,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 endIndent: 0,
                 color: Colors.white,
               ),
+              
             ],
           ),
         ),
