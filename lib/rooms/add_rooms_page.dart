@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:room_rental/home.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddRoomsPage extends StatefulWidget {
   const AddRoomsPage({super.key});
@@ -15,20 +16,25 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   final floorController = TextEditingController();
   final sizeController = TextEditingController();
   final landmarkController = TextEditingController();
-  TextEditingController pincode = TextEditingController();
-
-     bool agreeToTerms = false;
 
 
-  // Initial Selected Value
-  String preferenceDropdownvalue = 'Choose Your Preference';
 
-  String locationDropdownvalue = 'Choose Your Location';
 
-  String roomNumberDropdownvalue = 'No. of rooms';
+  final picker = ImagePicker();
+
+
+  selectFile() async {
+  final pickedFile =  await picker.pickImage(source: ImageSource.gallery);
+
+   
+  }
+
+  bool agreeToTerms = false;
+
+  String dropdownvalue = 'Choose Your Preference';
 
   // List of preferences items in our dropdown menu
-  var preferenceItems = [
+  var items = [
     'Choose Your Preference',
     'Family',
     'Student',
@@ -184,8 +190,11 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                   width: double.infinity,
                   margin: const EdgeInsets.only(top: 20),
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  // decoration: const BoxDecoration(
-                  //   color: Colors.amber,),
+                  decoration: BoxDecoration(
+                    // color: Colors.amber,
+                    border: Border.all(color: Colors.black, width: 1),
+                    borderRadius: BorderRadius.circular(90.0),
+                  ),
                   child: DropdownButton(
                     // Initial Value
                     value: dropdownvalue,
@@ -197,7 +206,11 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                     items: items.map((String items) {
                       return DropdownMenuItem(
                         value: items,
-                        child: Text(items),
+                        child: Text(
+                          items,
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 13, 79, 71)),
+                        ),
                       );
                     }).toList(),
                     // After selecting the desired option,it will
@@ -219,38 +232,39 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
             isActive: _activeStepIndex >= 1,
             title: const Text('Photo'),
             content: Container(
+              width: double.infinity,
               child: Column(
-                children: const [Text("page 1")],
+                children: [
+                  ElevatedButton(onPressed: selectFile, child: const Text("Upload Image"))
+                ]
               ),
             )),
         Step(
-          state: StepState.complete,
-          isActive: _activeStepIndex >= 2,
-          title: const Text('Confirm'),
-          content:  Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Checkbox(
-              value: agreeToTerms,
-              onChanged: (bool? value) {
-                setState(() {
-                  agreeToTerms = value ?? false;
-                });
-              },
-            ),
-            const Text(
-              'I agree to the terms and conditions',
-              style: TextStyle(fontSize: 20.0),
-            ),
-          ]
-        )
-        ),
+            state: StepState.complete,
+            isActive: _activeStepIndex >= 2,
+            title: const Text('Confirm'),
+            content:
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Checkbox(
+                value: agreeToTerms,
+                onChanged: (bool? value) {
+                  setState(() {
+                    agreeToTerms = value ?? false;
+                  });
+                },
+              ),
+              const Text(
+                'I agree to the terms and conditions',
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ])),
       ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Title(color: const Color(0xFFFFFFFF), child: const Text("hi")),
+        title: Title(
+            color: const Color(0xFFFFFFFF), child: const Text("Add Room")),
       ),
       body: Stepper(
           type: StepperType.horizontal,
@@ -262,23 +276,24 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                 _activeStepIndex += 1;
               });
             } else {
-                 Map<String, dynamic> data = {
-                    "Location": areaController.text,
-                    "Size": sizeController.text,
-                    "Floor": floorController.text,
-                    "Preference": dropdownvalue
-                  };
-                  FirebaseFirestore.instance
-                      .collection("Rooms")
-                      .doc("Room4")
-                      .set(data)
-                      .then((_) {
-                    // Navigation logic to another page on success
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                    );
-                  });
+              Map<String, dynamic> data = {
+                "Location": areaController.text,
+                "Size": sizeController.text,
+                "Floor": floorController.text,
+                "Nearest Landmark": landmarkController.text,
+                "Preference": dropdownvalue
+              };
+              FirebaseFirestore.instance
+                  .collection("Rooms")
+                  .doc("Room5")
+                  .set(data)
+                  .then((_) {
+                // Navigation logic to another page on success
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              });
             }
           },
           onStepCancel: () {

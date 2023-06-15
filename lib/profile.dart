@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:room_rental/home.dart';
 import 'package:room_rental/rooms/add_rooms_page.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 void main(List<String> args) {
   runApp(const ProfilePage()); // must include at the beginning
 }
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
+ 
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  Map<String, String> loginInfo = {};
+
   int currentPage = 0;
   List<Widget> pages = [
     // const ProfilePage(),

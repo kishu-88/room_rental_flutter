@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:room_rental/login.dart';
 import 'package:room_rental/profile.dart';
 import 'package:room_rental/rooms/add_rooms_page.dart';
 import 'package:room_rental/rooms/choose_category_page.dart';
@@ -179,10 +180,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
-                    // Navigator.pop(context);
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GoogleLogin(),
+                    ),
+                  );
                   },
                   leading: const Icon(
                     Icons.list,
