@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:room_rental/login.dart';
 import 'package:room_rental/profile.dart';
-import 'package:room_rental/rooms/add_rooms_page.dart';
+// import 'package:room_rental/rooms/add_rooms_page.dart';
 import 'package:room_rental/rooms/choose_category_page.dart';
 
 void main(List<String> args) {
@@ -25,6 +25,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: const Color.fromARGB(255, 27, 91, 118),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Color.fromARGB(255, 27, 91, 118),
+          selectedItemColor: Color.fromARGB(255, 106, 238, 243),
+          unselectedItemColor: Colors.white,
+          selectedIconTheme: IconThemeData(size: 28),
+          unselectedIconTheme: IconThemeData(size: 24),
+          selectedLabelStyle: TextStyle(fontSize: 14),
+          unselectedLabelStyle: TextStyle(fontSize: 12),
+        ),
+        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blue),
+      ),
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(
@@ -79,30 +92,38 @@ class _HomePageState extends State<HomePage> {
           ),
           // Set the desired color of the rectangle
         ),
-        bottomNavigationBar: NavigationBar(
-          backgroundColor: const Color.fromARGB(255, 27, 91, 118),
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(
-                Icons.home,
-                color: Color(0xFFFFFFFF),
-              ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
               label: 'Home',
             ),
-            // NavigationDestination(icon: Icon(Icons.send,color: Color(0xFFFFFFFF),), label: 'Messages'),
-            // NavigationDestination(icon: Icon(Icons.notifications,color: Color(0xFFFFFFFF),), label: 'Notifications'),
-            NavigationDestination(
-                icon: Icon(
-                  Icons.person,
-                  color: Color(0xFFFFFFFF),
-                ),
-                label: 'Profile')
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
           ],
-          selectedIndex: currentPage,
-          onDestinationSelected: (int index) {
+          currentIndex: currentPage,
+          onTap: (int index) {
             setState(() {
               currentPage = index;
             });
+
+            if (index == 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
+              );
+            } else if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfilePage(),
+                ),
+              );
+            }
           },
         ),
         backgroundColor: const Color(0xFF2284AE),
@@ -181,11 +202,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onTap: () {
                     Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const GoogleLogin(),
-                    ),
-                  );
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GoogleLogin(),
+                      ),
+                    );
                   },
                   leading: const Icon(
                     Icons.list,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:room_rental/rooms/add_rooms_page.dart';
+import 'package:room_rental/rooms/add_flat_page.dart';
 
 class ChooseCategoryPage extends StatefulWidget {
   const ChooseCategoryPage({super.key});
@@ -34,12 +35,12 @@ class _ChooseCategoryPageState extends State<ChooseCategoryPage> {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                   Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AddRoomsPage(),
-                          ),
-                        );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddRoomsPage(),
+                    ),
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor:
@@ -65,7 +66,14 @@ class _ChooseCategoryPageState extends State<ChooseCategoryPage> {
                 color: const Color(0xFF1B5B76),
               ),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddFlatsPage(),
+                    ),
+                  );
+                },
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.yellow),
@@ -76,7 +84,7 @@ class _ChooseCategoryPageState extends State<ChooseCategoryPage> {
                   ),
                 ),
                 child: const Text(
-                  "Add Floor",
+                  "Add Flats",
                   style: TextStyle(color: Colors.black, fontSize: 25),
                 ),
               ),
