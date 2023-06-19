@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:room_rental/rooms/add_rooms_page.dart';
-import 'package:room_rental/rooms/add_flat_page.dart';
+import 'package:room_rental/RoomOwner/rooms/add_rooms_page.dart';
+import 'package:room_rental/RoomOwner/rooms/add_flat_page.dart';
 
 class ChooseCategoryPage extends StatefulWidget {
   const ChooseCategoryPage({super.key});

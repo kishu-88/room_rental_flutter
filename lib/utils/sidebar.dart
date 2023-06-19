@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../profile.dart';
-import '../rooms/choose_category_page.dart';
+import '../RoomOwner/rooms/choose_category_page.dart';
 
 class SideBar extends StatefulWidget {
   const SideBar({super.key});

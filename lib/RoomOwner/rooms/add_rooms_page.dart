@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:room_rental/home.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../home.dart';
+
 
 class AddRoomsPage extends StatefulWidget {
   const AddRoomsPage({super.key});
@@ -18,14 +22,51 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   final sizeController = TextEditingController();
   final landmarkController = TextEditingController();
 
+  String uploadedImageUrl = '';
+
   final picker = ImagePicker();
 
   bool isChecked = false;
 
   var parkingOption;
 
-  selectFile() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+Future<void> uploadImage() async {
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+  if (pickedFile != null) {
+    final file = File(pickedFile.path);
+
+    try {
+      // Upload the image to Firebase Storage
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('images/${DateTime.now().millisecondsSinceEpoch}.jpg');
+      final uploadTask = storageRef.putFile(file);
+      await uploadTask;
+
+      // Get the image download URL
+      final downloadUrl = await storageRef.getDownloadURL();
+
+      // Store the image URL in Firebase Cloud Firestore
+      final firestoreInstance = FirebaseFirestore.instance;
+      await firestoreInstance.collection('images').add({'imageUrl': downloadUrl});
+
+       // Invoke the callback with the download URL
+      if (onUploadComplete != null) {
+        onUploadComplete(downloadUrl);
+      }
+    } catch (e) {
+      // Handle any exceptions
+    }
+  }
+}
+
+ void onUploadComplete(String downloadUrl) {
+    // Use the downloadUrl as needed
+    String uploadedImageUrl = downloadUrl;
+    print('Image download URL: $uploadedImageUrl');
+    // Perform further operations or update the UI with the download URL
   }
 
   bool agreeToTerms = false;
@@ -296,7 +337,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
               width: double.infinity,
               child: Column(children: [
                 ElevatedButton(
-                    onPressed: selectFile, child: const Text("Upload Image"))
+                    onPressed: uploadImage, child: const Text("Upload Image"))
               ]),
             )),
         Step(
@@ -343,7 +384,8 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                 "Floor": floorController.text,
                 "Nearest Landmark": landmarkController.text,
                 "Preference": dropdownvalue,
-                "Parking": parkingOption
+                "Parking": parkingOption,
+                "imageUrl": uploadedImageUrl,
               };
               FirebaseFirestore.instance
                   .collection("Rooms")

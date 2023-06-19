@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:room_rental/home.dart';
 import 'package:room_rental/login_options.dart';
 // import 'package:room_rental/customer.dart';
-import 'package:room_rental/rooms/add_rooms_page.dart';
+import 'package:room_rental/RoomOwner/rooms/add_rooms_page.dart';
 import 'package:room_rental/test_login.dart';
 import 'package:room_rental/utils/sidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
