@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:room_rental/home.dart';
+import 'package:room_rental/RoomOwner/home.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddFlatsPage extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 // import 'home.dart';
-import 'login_options.dart';
+import 'authentication/login_options.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

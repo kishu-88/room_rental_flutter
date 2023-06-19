@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../profile.dart';
+import '../RoomOwner/profile.dart';
 import '../RoomOwner/rooms/choose_category_page.dart';
 
 class SideBar extends StatefulWidget {
