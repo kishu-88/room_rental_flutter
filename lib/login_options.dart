@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:room_rental/test_login.dart';
 // import 'package:room_rental/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,11 +67,11 @@ class _LoginOptionsState extends State<LoginOptions> {
     UserCredential? userCredential = await signInWithGoogle();
 
     if (userCredential != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-      User user = userCredential.user!;
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => const HomePage()),
+      // );
+      // User user = userCredential.user!;
       // Perform further operations with the signed-in user
     } else {
       // Google Sign-In was canceled
@@ -104,16 +105,16 @@ class _LoginOptionsState extends State<LoginOptions> {
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
                     onPressed: () {
-                      //     Navigator.of(context).pushReplacement(
-                      // MaterialPageRoute(builder: (context) => const Login()));
-                      showModalBottomSheet(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(30),
-                        )),
-                        builder: (context) => roomOwnerLoginSheet(context),
-                      );
+                          Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const TestLogin()));
+                      // showModalBottomSheet(
+                      //   context: context,
+                      //   shape: const RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.vertical(
+                      //     top: Radius.circular(30),
+                      //   )),
+                      //   builder: (context) => roomOwnerLoginSheet(context),
+                      // );
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.yellow),
@@ -216,8 +217,8 @@ class _LoginOptionsState extends State<LoginOptions> {
                 String email = roomOwnerEmailController.text;
                 prefs.setString('email', email);
 
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const HomePage()));
+                // Navigator.of(context).pushReplacement(
+                //     MaterialPageRoute(builder: (context) => const HomePage()));
                 print("done");
               } else {
                 print("no user foud with these credentials.");
@@ -314,12 +315,12 @@ class _LoginOptionsState extends State<LoginOptions> {
               child: ElevatedButton(
                 onPressed: () {
                   // Navigate to the new page/screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomePage(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const HomePage(),
+                  //   ),
+                  // );
                 },
                 style: ButtonStyle(
                   backgroundColor:
@@ -428,12 +429,12 @@ class _LoginOptionsState extends State<LoginOptions> {
             child: ElevatedButton(
               onPressed: () {
                 // Navigate to the new page/screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomePage(),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const HomePage(),
+                //   ),
+                // );
               },
               style: ButtonStyle(
                 backgroundColor:
@@ -518,12 +519,12 @@ class _LoginOptionsState extends State<LoginOptions> {
             child: ElevatedButton(
               onPressed: () {
                 // Navigate to the new page/screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomePage(),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const HomePage(),
+                //   ),
+                // );
               },
               style: ButtonStyle(
                 backgroundColor:

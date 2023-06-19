@@ -257,7 +257,7 @@ class _AddFlatsPageState extends State<AddFlatsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Title(
-            color: const Color(0xFFFFFFFF), child: const Text("Add Room")),
+            color: const Color(0xFFFFFFFF), child: const Text("Add Flat")),
       ),
       body: Stepper(
           type: StepperType.horizontal,
@@ -277,8 +277,8 @@ class _AddFlatsPageState extends State<AddFlatsPage> {
                 "Preference": dropdownvalue
               };
               FirebaseFirestore.instance
-                  .collection("Rooms")
-                  .doc("Room5")
+                  .collection("Flats")
+                  .doc("flat1")
                   .set(data)
                   .then((_) {
                 // Navigation logic to another page on success

@@ -1,34 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:room_rental/home.dart';
+import 'package:room_rental/login_options.dart';
 // import 'package:room_rental/customer.dart';
 import 'package:room_rental/rooms/add_rooms_page.dart';
-
-void main(List<String> args) {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Room Rental',
-      home: ProfilePage(),
-    );
-  }
-}
+import 'package:room_rental/test_login.dart';
+import 'package:room_rental/utils/sidebar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+  // final String email;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String email = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getEmail().then((value) {
+      setState(() {
+        email = value ?? '';
+      });
+    });
+  }
+
+  Future<String?> getEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('email');
+  }
+
   int currentPage = 1;
+
+  void logout(BuildContext context) async {
+    // Remove the stored email from shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('email');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,15 +78,14 @@ class _ProfilePageState extends State<ProfilePage> {
           actions: [
             IconButton(
               icon: const Icon(
-                Icons.person_outline,
+                Icons.logout,
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.push(
+                logout(context);
+                Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProfilePage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const LoginOptions()),
                 );
               },
             ),
@@ -108,8 +118,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 5),
-                child: const Text(
-                  "Kishoraryal72@gmail.com",
+                child: Text(
+                  email,
                   style: TextStyle(color: Colors.white, fontSize: 15),
                 ),
               ),
@@ -293,144 +303,7 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
         backgroundColor: const Color(0xFF2284AE),
-        drawer: Drawer(
-          backgroundColor: const Color.fromARGB(255, 27, 91, 118),
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              Image.asset('images/logo_opaque.png'),
-              ListTile(
-                title: const Text(
-                  'Home',
-                  style: TextStyle(
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomePage(),
-                      // builder: (context) => const CustomerPage(),
-                    ),
-                  );
-                },
-                leading: const Icon(
-                  Icons.home,
-                  color: Color(0xFFFFFFFF),
-                ),
-              ),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
-              ListTile(
-                title: const Text(
-                  'Profile',
-                  style: TextStyle(
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfilePage(),
-                    ),
-                  );
-                },
-                leading: const Icon(
-                  Icons.person,
-                  color: Color(0xFFFFFFFF),
-                ),
-              ),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
-              ListTile(
-                title: const Text(
-                  'List Rooms',
-                  style: TextStyle(
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  // Navigator.pop(context);
-                },
-                leading: const Icon(
-                  Icons.list,
-                  color: Color(0xFFFFFFFF),
-                ),
-              ),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
-              ListTile(
-                title: const Text(
-                  'Add Rooms',
-                  style: TextStyle(
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddRoomsPage(),
-                    ),
-                  );
-                },
-                leading: const Badge(
-                  child: Icon(
-                    Icons.add,
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-              ),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
-              ListTile(
-                title: const Text(
-                  'Booking Requests',
-                  style: TextStyle(
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  // Navigator.pop(context);
-                },
-                leading: const Icon(
-                  Icons.arrow_circle_up,
-                  color: Color(0xFFFFFFFF),
-                ),
-              ),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
-            ],
-          ),
-        ),
+       drawer: const SideBar(),
       ),
     );
   }

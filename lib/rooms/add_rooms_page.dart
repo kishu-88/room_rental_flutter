@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:room_rental/home.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddRoomsPage extends StatefulWidget {
   const AddRoomsPage({super.key});
@@ -17,21 +18,37 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   final sizeController = TextEditingController();
   final landmarkController = TextEditingController();
 
-
-
-
   final picker = ImagePicker();
 
+  bool isChecked = false;
+
+  var parkingOption;
 
   selectFile() async {
-  final pickedFile =  await picker.pickImage(source: ImageSource.gallery);
-
-   
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
   }
 
   bool agreeToTerms = false;
 
   String dropdownvalue = 'Choose Your Preference';
+
+  String email = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getEmail().then((value) {
+      setState(() {
+        email = value ?? '';
+      });
+    });
+  }
+
+  //getting email from shared preference
+  Future<String?> getEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('email');
+  }
 
   // List of preferences items in our dropdown menu
   var items = [
@@ -222,6 +239,50 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                     },
                   ),
                 ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Car Parking', style: TextStyle(fontSize: 16,color: Colors.white)),
+                            Row(
+                              children: [
+                                Radio<String>(
+                                  value: 'Available',
+                                  groupValue: parkingOption,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      parkingOption = value;
+                                    });
+                                  },
+                                ),
+                                const Text('Available',style: TextStyle(color: Colors.white),),
+                                const SizedBox(width: 20),
+                                Radio<String>(
+                                  value: 'Not Available',
+                                  groupValue: parkingOption,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      parkingOption = value;
+                                    });
+                                  },
+                                ),
+                                const Text('Not Available',style: TextStyle(color: Colors.white),),
+                              ],
+                            ),
+                          ],
+                        ))
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -233,11 +294,10 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
             title: const Text('Photo'),
             content: Container(
               width: double.infinity,
-              child: Column(
-                children: [
-                  ElevatedButton(onPressed: selectFile, child: const Text("Upload Image"))
-                ]
-              ),
+              child: Column(children: [
+                ElevatedButton(
+                    onPressed: selectFile, child: const Text("Upload Image"))
+              ]),
             )),
         Step(
             state: StepState.complete,
@@ -277,15 +337,17 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
               });
             } else {
               Map<String, dynamic> data = {
+                "user": email,
                 "Location": areaController.text,
                 "Size": sizeController.text,
                 "Floor": floorController.text,
                 "Nearest Landmark": landmarkController.text,
-                "Preference": dropdownvalue
+                "Preference": dropdownvalue,
+                "Parking": parkingOption
               };
               FirebaseFirestore.instance
                   .collection("Rooms")
-                  .doc("Room5")
+                  .doc()
                   .set(data)
                   .then((_) {
                 // Navigation logic to another page on success
