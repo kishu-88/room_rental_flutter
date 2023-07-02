@@ -105,8 +105,8 @@ class _LoginOptionsState extends State<LoginOptions> {
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
                     onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => const RoomOwnerLoginPage()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const RoomOwnerLoginPage()));
                       // showModalBottomSheet(
                       //   context: context,
                       //   shape: const RoundedRectangleBorder(
@@ -476,7 +476,7 @@ class _LoginOptionsState extends State<LoginOptions> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(90.0),
                 ),
-                labelText: 'Email',
+                labelText: 'Username',
               ),
             ),
           ),
