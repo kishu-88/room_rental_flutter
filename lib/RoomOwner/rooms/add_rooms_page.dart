@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../home.dart';
 
-
 class AddRoomsPage extends StatefulWidget {
   const AddRoomsPage({super.key});
 
@@ -21,8 +20,9 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   final floorController = TextEditingController();
   final sizeController = TextEditingController();
   final landmarkController = TextEditingController();
+  // final downloadUrl = '';
 
-  String uploadedImageUrl = '';
+  final uploadedImageUrl = '';
 
   final picker = ImagePicker();
 
@@ -30,43 +30,55 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
 
   var parkingOption;
 
-Future<void> uploadImage() async {
-  final picker = ImagePicker();
-  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  var id = DateTime.now().millisecondsSinceEpoch;
+  
+  get downloadUrl => null;
 
-  if (pickedFile != null) {
-    final file = File(pickedFile.path);
+  Future<String> uploadImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    try {
-      // Upload the image to Firebase Storage
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('images/${DateTime.now().millisecondsSinceEpoch}.jpg');
-      final uploadTask = storageRef.putFile(file);
-      await uploadTask;
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
 
-      // Get the image download URL
-      final downloadUrl = await storageRef.getDownloadURL();
+      try {
+        // Upload the image to Firebase Storage
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('images/$id.jpg');
+        final uploadTask = storageRef.putFile(file);
+        await uploadTask;
 
-      // Store the image URL in Firebase Cloud Firestore
-      final firestoreInstance = FirebaseFirestore.instance;
-      await firestoreInstance.collection('images').add({'imageUrl': downloadUrl});
+        // Get the image download URL
+        final downloadUrl = await storageRef.getDownloadURL();
 
-       // Invoke the callback with the download URL
-      if (onUploadComplete != null) {
-        onUploadComplete(downloadUrl);
+        final uploadedImageUrl = downloadUrl;
+
+        // Store the image URL in Firebase Cloud Firestore
+        final firestoreInstance = FirebaseFirestore.instance;
+        
+await FirebaseFirestore.instance
+    .collection('Rooms')
+    .doc(id.toString())
+    .set({'imageUrl': downloadUrl,'Location':''});
+    print("babaal...........");
+
+        return downloadUrl; // Return the download URL as a String
+      } catch (e) {
+        throw Exception(
+            'Image upload failed.'); // Throw an exception if there's an error
       }
-    } catch (e) {
-      // Handle any exceptions
     }
-  }
-}
 
- void onUploadComplete(String downloadUrl) {
+    throw Exception(
+        'Image upload failed.'); // Throw an exception if there's an error
+  }
+
+  onUploadComplete(String downloadUrl) {
     // Use the downloadUrl as needed
     String uploadedImageUrl = downloadUrl;
     print('Image download URL: $uploadedImageUrl');
-    // Perform further operations or update the UI with the download URL
+    return uploadedImageUrl;
   }
 
   bool agreeToTerms = false;
@@ -292,7 +304,9 @@ Future<void> uploadImage() async {
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Car Parking', style: TextStyle(fontSize: 16,color: Colors.white)),
+                            const Text('Car Parking',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white)),
                             Row(
                               children: [
                                 Radio<String>(
@@ -304,7 +318,10 @@ Future<void> uploadImage() async {
                                     });
                                   },
                                 ),
-                                const Text('Available',style: TextStyle(color: Colors.white),),
+                                const Text(
+                                  'Available',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                                 const SizedBox(width: 20),
                                 Radio<String>(
                                   value: 'Not Available',
@@ -315,7 +332,10 @@ Future<void> uploadImage() async {
                                     });
                                   },
                                 ),
-                                const Text('Not Available',style: TextStyle(color: Colors.white),),
+                                const Text(
+                                  'Not Available',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ],
                             ),
                           ],
@@ -336,8 +356,19 @@ Future<void> uploadImage() async {
             content: Container(
               width: double.infinity,
               child: Column(children: [
-                ElevatedButton(
-                    onPressed: uploadImage, child: const Text("Upload Image"))
+               ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      String uploadedImageUrl = await uploadImage();
+                      // Use the download URL as needed
+                      print('Image uploaded. URL: $uploadedImageUrl');
+                    } catch (e) {
+                      // Handle any errors
+                      print('Error uploading image: $e');
+            }
+          },
+          child: const Text("Upload Image"),
+        ),
               ]),
             )),
         Step(
@@ -378,6 +409,7 @@ Future<void> uploadImage() async {
               });
             } else {
               Map<String, dynamic> data = {
+                "id":id,
                 "user": email,
                 "Location": areaController.text,
                 "Size": sizeController.text,
@@ -385,17 +417,16 @@ Future<void> uploadImage() async {
                 "Nearest Landmark": landmarkController.text,
                 "Preference": dropdownvalue,
                 "Parking": parkingOption,
-                "imageUrl": uploadedImageUrl,
               };
               FirebaseFirestore.instance
-                  .collection("Rooms")
-                  .doc()
-                  .set(data)
+                  .collection('Rooms')
+                  .doc(id.toString())
+                  .update(data)
                   .then((_) {
                 // Navigation logic to another page on success
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(builder: (context) => HomePage()),
                 );
               });
             }

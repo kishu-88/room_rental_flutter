@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     Image.network(
-                      document['imageUrl'],
+                      'https://www.seiu1000.org/sites/main/files/main-images/camera_lense_0.jpeg',
                       height: 150,
                       width: 180,
                       fit: BoxFit.fill,
