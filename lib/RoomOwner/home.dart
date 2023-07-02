@@ -4,19 +4,19 @@ import 'package:room_rental/RoomOwner/profile.dart';
 // import 'package:room_rental/rooms/add_rooms_page.dart';
 import 'package:room_rental/utils/sidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:rxdart/rxdart.dart';
+// import 'package:rxdart/rxdart.dart';
 
-class HomePage extends StatefulWidget {
+class OwnerHomePage extends StatefulWidget {
   // final String email;
-  const HomePage({Key? key}) : super(key: key);
+  const OwnerHomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<OwnerHomePage> createState() => _OwnerHomePageState();
 
   
 }
 
-class _HomePageState extends State<HomePage> {
+class _OwnerHomePageState extends State<OwnerHomePage> {
   String email = '';
 
   @override
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> pages = [
-    // const HomePage(),
+    // const OwnerHomePage(),
     // const ProfilePage(),
   ];
   int currentPage = 0;
@@ -182,7 +182,7 @@ class _HomePageState extends State<HomePage> {
               // Navigator.push(
               //   context,
               //   MaterialPageRoute(
-              //     builder: (context) => const HomePage(),
+              //     builder: (context) => const OwnerHomePage(),
               //   ),
               // );
             } else if (index == 1) {

@@ -4,6 +4,7 @@ import 'package:room_rental/authentication/login_options.dart';
 // import 'package:room_rental/customer.dart';
 import 'package:room_rental/RoomOwner/rooms/add_rooms_page.dart';
 import 'package:room_rental/authentication/roomOwner/roomOwnerLoginPage.dart';
+import 'package:room_rental/customer/home.dart';
 import 'package:room_rental/utils/sidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -288,7 +289,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const HomePage(),
+                  builder: (context) => const CustomerHomePage(),
                   // builder: (context) => const CustomerPage(),
                 ),
               );

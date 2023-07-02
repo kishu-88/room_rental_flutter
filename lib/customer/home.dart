@@ -1,22 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:room_rental/RoomOwner/profile.dart';
+// import 'package:room_rental/RoomOwner/profile.dart';
+import 'package:room_rental/customer/profile.dart';
+import 'package:room_rental/customer/RoomDetailsPage.dart';
 // import 'package:room_rental/rooms/add_rooms_page.dart';
 import 'package:room_rental/utils/sidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rxdart/rxdart.dart';
 
-class HomePage extends StatefulWidget {
+class CustomerHomePage extends StatefulWidget {
   // final String email;
-  const HomePage({Key? key}) : super(key: key);
+  const CustomerHomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<CustomerHomePage> createState() => _CustomerHomePageState();
 
   
 }
 
-class _HomePageState extends State<HomePage> {
+class _CustomerHomePageState extends State<CustomerHomePage> {
   String email = '';
 
   @override
@@ -35,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> pages = [
-    // const HomePage(),
+    // const CustomerHomePage(),
     // const ProfilePage(),
   ];
   int currentPage = 0;
@@ -107,26 +109,35 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.center,
 
               child: const Text(
-                'My Rooms',
+                'Rooms Available',
                 style: TextStyle(color: Colors.white, fontSize: 30),
               ),
               // Set the desired color of the rectangle
             ),
             Expanded(
               
-  child: StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance.collection('Rooms').snapshots(),
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        final documents = snapshot.data!.docs;
+child: StreamBuilder<QuerySnapshot>(
+  stream: FirebaseFirestore.instance.collection('Rooms').snapshots(),
+  builder: (context, snapshot) {
+    if (snapshot.hasData) {
+      final documents = snapshot.data!.docs;
 
-        return GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          padding: const EdgeInsets.all(10),
-          children: documents.map((document) {
-            return Container(
+      return GridView.count(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        padding: const EdgeInsets.all(10),
+        children: documents.map((document) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RoomDetailsPage(document),
+                ),
+              );
+            },
+            child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.grey[200],
@@ -147,16 +158,18 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-            );
-          }).toList(),
-        );
-      }
-
-      return const Center(
-        child: CircularProgressIndicator(),
+            ),
+          );
+        }).toList(),
       );
-    },
-  ),
+    }
+
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  },
+),
+
 ),
 
           ],
@@ -182,7 +195,7 @@ class _HomePageState extends State<HomePage> {
               // Navigator.push(
               //   context,
               //   MaterialPageRoute(
-              //     builder: (context) => const HomePage(),
+              //     builder: (context) => const CustomerHomePage(),
               //   ),
               // );
             } else if (index == 1) {

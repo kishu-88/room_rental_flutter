@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../RoomOwner/home.dart';
+import '../register.dart';
 
 class RoomOwnerLoginPage extends StatefulWidget {
   const RoomOwnerLoginPage({super.key});
@@ -149,7 +150,7 @@ class _RoomOwnerLoginPageState extends State<RoomOwnerLoginPage> {
 
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                              builder: (context) => const HomePage(),
+                              builder: (context) => const OwnerHomePage(),
                             ),
                           );
                           print("done");
@@ -194,6 +195,20 @@ class _RoomOwnerLoginPageState extends State<RoomOwnerLoginPage> {
                     onPressed: () {},
                     child: const Text(
                       'Forgot Password?',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SignupPage(),
+                  ),
+                );
+                    },
+                    child: const Text(
+                      'New? Register Here!',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

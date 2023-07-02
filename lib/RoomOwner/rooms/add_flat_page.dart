@@ -433,7 +433,7 @@ class _AddFlatsPageState extends State<AddFlatsPage> {
                 // Navigation logic to another page on success
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(builder: (context) => const OwnerHomePage()),
                 );
               });
             }

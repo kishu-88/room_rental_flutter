@@ -148,11 +148,12 @@ class _RoomCustomerLoginPageState extends State<RoomCustomerLoginPage> {
                               await SharedPreferences.getInstance();
                           await prefs.setString('email', email);
 
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ),
-                          );
+                          Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CustomerHomePage(),
+                  ),
+                );
                           print("done");
                         } else {
                           showDialog(

@@ -426,7 +426,7 @@ await FirebaseFirestore.instance
                 // Navigation logic to another page on success
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) => OwnerHomePage()),
                 );
               });
             }
