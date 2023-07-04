@@ -1,24 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-// import 'package:room_rental/RoomOwner/profile.dart';
-import 'package:room_rental/customer/profile.dart';
-import 'package:room_rental/customer/RoomDetailsPage.dart';
+import 'package:room_rental/RoomOwner/ownerProfile.dart';
+import 'package:room_rental/RoomOwner/rooms/RoomDetailsPageOwner.dart';
 // import 'package:room_rental/rooms/add_rooms_page.dart';
-import 'package:room_rental/utils/sidebar.dart';
+import 'package:room_rental/utils/OwnerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:rxdart/rxdart.dart';
+// import 'package:rxdart/rxdart.dart';
 
-class CustomerHomePage extends StatefulWidget {
+class OwnerHomePage extends StatefulWidget {
   // final String email;
-  const CustomerHomePage({Key? key}) : super(key: key);
+  const OwnerHomePage({Key? key}) : super(key: key);
 
   @override
-  State<CustomerHomePage> createState() => _CustomerHomePageState();
-
-  
+  State<OwnerHomePage> createState() => _OwnerHomePageState();
 }
 
-class _CustomerHomePageState extends State<CustomerHomePage> {
+class _OwnerHomePageState extends State<OwnerHomePage> {
   String email = '';
 
   @override
@@ -37,7 +34,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   }
 
   List<Widget> pages = [
-    // const CustomerHomePage(),
+    // const OwnerHomePage(),
     // const ProfilePage(),
   ];
   int currentPage = 0;
@@ -109,69 +106,87 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
               alignment: Alignment.center,
 
               child: const Text(
-                'Rooms Available',
+                'My Rooms',
                 style: TextStyle(color: Colors.white, fontSize: 30),
               ),
               // Set the desired color of the rectangle
             ),
             Expanded(
-              
-child: StreamBuilder<QuerySnapshot>(
-  stream: FirebaseFirestore.instance.collection('Rooms').snapshots(),
-  builder: (context, snapshot) {
-    if (snapshot.hasData) {
-      final documents = snapshot.data!.docs;
+              child: StreamBuilder<QuerySnapshot>(
+                stream:
+                    FirebaseFirestore.instance.collection('Rooms').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final documents = snapshot.data!.docs;
 
-      return GridView.count(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        padding: const EdgeInsets.all(10),
-        children: documents.map((document) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RoomDetailsPage(document),
-                ),
-              );
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey[200],
-              ),
-              child: Center(
-                child: Column(
-                  children: [
-                    Image.network(
-                      document['imageUrl'],
-                      height: 150,
-                      width: 180,
-                      fit: BoxFit.fill,
-                    ),
-                    Text(
-                      document['Location'],
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
+                    return GridView.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      padding: const EdgeInsets.all(10),
+                      children: documents.map((document) {
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      RoomDetailsPageOwner(document),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color.fromARGB(255, 27, 91, 118),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Image.network(
+                                      document['imageUrl'],
+                                      height: 150,
+                                      width: 180,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          document['Location'],
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white),
+                                        ),
+                                        const Text(
+                                          ' | Rs ',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white),
+                                        ),
+                                        Text(
+                                          document['Rate'],
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
+                      }).toList(),
+                    );
+                  }
+
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
             ),
-          );
-        }).toList(),
-      );
-    }
-
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  },
-),
-
-),
-
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -195,7 +210,7 @@ child: StreamBuilder<QuerySnapshot>(
               // Navigator.push(
               //   context,
               //   MaterialPageRoute(
-              //     builder: (context) => const CustomerHomePage(),
+              //     builder: (context) => const OwnerHomePage(),
               //   ),
               // );
             } else if (index == 1) {
@@ -209,7 +224,7 @@ child: StreamBuilder<QuerySnapshot>(
           },
         ),
         backgroundColor: const Color(0xFF2284AE),
-        drawer: const SideBar(),
+        drawer: const OwnerSidebar(),
       ),
     );
   }

@@ -7,7 +7,7 @@ import 'package:room_rental/authentication/customer/customerLoginPage.dart';
 // import 'package:room_rental/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../RoomOwner/home.dart';
+import '../RoomOwner/ownerHome.dart';
 
 class LoginOptions extends StatefulWidget {
   const LoginOptions({super.key});
@@ -126,28 +126,29 @@ class _LoginOptionsState extends State<LoginOptions> {
                     ),
                   )),
               Container(
-                  margin: const EdgeInsets.only(top: 100),
-                  padding: const EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const RoomCustomerLoginPage()));
-                      // showModalBottomSheet(
-                      //   context: context,
-                      //   shape: const RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.vertical(
-                      //     top: Radius.circular(30),
-                      //   )),
-                      //   builder: (context) => roomOwnerLoginSheet(context),
-                      // );
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.yellow),
-                    child: const Text(
-                      'Room Customer',
-                      style: TextStyle(fontSize: 30, color: Colors.black),
-                    ),
-                  )),
+                margin: const EdgeInsets.only(top: 100),
+                padding: const EdgeInsets.all(5),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const RoomCustomerLoginPage()));
+                    // showModalBottomSheet(
+                    //   context: context,
+                    //   shape: const RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.vertical(
+                    //     top: Radius.circular(30),
+                    //   )),
+                    //   builder: (context) => roomOwnerLoginSheet(context),
+                    // );
+                  },
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
+                  child: const Text(
+                    'Room Customer',
+                    style: TextStyle(fontSize: 30, color: Colors.black),
+                  ),
+                ),
+              ),
             ],
           ),
           // Set the desired color of the rectangle

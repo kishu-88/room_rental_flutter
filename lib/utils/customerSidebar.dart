@@ -1,16 +1,15 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:room_rental/customer/customerProfile.dart';
 
-import '../RoomOwner/profile.dart';
-import '../RoomOwner/rooms/choose_category_page.dart';
-
-class SideBar extends StatefulWidget {
-  const SideBar({super.key});
+class CustomerSidebar extends StatefulWidget {
+  const CustomerSidebar({super.key});
 
   @override
-  State<SideBar> createState() => _SideBarState();
+  State<CustomerSidebar> createState() => _CustomerSidebarState();
 }
 
-class _SideBarState extends State<SideBar> {
+class _CustomerSidebarState extends State<CustomerSidebar> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -64,7 +63,7 @@ class _SideBarState extends State<SideBar> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ProfilePage(),
+                      builder: (context) => const CustomerProfilePage(),
                     ),
                   );
                 },
@@ -81,7 +80,7 @@ class _SideBarState extends State<SideBar> {
               ),
               ListTile(
                   title: const Text(
-                    'List Rooms',
+                    'Filter Rooms',
                     style: TextStyle(
                       color: Color(0xFFFFFFFF),
                     ),
@@ -104,46 +103,48 @@ class _SideBarState extends State<SideBar> {
                 endIndent: 0,
                 color: Colors.white,
               ),
-              ListTile(
-                title: const Text(
-                  'Add Rooms',
-                  style: TextStyle(
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ChooseCategoryPage(),
-                    ),
-                  );
-                },
-                leading: const Badge(
-                  child: Icon(
-                    Icons.add,
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-              ),
-              const Divider(
-                height: 10,
-                thickness: 1,
-                endIndent: 0,
-                color: Colors.white,
-              ),
+              // ListTile(
+              //   title: const Text(
+              //     'Add Rooms',
+              //     style: TextStyle(
+              //       color: Color(0xFFFFFFFF),
+              //     ),
+              //   ),
+              //   onTap: () {
+              //     // Navigator.push(
+              //     //   context,
+              //     //   MaterialPageRoute(
+              //     //     builder: (context) => const ChooseCategoryPage(),
+              //     //   ),
+              //     // );
+              //   },
+              //   leading: const Badge(
+              //     child: Icon(
+              //       Icons.add,
+              //       color: Color(0xFFFFFFFF),
+              //     ),
+              //   ),
+              // ),
+              // const Divider(
+              //   height: 10,
+              //   thickness: 1,
+              //   endIndent: 0,
+              //   color: Colors.white,
+              // ),
               ListTile(
                   title: const Text(
-                    'Booking Requests',
+                    'My Booking Requests',
                     style: TextStyle(
                       color: Color(0xFFFFFFFF),
                     ),
                   ),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
-                    // Navigator.pop(context);
+                  //   Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const bookingRequestNotiPage(),
+                  //   ),
+                  // );
                   },
                   leading: const Icon(
                     Icons.arrow_circle_up,

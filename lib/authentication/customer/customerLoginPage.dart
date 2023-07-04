@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../customer/home.dart';
+import '../../customer/customerHome.dart';
+import '../register.dart';
 
 class RoomCustomerLoginPage extends StatefulWidget {
   const RoomCustomerLoginPage({super.key});
@@ -196,6 +197,20 @@ class _RoomCustomerLoginPageState extends State<RoomCustomerLoginPage> {
                     onPressed: () {},
                     child: const Text(
                       'Forgot Password?',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                   TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SignupPage(),
+                  ),
+                );
+                    },
+                    child: const Text(
+                      'New? Register Here!',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

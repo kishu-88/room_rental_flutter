@@ -1,22 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:room_rental/RoomOwner/profile.dart';
+// import 'package:room_rental/RoomOwner/profile.dart';
+import 'package:room_rental/customer/customerProfile.dart';
+import 'package:room_rental/customer/customerRoomDetailsPage.dart';
 // import 'package:room_rental/rooms/add_rooms_page.dart';
-import 'package:room_rental/utils/sidebar.dart';
+import 'package:room_rental/utils/customerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:rxdart/rxdart.dart';
 
-class OwnerHomePage extends StatefulWidget {
+class CustomerHomePage extends StatefulWidget {
   // final String email;
-  const OwnerHomePage({Key? key}) : super(key: key);
+  const CustomerHomePage({Key? key}) : super(key: key);
 
   @override
-  State<OwnerHomePage> createState() => _OwnerHomePageState();
-
-  
+  State<CustomerHomePage> createState() => _CustomerHomePageState();
 }
 
-class _OwnerHomePageState extends State<OwnerHomePage> {
+class _CustomerHomePageState extends State<CustomerHomePage> {
   String email = '';
 
   @override
@@ -35,7 +34,7 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
   }
 
   List<Widget> pages = [
-    // const OwnerHomePage(),
+    // const CustomerHomePage(),
     // const ProfilePage(),
   ];
   int currentPage = 0;
@@ -87,7 +86,7 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ProfilePage(),
+                    builder: (context) => const CustomerProfilePage(),
                   ),
                 );
               },
@@ -107,58 +106,83 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
               alignment: Alignment.center,
 
               child: const Text(
-                'My Rooms',
+                'Rooms Available',
                 style: TextStyle(color: Colors.white, fontSize: 30),
               ),
               // Set the desired color of the rectangle
             ),
             Expanded(
-              
-  child: StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance.collection('Rooms').snapshots(),
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        final documents = snapshot.data!.docs;
+              child: StreamBuilder<QuerySnapshot>(
+                stream:
+                    FirebaseFirestore.instance.collection('Rooms').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final documents = snapshot.data!.docs;
 
-        return GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          padding: const EdgeInsets.all(10),
-          children: documents.map((document) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey[200],
+                    return GridView.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      padding: const EdgeInsets.all(10),
+                      children: documents.map((document) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CustomerRoomDetails(document),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: const Color.fromARGB(255, 27, 91, 118),
+                            ),
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Image.network(
+                                    document['imageUrl'],
+                                    height: 150,
+                                    width: 180,
+                                    fit: BoxFit.fill,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        document['Location'],
+                                        style: const TextStyle(
+                                            fontSize: 15, color: Colors.white),
+                                      ),
+                                      const Text(
+                                        ' | Rs',
+                                        style: TextStyle(
+                                            fontSize: 15, color: Colors.white),
+                                      ),
+                                      Text(
+                                        document['Rate'],
+                                        style: const TextStyle(
+                                            fontSize: 15, color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  }
+
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
-              child: Center(
-                child: Column(
-                  children: [
-                    Image.network(
-                      document['imageUrl'],
-                      height: 150,
-                      width: 180,
-                      fit: BoxFit.fill,
-                    ),
-                    Text(
-                      document['Location'],
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
-        );
-      }
-
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    },
-  ),
-),
-
+            ),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -182,21 +206,21 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
               // Navigator.push(
               //   context,
               //   MaterialPageRoute(
-              //     builder: (context) => const OwnerHomePage(),
+              //     builder: (context) => const CustomerHomePage(),
               //   ),
               // );
             } else if (index == 1) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ProfilePage(),
+                  builder: (context) => const CustomerProfilePage(),
                 ),
               );
             }
           },
         ),
         backgroundColor: const Color(0xFF2284AE),
-        drawer: const SideBar(),
+        drawer: const CustomerSidebar(),
       ),
     );
   }

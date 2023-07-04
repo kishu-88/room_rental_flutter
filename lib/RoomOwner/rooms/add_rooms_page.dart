@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../home.dart';
+import '../ownerHome.dart';
 
 class AddRoomsPage extends StatefulWidget {
   const AddRoomsPage({super.key});
@@ -20,6 +20,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   final floorController = TextEditingController();
   final sizeController = TextEditingController();
   final landmarkController = TextEditingController();
+  final rateController = TextEditingController();
   // final downloadUrl = '';
 
   final uploadedImageUrl = '';
@@ -30,8 +31,10 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
 
   var parkingOption;
 
+  var negotiability;
+
   var id = DateTime.now().millisecondsSinceEpoch;
-  
+
   get downloadUrl => null;
 
   Future<String> uploadImage() async {
@@ -43,9 +46,8 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
 
       try {
         // Upload the image to Firebase Storage
-        final storageRef = FirebaseStorage.instance
-            .ref()
-            .child('images/$id.jpg');
+        final storageRef =
+            FirebaseStorage.instance.ref().child('images/$id.jpg');
         final uploadTask = storageRef.putFile(file);
         await uploadTask;
 
@@ -56,12 +58,12 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
 
         // Store the image URL in Firebase Cloud Firestore
         final firestoreInstance = FirebaseFirestore.instance;
-        
-await FirebaseFirestore.instance
-    .collection('Rooms')
-    .doc(id.toString())
-    .set({'imageUrl': downloadUrl,'Location':''});
-    print("babaal...........");
+
+        await FirebaseFirestore.instance
+            .collection('Rooms')
+            .doc(id.toString())
+            .set({'imageUrl': downloadUrl, 'Location': ''});
+        print("babaal...........");
 
         return downloadUrl; // Return the download URL as a String
       } catch (e) {
@@ -343,6 +345,92 @@ await FirebaseFirestore.instance
                       ],
                     ),
                   ),
+                ),
+                 Container(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: const Text(
+                            "Rate (NRs)",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: TextField(
+                            controller: rateController,
+                            decoration: InputDecoration(
+                              focusColor: Colors.white,
+                              hoverColor: Colors.white,
+                              // hoverColor: Colors.amber,
+                              // filled: true,
+                              // fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(90.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Is Rate Negotiable?',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white)),
+                            Row(
+                              children: [
+                                Radio<String>(
+                                  value: 'Yes',
+                                  groupValue: negotiability,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      negotiability = value;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  'Yes',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                const SizedBox(width: 20),
+                                Radio<String>(
+                                  value: 'No',
+                                  groupValue: negotiability,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      negotiability = value;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  'No',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ))
+                      ],
+                    ),
+                  ),
                 )
               ],
             ),
@@ -356,7 +444,7 @@ await FirebaseFirestore.instance
             content: Container(
               width: double.infinity,
               child: Column(children: [
-               ElevatedButton(
+                ElevatedButton(
                   onPressed: () async {
                     try {
                       String uploadedImageUrl = await uploadImage();
@@ -365,10 +453,10 @@ await FirebaseFirestore.instance
                     } catch (e) {
                       // Handle any errors
                       print('Error uploading image: $e');
-            }
-          },
-          child: const Text("Upload Image"),
-        ),
+                    }
+                  },
+                  child: const Text("Upload Image"),
+                ),
               ]),
             )),
         Step(
@@ -409,12 +497,14 @@ await FirebaseFirestore.instance
               });
             } else {
               Map<String, dynamic> data = {
-                "id":id,
+                "id": id,
                 "user": email,
                 "Location": areaController.text,
                 "Size": sizeController.text,
                 "Floor": floorController.text,
                 "Nearest Landmark": landmarkController.text,
+                "Rate": rateController.text,
+                "Negotiability":negotiability,
                 "Preference": dropdownvalue,
                 "Parking": parkingOption,
               };

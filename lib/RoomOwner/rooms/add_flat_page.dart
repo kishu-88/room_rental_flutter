@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/components/white_rounded_textfield.dart';
-import '../home.dart';
+import '../ownerHome.dart';
 
 class AddFlatsPage extends StatefulWidget {
   const AddFlatsPage({super.key});

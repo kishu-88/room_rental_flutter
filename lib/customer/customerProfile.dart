@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:room_rental/RoomOwner/home.dart';
+import 'package:room_rental/RoomOwner/ownerHome.dart';
 import 'package:room_rental/authentication/login_options.dart';
 // import 'package:room_rental/customer.dart';
 import 'package:room_rental/RoomOwner/rooms/add_rooms_page.dart';
 import 'package:room_rental/authentication/roomOwner/roomOwnerLoginPage.dart';
-import 'package:room_rental/customer/home.dart';
-import 'package:room_rental/utils/sidebar.dart';
+import 'package:room_rental/customer/customerHome.dart';
+import 'package:room_rental/utils/OwnerSidebar.dart';
+import 'package:room_rental/utils/customerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class CustomerProfilePage extends StatefulWidget {
+  const CustomerProfilePage({Key? key}) : super(key: key);
   // final String email;
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<CustomerProfilePage> createState() => _CustomerProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _CustomerProfilePageState extends State<CustomerProfilePage> {
   String email = '';
 
   @override
@@ -297,14 +298,14 @@ class _ProfilePageState extends State<ProfilePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ProfilePage(),
+                  builder: (context) => const CustomerProfilePage(),
                 ),
               );
             }
           },
         ),
         backgroundColor: const Color(0xFF2284AE),
-       drawer: const SideBar(),
+       drawer: const CustomerSidebar(),
       ),
     );
   }
