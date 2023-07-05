@@ -130,7 +130,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CustomerRoomDetails(document),
+                                builder: (context) => CustomerRoomDetails(document:document),
                               ),
                             );
                           },

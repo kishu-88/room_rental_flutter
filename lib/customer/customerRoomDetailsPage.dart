@@ -1,18 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:room_rental/RoomOwner/ownerProfile.dart';
 import 'package:room_rental/customer/customerProfile.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CustomerRoomDetails extends StatelessWidget {
+class CustomerRoomDetails extends StatefulWidget {
+  final QueryDocumentSnapshot<Object?> document;
+
+  const CustomerRoomDetails({required this.document});
+
+  @override
+  _CustomerRoomDetailsState createState() => _CustomerRoomDetailsState();
+}
+
+class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
+  @override
+
+
   bool isFavorite = false;
+  String email = '';
 
-  final QueryDocumentSnapshot document;
+  
 
-  CustomerRoomDetails(this.document, {super.key});
+   @override
+  void initState() {
+    super.initState();
+    getEmail().then((value) {
+      setState(() {
+        email = value ?? '';
+      });
+    });
+  }
+
+  Future<String?> getEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('email');
+  }
+
+  Future<void> addInfoToFirestore(String user, String email, String roomId) async {
+  try {
+    // Get a reference to the Firestore collection
+    CollectionReference<Map<String, dynamic>> collection =
+        FirebaseFirestore.instance.collection('Booking Requests');
+
+    // Create a new document with a unique ID
+    DocumentReference<Map<String, dynamic>> documentRef =
+        collection.doc(roomId);
+
+    // Set the data to be added
+    await documentRef.set({
+      'RoomId':roomId,
+      'Requester': user,
+      'Owner':email,
+      'Status':"Open",
+    });
+
+    print('Information added to Firestore successfully!');
+  } catch (e) {
+    print('Error adding information to Firestore: $e');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
+    final data = widget.document.data() as Map<String, dynamic>?;
+            final imageUrl = data?['imageUrl'];
+            final location = data?['Location'];
+            final floor = data?['Floor'];
+            final landmark = data?['Nearest Landmark'];
+            final parking = data?['Parking'];
+            final negotiability = data?['Negotiability'];
+            final preference = data?['Preference'];
+            final rate = data?['Rate'];
+            final size = data?['Size'];
+            final user = data?['user'];
+            final roomId = data?['id'];
+
+
     // Use the document data to display room details
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +100,7 @@ class CustomerRoomDetails extends StatelessWidget {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.network(
-              document['imageUrl'],
+             imageUrl,
               height: 300,
               width: double.infinity,
               fit: BoxFit.fill,
@@ -68,7 +131,7 @@ class CustomerRoomDetails extends StatelessWidget {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                        document['Location'],
+                        location,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
@@ -80,19 +143,19 @@ class CustomerRoomDetails extends StatelessWidget {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                        document['Floor'],
+                        floor,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
                   ),
-                  DataRow(
+                 DataRow(
                     cells: <DataCell>[
                       DataCell(Text(
-                        "Area : ",
+                        "Size : ",
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                        document['Size'],
+                        size,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
@@ -104,7 +167,7 @@ class CustomerRoomDetails extends StatelessWidget {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                        document['Nearest Landmark'],
+                       landmark,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
@@ -116,7 +179,7 @@ class CustomerRoomDetails extends StatelessWidget {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                        document['Parking'],
+                        parking,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
@@ -128,7 +191,7 @@ class CustomerRoomDetails extends StatelessWidget {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                        document['Preference'],
+                        preference,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
@@ -140,7 +203,7 @@ class CustomerRoomDetails extends StatelessWidget {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                        document['user'],
+                        user,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
@@ -152,7 +215,7 @@ class CustomerRoomDetails extends StatelessWidget {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                        document['Rate'],
+                        rate,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
@@ -164,7 +227,7 @@ class CustomerRoomDetails extends StatelessWidget {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                        document['Negotiability'],
+                        negotiability,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
@@ -181,8 +244,8 @@ class CustomerRoomDetails extends StatelessWidget {
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const CustomerProfilePage()));
+                    addInfoToFirestore(user,email,roomId.toString());
+
                     },
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
