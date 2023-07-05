@@ -7,22 +7,25 @@ import '../../RoomOwner/ownerHome.dart';
 import '../register.dart';
 
 class RoomOwnerLoginPage extends StatefulWidget {
-  const RoomOwnerLoginPage({super.key});
+  const RoomOwnerLoginPage({Key? key}) : super(key: key);
 
   @override
   State<RoomOwnerLoginPage> createState() => _RoomOwnerLoginPageState();
 }
 
 class _RoomOwnerLoginPageState extends State<RoomOwnerLoginPage> {
-  static Future<User?> RoomOwnerLogin(
-      {required String email,
-      required String password,
-      required BuildContext context}) async {
+  static Future<User?> roomOwnerLogin({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
@@ -80,143 +83,135 @@ class _RoomOwnerLoginPageState extends State<RoomOwnerLoginPage> {
         TextEditingController();
     final TextEditingController roomOwnerPasswordController =
         TextEditingController();
+
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Container(
-          margin: const EdgeInsets.only(top: 100),
-          width: 1000, // Specify the desired width of the rectangle
-          height: 600, // Specify the desired height of the rectangle
-          // decoration: BoxDecoration(
-          //   borderRadius: BorderRadius.circular(20),
-          //   color: const Color.fromARGB(255, 27, 91, 118),
-          // ),
-          alignment: Alignment.center,
-
-          child: Column(
-            children: [
-              Container(
-                // margin: const EdgeInsets.all(55),
-                padding: const EdgeInsets.all(5),
-                child: Column(children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    child: const Text(
-                      "Login As Room Owner",
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.1,
+              horizontal: screenWidth * 0.1,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Login As Room Owner",
+                  style: TextStyle(
+                    fontSize: screenHeight * 0.04,
+                    color: Colors.white,
                   ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    child: TextFormField(
-                      controller: roomOwnerEmailController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(90.0),
+                ),
+                SizedBox(height: screenHeight * 0.05),
+                TextFormField(
+                  controller: roomOwnerEmailController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(90.0),
+                    ),
+                    labelText: 'Email',
+                    labelStyle: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                TextFormField(
+                  controller: roomOwnerPasswordController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(90.0),
+                    ),
+                    labelText: 'Password',
+                    labelStyle: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03),
+                ElevatedButton(
+                  onPressed: () async {
+                    User? user = await roomOwnerLogin(
+                      email: roomOwnerEmailController.text,
+                      password: roomOwnerPasswordController.text,
+                      context: context,
+                    );
+                    if (user != null) {
+                      String email = roomOwnerEmailController.text.trim();
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString('email', email);
+
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const OwnerHomePage(),
                         ),
-                        labelText: 'Email',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    child: TextFormField(
-                      controller: roomOwnerPasswordController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(90.0),
-                        ),
-                        labelText: 'Password',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(15),
-                    margin: const EdgeInsets.only(top: 15),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        User? user = await RoomOwnerLogin(
-                            email: roomOwnerEmailController.text,
-                            password: roomOwnerPasswordController.text,
-                            context: context);
-                        // print("user");
-                        if (user != null) {
-                          String email = roomOwnerEmailController.text.trim();
-
-                          // Store the email value in shared preferences
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          await prefs.setString('email', email);
-
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => const OwnerHomePage(),
-                            ),
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Login Failed'),
+                            content:
+                                Text('No user found with these credentials.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
                           );
-                          print("done");
-                        } else {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('Login Failed'),
-                                content: Text(
-                                    'No user found with these credentials.'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.yellow),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(90.0),
-                          ),
-                        ),
-                      ),
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(fontSize: 20, color: Colors.black),
+                        },
+                      );
+                    }
+                  },
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.yellow),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(90.0),
                       ),
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Forgot Password?',
-                      style: TextStyle(color: Colors.white),
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      fontSize: screenHeight * 0.025,
+                      color: Colors.black,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SignupPage(),
+                ),
+                SizedBox(height: screenHeight * 0.01),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(color: Colors.white),
                   ),
-                );
-                    },
-                    child: const Text(
-                      'New? Register Here!',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignupPage(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'New? Register Here!',
+                    style: TextStyle(color: Colors.white),
                   ),
-                ]),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-          // Set the desired color of the rectangle
         ),
         backgroundColor: const Color.fromARGB(255, 27, 91, 118),
       ),

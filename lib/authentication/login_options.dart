@@ -126,7 +126,7 @@ class _LoginOptionsState extends State<LoginOptions> {
                     ),
                   )),
               Container(
-                margin: const EdgeInsets.only(top: 100),
+                margin: const EdgeInsets.only(top: 20),
                 padding: const EdgeInsets.all(5),
                 child: ElevatedButton(
                   onPressed: () {

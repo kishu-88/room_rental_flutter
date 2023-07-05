@@ -303,7 +303,7 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
         backgroundColor: const Color(0xFF2284AE),
-       drawer: const OwnerSidebar(),
+        drawer: const OwnerSidebar(),
       ),
     );
   }

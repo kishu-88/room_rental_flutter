@@ -145,7 +145,7 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
                                   children: [
                                     Image.network(
                                       document['imageUrl'],
-                                      height: 150,
+                                      height: 140,
                                       width: 180,
                                       fit: BoxFit.fill,
                                     ),
