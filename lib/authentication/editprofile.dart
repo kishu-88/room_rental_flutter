@@ -16,6 +16,8 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   String email = '';
+  var sexOption;
+  DateTime? selectedDate;
 
   @override
   void initState() {
@@ -142,13 +144,119 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 TextFormField(
+                  controller: roomCustomerEmailController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(90.0),
+                    ),
+                    labelText: 'Age',
+                    labelStyle: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: const Text(
+                      'Sex : ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Radio<String>(
+                      value: 'Male',
+                      groupValue: sexOption,
+                      onChanged: (String? value) {
+                        setState(() {
+                          sexOption = value;
+                        });
+                      },
+                    ),
+                    const Text(
+                      'Male',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(width: 20),
+                    Radio<String>(
+                      value: 'Female',
+                      groupValue: sexOption,
+                      onChanged: (String? value) {
+                        setState(() {
+                          sexOption = value;
+                        });
+                      },
+                    ),
+                    const Text(
+                      'Female',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Radio<String>(
+                      value: 'Others',
+                      groupValue: sexOption,
+                      onChanged: (String? value) {
+                        setState(() {
+                          sexOption = value;
+                        });
+                      },
+                    ),
+                    const Text(
+                      'Others',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                ElevatedButton(
+                  onPressed: () async {
+                    final DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+
+                    if (pickedDate != null) {
+                      setState(() {
+                        selectedDate = pickedDate;
+                      });
+                    }
+                  },
+                  child: Text(
+                    'Select Date of Birth',
+                    style: TextStyle(
+                      fontSize: screenHeight * 0.025,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                TextFormField(
                   controller: roomCustomerPasswordController,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(90.0),
                     ),
-                    labelText: 'Password',
+                    labelText: 'Religion',
+                    labelStyle: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                TextFormField(
+                  controller: roomCustomerPasswordController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(90.0),
+                    ),
+                    labelText: 'Occupation',
                     labelStyle: const TextStyle(color: Colors.white),
                   ),
                 ),
@@ -202,33 +310,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                   ),
                   child: Text(
-                    'Login',
+                    'Save',
                     style: TextStyle(
                       fontSize: screenHeight * 0.025,
                       color: Colors.black,
                     ),
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.01),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Forgot Password?',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignupPage(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'New? Register Here!',
-                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ],
