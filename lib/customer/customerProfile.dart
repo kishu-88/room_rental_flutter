@@ -105,8 +105,8 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                   borderRadius: BorderRadius.circular(100),
                   child: Image.asset(
                     'images/profile_pic.jpg',
-                    height: 200,
-                    width: 200,
+                    height: 100,
+                    width: 100,
                   ),
                 ),
               ),

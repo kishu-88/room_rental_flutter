@@ -47,8 +47,8 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
       // Set the data to be added
       await documentRef.set({
         'RoomId': roomId,
-        'Requester': user,
-        'Owner': email,
+        'Requester': email,
+        'Owner': user,
         'Status': "Open",
       });
 
@@ -276,7 +276,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                         final data = doc.data()
                             as Map<String, dynamic>?; // Explicit type cast
                         final fieldValue = data?["Requester"]; // Explicit type cast
-                        const searchString = "karan@karan.com";
+                        var searchString = email;
 
                         return fieldValue != null &&
                             fieldValue.contains(searchString);

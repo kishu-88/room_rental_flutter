@@ -40,6 +40,7 @@ dependencies:
   image_picker: ^0.8.8
   rxdart: ^0.27.7
   url_launcher: ^6.1.11
+  flutter_launcher_icons: ^0.13.1
 
 
 
