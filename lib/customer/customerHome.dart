@@ -113,18 +113,24 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    FirebaseFirestore.instance.collection('Rooms').snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final documents = snapshot.data!.docs;
+            stream: FirebaseFirestore.instance.collection('Rooms').snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final documents = snapshot.data!.docs;
+                        final currentUserEmail = email;
+                        
+                         final filteredDocuments = documents.where((doc) {
+                          final data = doc.data() as Map<String, dynamic>?; // Explicit type cast
+                          final fieldValue = data?["Owner"] as String?; // Explicit type cast
 
+                          return fieldValue != currentUserEmail;
+                        }).toList();
                     return GridView.count(
                       crossAxisCount: 2,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                       padding: const EdgeInsets.all(10),
-                      children: documents.map((document) {
+                      children: filteredDocuments.map((document) {
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(

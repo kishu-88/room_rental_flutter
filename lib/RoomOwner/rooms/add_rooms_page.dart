@@ -39,7 +39,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
 
   Future<String> uploadImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
       final file = File(pickedFile.path);
