@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:room_rental/RoomOwner/ownerProfile.dart';
 import 'package:room_rental/RoomOwner/rooms/RoomDetailsPageOwner.dart';
-import 'package:room_rental/RoomOwner/rooms/add_rooms_page.dart';
 import 'package:room_rental/RoomOwner/rooms/choose_category_page.dart';
 // import 'package:room_rental/rooms/add_rooms_page.dart';
 import 'package:room_rental/utils/OwnerSidebar.dart';
@@ -115,28 +114,24 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    FirebaseFirestore.instance.collection('Rooms').snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final documents = snapshot.data!.docs;
-                    final containsSearchString = documents.any((doc) {
-                      final data = doc.data()
-                          as Map<String, dynamic>?; // Explicit type cast
-                      final fieldValue = data?["Owner"]; // Explicit type cast
-                      var searchString = email;
+                stream: FirebaseFirestore.instance.collection('Rooms').snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final documents = snapshot.data!.docs;
+                        final currentUserEmail = email;
+                        
+                         final filteredDocuments = documents.where((doc) {
+                          final data = doc.data() as Map<String, dynamic>?; // Explicit type cast
+                          final fieldValue = data?["Owner"] as String?; // Explicit type cast
 
-                      return fieldValue != null &&
-                          fieldValue.contains(searchString);
-                    });
-
-                    if (containsSearchString) {
+                          return fieldValue == currentUserEmail;
+                        }).toList();
                       return GridView.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                         padding: const EdgeInsets.all(10),
-                        children: documents.map((document) {
+                        children: filteredDocuments.map((document) {
                           return GestureDetector(
                               onTap: () {
                                 Navigator.push(
@@ -219,14 +214,10 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
                       );
                     }
                   }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+              )
+            )
+          ]
+         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const [
             BottomNavigationBarItem(
@@ -261,7 +252,7 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
             }
           },
         ),
-        backgroundColor: const Color(0xFF2284AE),
+          backgroundColor: const Color(0xFF2284AE),
         drawer: const OwnerSidebar(),
       ),
     );
