@@ -28,6 +28,7 @@ class _SignupPageState extends State<SignupPage> {
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
+                labelStyle: const TextStyle(color: Colors.white),
               ),
             ),
             SizedBox(height: 16.0),
@@ -35,6 +36,7 @@ class _SignupPageState extends State<SignupPage> {
               controller: _passwordController,
               decoration: InputDecoration(
                 labelText: 'Password',
+                labelStyle: const TextStyle(color: Colors.white),
               ),
               obscureText: true,
             ),

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:room_rental/RoomOwner/ownerHome.dart';
 import 'package:room_rental/authentication/login_options.dart';
 // import 'package:room_rental/customer.dart';
-import 'package:room_rental/RoomOwner/rooms/add_rooms_page.dart';
-import 'package:room_rental/authentication/roomOwner/roomOwnerLoginPage.dart';
 import 'package:room_rental/customer/customerHome.dart';
-import 'package:room_rental/utils/OwnerSidebar.dart';
 import 'package:room_rental/utils/customerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

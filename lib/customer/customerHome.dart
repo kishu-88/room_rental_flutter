@@ -130,7 +130,8 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CustomerRoomDetails(document),
+                                builder: (context) =>
+                                    CustomerRoomDetails(document: document),
                               ),
                             );
                           },
@@ -144,7 +145,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                                 children: [
                                   Image.network(
                                     document['imageUrl'],
-                                    height: 150,
+                                    height: 140,
                                     width: 180,
                                     fit: BoxFit.fill,
                                   ),

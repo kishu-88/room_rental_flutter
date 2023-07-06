@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:room_rental/RoomOwner/ownerProfile.dart';
 import 'package:room_rental/RoomOwner/rooms/RoomDetailsPageOwner.dart';
+import 'package:room_rental/RoomOwner/rooms/choose_category_page.dart';
 // import 'package:room_rental/rooms/add_rooms_page.dart';
 import 'package:room_rental/utils/OwnerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -113,82 +114,110 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    FirebaseFirestore.instance.collection('Rooms').snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final documents = snapshot.data!.docs;
+                stream: FirebaseFirestore.instance.collection('Rooms').snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final documents = snapshot.data!.docs;
+                        final currentUserEmail = email;
+                        
+                         final filteredDocuments = documents.where((doc) {
+                          final data = doc.data() as Map<String, dynamic>?; // Explicit type cast
+                          final fieldValue = data?["Owner"] as String?; // Explicit type cast
 
-                    return GridView.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      padding: const EdgeInsets.all(10),
-                      children: documents.map((document) {
-                        return GestureDetector(
-                            onTap: () {
+                          return fieldValue == currentUserEmail;
+                        }).toList();
+                      return GridView.count(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        padding: const EdgeInsets.all(10),
+                        children: filteredDocuments.map((document) {
+                          return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        RoomDetailsPageOwner(document),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color.fromARGB(255, 27, 91, 118),
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      Image.network(
+                                        document['imageUrl'],
+                                        height: 140,
+                                        width: 180,
+                                        fit: BoxFit.fill,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            document['Location'],
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white),
+                                          ),
+                                          const Text(
+                                            ' | Rs ',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white),
+                                          ),
+                                          Text(
+                                            document['Rate'],
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ));
+                        }).toList(),
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          const Text(
+                            "You have not added any rooms!",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      RoomDetailsPageOwner(document),
+                                      const ChooseCategoryPage(),
                                 ),
                               );
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: const Color.fromARGB(255, 27, 91, 118),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    Image.network(
-                                      document['imageUrl'],
-                                      height: 140,
-                                      width: 180,
-                                      fit: BoxFit.fill,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          document['Location'],
-                                          style: const TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white),
-                                        ),
-                                        const Text(
-                                          ' | Rs ',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white),
-                                        ),
-                                        Text(
-                                          document['Rate'],
-                                          style: const TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ));
-                      }).toList(),
-                    );
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.yellow),
+                            child: const Text(
+                              "Add Room",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
                   }
-
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+              )
+            )
+          ]
+         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const [
             BottomNavigationBarItem(
@@ -223,7 +252,7 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
             }
           },
         ),
-        backgroundColor: const Color(0xFF2284AE),
+          backgroundColor: const Color(0xFF2284AE),
         drawer: const OwnerSidebar(),
       ),
     );
