@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:room_rental/authentication/login_options.dart';
+
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -69,12 +72,24 @@ class _SignupPageState extends State<SignupPage> {
         password: password,
       );
 
+ FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Add a document with a generated ID
+    firestore.collection('users').doc(email).set({
+      'email': email,
+    });
       // Registration successful, navigate to the home page or another screen
       print('User registered: ${userCredential.user!.uid}');
 
       setState(() {
         _isLoading = false;
       });
+        // Navigate to the home page or another screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginOptions()), // Replace 'HomePage' with your desired screen
+            );
+
     } catch (e) {
       setState(() {
         _isLoading = false;
