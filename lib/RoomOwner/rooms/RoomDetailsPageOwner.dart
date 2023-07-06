@@ -125,11 +125,11 @@ class RoomDetailsPageOwner extends StatelessWidget {
                  Row(
                   children: [
                     const Text(
-                      "User : ",
+                      "Owner : ",
                       style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                     Text(
-                      document['user'],
+                      document['Owner'],
                       style: const TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ],

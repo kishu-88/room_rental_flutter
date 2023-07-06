@@ -7,6 +7,7 @@ class CustomerRoomDetails extends StatefulWidget {
   final QueryDocumentSnapshot<Object?> document;
 
   const CustomerRoomDetails({required this.document});
+  final String fieldName = "your_field_name";
 
   @override
   _CustomerRoomDetailsState createState() => _CustomerRoomDetailsState();
@@ -14,14 +15,10 @@ class CustomerRoomDetails extends StatefulWidget {
 
 class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
   @override
-
-
   bool isFavorite = false;
   String email = '';
 
-  
-
-   @override
+  @override
   void initState() {
     super.initState();
     getEmail().then((value) {
@@ -36,45 +33,64 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
     return prefs.getString('email');
   }
 
-  Future<void> addInfoToFirestore(String user, String email, String roomId) async {
-  try {
-    // Get a reference to the Firestore collection
-    CollectionReference<Map<String, dynamic>> collection =
-        FirebaseFirestore.instance.collection('Booking Requests');
+  Future<void> addInfoToFirestore(
+      String user, String email, String roomId) async {
+    try {
+      // Get a reference to the Firestore collection
+      CollectionReference<Map<String, dynamic>> collection =
+          FirebaseFirestore.instance.collection('Booking Requests');
 
-    // Create a new document with a unique ID
-    DocumentReference<Map<String, dynamic>> documentRef =
-        collection.doc(roomId);
+      // Create a new document with a unique ID
+      DocumentReference<Map<String, dynamic>> documentRef =
+          collection.doc(roomId);
 
-    // Set the data to be added
-    await documentRef.set({
-      'RoomId':roomId,
-      'Requester': user,
-      'Owner':email,
-      'Status':"Open",
-    });
+      // Set the data to be added
+      await documentRef.set({
+        'RoomId': roomId,
+        'Requester': user,
+        'Owner': email,
+        'Status': "Open",
+      });
 
-    print('Information added to Firestore successfully!');
-  } catch (e) {
-    print('Error adding information to Firestore: $e');
+      print('Information added to Firestore successfully!');
+    } catch (e) {
+      print('Error adding information to Firestore: $e');
+    }
   }
-}
+
+  Future<void> removeDocumentFromFirestore(String documentId) async {
+    try {
+      // Get a reference to the Firestore collection
+      CollectionReference<Map<String, dynamic>> collection =
+          FirebaseFirestore.instance.collection('Booking Requests');
+
+      // Get a reference to the document using the provided ID
+      DocumentReference<Map<String, dynamic>> documentRef =
+          collection.doc(documentId);
+
+      // Delete the document
+      await documentRef.delete();
+
+      print('Document removed from Firestore successfully!');
+    } catch (e) {
+      print('Error removing document from Firestore: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final data = widget.document.data() as Map<String, dynamic>?;
-            final imageUrl = data?['imageUrl'];
-            final location = data?['Location'];
-            final floor = data?['Floor'];
-            final landmark = data?['Nearest Landmark'];
-            final parking = data?['Parking'];
-            final negotiability = data?['Negotiability'];
-            final preference = data?['Preference'];
-            final rate = data?['Rate'];
-            final size = data?['Size'];
-            final user = data?['user'];
-            final roomId = data?['id'];
-
+    final imageUrl = data?['imageUrl'];
+    final location = data?['Location'];
+    final floor = data?['Floor'];
+    final landmark = data?['Nearest Landmark'];
+    final parking = data?['Parking'];
+    final negotiability = data?['Negotiability'];
+    final preference = data?['Preference'];
+    final rate = data?['Rate'];
+    final size = data?['Size'];
+    final owner = data?['Owner'];
+    final roomId = data?['id'];
 
     // Use the document data to display room details
     return Scaffold(
@@ -100,7 +116,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.network(
-             imageUrl,
+              imageUrl,
               height: 300,
               width: double.infinity,
               fit: BoxFit.fill,
@@ -126,7 +142,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                 rows: <DataRow>[
                   DataRow(
                     cells: <DataCell>[
-                     const DataCell(Text(
+                      const DataCell(Text(
                         "Location : ",
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
@@ -148,7 +164,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                       )),
                     ],
                   ),
-                 DataRow(
+                  DataRow(
                     cells: <DataCell>[
                       DataCell(Text(
                         "Size : ",
@@ -167,7 +183,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                       landmark,
+                        landmark,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
@@ -203,7 +219,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
-                        user,
+                        owner,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
@@ -235,24 +251,60 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                 ],
               ),
             ),
-      
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   padding: const EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    onPressed: () {
-                    addInfoToFirestore(user,email,roomId.toString());
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("Booking Requests")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return const Text('Error: Unable to retrieve data');
+                      }
 
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+
+                      final docs = snapshot.data!.docs;
+                      final containsSearchString = docs.any((doc) {
+                        final data = doc.data()
+                            as Map<String, dynamic>?; // Explicit type cast
+                        final fieldValue = data?["Requester"]; // Explicit type cast
+                        const searchString = "karan@karan.com";
+
+                        return fieldValue != null &&
+                            fieldValue.contains(searchString);
+                      });
+
+                      if (containsSearchString) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            removeDocumentFromFirestore(roomId.toString());
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.yellow),
+                          child: const Text(
+                            'Requested',
+                            style: TextStyle(fontSize: 20, color: Colors.black),
+                          ),
+                        );
+                      } else {
+                        return ElevatedButton(
+                          onPressed: () {
+                            addInfoToFirestore(owner, email, roomId.toString());
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.yellow),
+                          child: const Text('Request',style: TextStyle(fontSize: 20, color: Colors.black),),
+                        );
+                      }
                     },
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
-                    child: const Text(
-                      'Request',
-                      style: TextStyle(fontSize: 35, color: Colors.black),
-                    ),
                   ),
                 ),
                 Container(
@@ -260,11 +312,11 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
                     onPressed: () {},
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow),
                     child: const Text(
                       'Call',
-                      style: TextStyle(fontSize: 35, color: Colors.black),
+                      style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),
                 ),

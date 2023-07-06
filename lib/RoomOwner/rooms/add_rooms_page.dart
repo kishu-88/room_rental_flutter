@@ -62,7 +62,19 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
         await FirebaseFirestore.instance
             .collection('Rooms')
             .doc(id.toString())
-            .set({'imageUrl': downloadUrl, 'Location': ''});
+            .set({
+          'imageUrl': downloadUrl,
+          'Location': '',
+          'id': '',
+          'Owner': '',
+          'Size': '',
+          'Floor': '',
+          'Nearest Landmark': '',
+          'Rate': '',
+          'Negotiability': '',
+          'Preference': '',
+          'Parking': '',
+        });
         print("babaal...........");
 
         return downloadUrl; // Return the download URL as a String
@@ -346,7 +358,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                     ),
                   ),
                 ),
-                 Container(
+                Container(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: Align(
                     alignment: Alignment.centerRight,
@@ -498,13 +510,13 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
             } else {
               Map<String, dynamic> data = {
                 "id": id,
-                "user": email,
+                "Owner": email,
                 "Location": areaController.text,
                 "Size": sizeController.text,
                 "Floor": floorController.text,
                 "Nearest Landmark": landmarkController.text,
                 "Rate": rateController.text,
-                "Negotiability":negotiability,
+                "Negotiability": negotiability,
                 "Preference": dropdownvalue,
                 "Parking": parkingOption,
               };
