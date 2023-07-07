@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 // import 'home.dart';
 import 'authentication/login_options.dart';
 
@@ -8,7 +7,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
   runApp(
-    const MaterialApp(
+     const MaterialApp(
       home: MyApp(),
     ),
   );
@@ -57,7 +56,6 @@ class _MyAppState extends State<MyApp> {
                   ),
                   // color: Colors.amber,
               ),
-                  child : const Text("nice"),
             ),
             ),
             Positioned(
@@ -101,7 +99,8 @@ class _MyAppState extends State<MyApp> {
               child: const Text("Sharing Spaces, Spreading Happiness",
                   style: TextStyle(
                     color: Color(0xFFFFFFFF),
-                    fontSize: 15,
+                    fontSize: 18,
+                    fontFamily: "Inter",
                   )),
             ),
             Positioned(

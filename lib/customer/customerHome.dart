@@ -98,33 +98,54 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
             Container(
               margin: const EdgeInsets.all(24),
               width: 1000, // Specify the desired width of the rectangle
-              height: 120, // Specify the desired height of the rectangle
+              height: 130, // Specify the desired height of the rectangle
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: const Color.fromARGB(255, 27, 91, 118),
+                color: Color.fromARGB(255, 195, 86, 2),
               ),
               alignment: Alignment.center,
 
-              child: const Text(
-                'Rooms Available',
-                style: TextStyle(color: Colors.white, fontSize: 30),
+              child: Column(
+                children:  [
+                  const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      'Do you want us to recommend good neighbourhood for you?',
+                      style: TextStyle(color: Colors.white, fontSize: 22),
+                    ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: ElevatedButton(onPressed: (){}, child: const Text("Recommend Me",style:TextStyle(color: Color.fromARGB(255, 195, 86, 2),
+),),
+                     style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),),
+                    ),
+                ],
               ),
               // Set the desired color of the rectangle
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('Rooms').snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final documents = snapshot.data!.docs;
-                        final currentUserEmail = email;
-                        
-                         final filteredDocuments = documents.where((doc) {
-                          final data = doc.data() as Map<String, dynamic>?; // Explicit type cast
-                          final fieldValue = data?["Owner"] as String?; // Explicit type cast
+                stream:
+                    FirebaseFirestore.instance.collection('Rooms').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final documents = snapshot.data!.docs;
+                    final currentUserEmail = email;
 
-                          return fieldValue != currentUserEmail;
-                        }).toList();
+                    final filteredDocuments = documents.where((doc) {
+                      final data = doc.data()
+                          as Map<String, dynamic>?; // Explicit type cast
+                      final fieldValue =
+                          data?["Owner"] as String?; // Explicit type cast
+
+                      return fieldValue != currentUserEmail;
+                    }).toList();
                     return GridView.count(
                       crossAxisCount: 2,
                       crossAxisSpacing: 10,

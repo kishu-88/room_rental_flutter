@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,54 +50,43 @@ class _bookingRequestNotiPageState extends State<bookingRequestNotiPage> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                var requester; // Declare the 'requester' variable outside the loop
+                var roomId; // Declare the 'requester' variable outside the loop
+
                 final documents = snapshot.data!.docs;
                 final containsSearchString = documents.any((doc) {
                   final data =
                       doc.data() as Map<String, dynamic>?; // Explicit type cast
-                  final fieldValue = data?["Owner"]; // Explicit type cast
+                  final ownerName = data?["Owner"];
+                  requester = data?["Requester"];
+                  roomId = data?["RoomId"]; // Explicit type cast
                   var searchString = email;
 
-                  return fieldValue != null &&
-                      fieldValue.contains(searchString);
+                   return ownerName != null &&
+            ownerName.contains(searchString) && requester != null;
                 });
 
                 if (containsSearchString) {
+                  print(requester);
+                  print(roomId);
                   return Column(
                     children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.amber,
-                        ),
-                        child: ElevatedButton(
+                       ElevatedButton(
                           onPressed: () {},
                           child: Row(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                height: 80,
-                                width: 80,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 27, 91, 118),
-                                  borderRadius: BorderRadius.circular(55),
-                                ),
-                                child: const Icon(
-                                  Icons.location_city_outlined,
-                                  size: 50,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                child: const Text(
-                                  "You have a booking request",
-                                  style: TextStyle(fontSize: 20),
+                              Flexible(
+                                child: Container(
+                                  padding: EdgeInsets.all(15),
+                                  child:  Text(
+                                    "You have a booking request from $requester",
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
                     ],
                   );
                 } else {
