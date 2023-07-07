@@ -275,11 +275,12 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                       final containsSearchString = docs.any((doc) {
                         final data = doc.data()
                             as Map<String, dynamic>?; // Explicit type cast
-                        final fieldValue = data?["Requester"]; // Explicit type cast
+                        final id = data?["RoomId"]; // Explicit type cast
+                        final requester = data?["Requester"]; // Explicit type cast
                         var searchString = email;
 
-                        return fieldValue != null &&
-                            fieldValue.contains(searchString);
+                        return id != null &&
+                            id.contains(roomId.toString()) && searchString.contains(requester);
                       });
 
                       if (containsSearchString) {
