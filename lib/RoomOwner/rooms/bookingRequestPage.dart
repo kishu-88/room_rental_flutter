@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../customer/customerProfile.dart';
+import '../rooms/viewCustomerProfile.dart';
 
 class BookingRequestPage extends StatefulWidget {
   final String documentId;
@@ -118,7 +117,8 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CustomerProfilePage()),
+                          builder: (context) =>
+                              const ViewCustomerProfilePage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(

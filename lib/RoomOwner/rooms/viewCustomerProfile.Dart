@@ -6,16 +6,18 @@ import 'package:room_rental/RoomOwner/rooms/add_rooms_page.dart';
 import 'package:room_rental/authentication/roomOwner/roomOwnerLoginPage.dart';
 import 'package:room_rental/utils/OwnerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../rooms/bookingRequestPage.dart';
 
-class CustomerProfilePage extends StatefulWidget {
-  const CustomerProfilePage({Key? key}) : super(key: key);
+
+class ViewCustomerProfilePage extends StatefulWidget {
+  const ViewCustomerProfilePage({Key? key}) : super(key: key);
   // final String email;
 
   @override
-  State<CustomerProfilePage> createState() => _CustomerProfilePageState();
+  State<ViewCustomerProfilePage> createState() => _ViewCustomerProfilePageState();
 }
 
-class _CustomerProfilePageState extends State<CustomerProfilePage> {
+class _ViewCustomerProfilePageState extends State<ViewCustomerProfilePage> {
   String email = '';
 
   @override
@@ -43,53 +45,17 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: const Color.fromARGB(255, 27, 91, 118),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color.fromARGB(255, 27, 91, 118),
-          selectedItemColor: Color.fromARGB(255, 106, 238, 243),
-          unselectedItemColor: Colors.white,
-          selectedIconTheme: IconThemeData(size: 28),
-          unselectedIconTheme: IconThemeData(size: 24),
-          selectedLabelStyle: TextStyle(fontSize: 14),
-          unselectedLabelStyle: TextStyle(fontSize: 12),
-        ),
-        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blue),
-      ),
-      home: Scaffold(
+     return Scaffold(
         appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(
-                  Icons.menu,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              );
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              // Navigator.of(context).pushReplacement(MaterialPageRoute(
+              //     builder: (context) => const BookingRequestPage()));
             },
           ),
-          title: const Text('Hamro Room'),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                logout(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginOptions()),
-                );
-              },
-            ),
-          ],
+          title: const Text('Edit Details'),
+          backgroundColor: const Color.fromARGB(255, 27, 91, 118),
         ),
         body: Center(
           child: Column(
@@ -107,8 +73,8 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                   borderRadius: BorderRadius.circular(100),
                   child: Image.asset(
                     'images/profile_pic.jpg',
-                    height: 200,
-                    width: 200,
+                    height: 100,
+                    width: 100,
                   ),
                 ),
               ),
@@ -123,51 +89,12 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                   style: TextStyle(color: Colors.white, fontSize: 15),
                 ),
               ),
-    
-                  ],
-                ),
-              )
             ],
           ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-          currentIndex: currentPage,
-          onTap: (int index) {
-            setState(() {
-              currentPage = index;
-            });
-
-            if (index == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const OwnerHomePage(),
-                  // builder: (context) => const CustomerPage(),
-                ),
-              );
-            } else if (index == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ProfilePage(),
-                ),
-              );
-            }
-          },
-        ),
+      
         backgroundColor: const Color(0xFF2284AE),
-        drawer: const OwnerSidebar(),
-      ),
-    );
+      );
+    
   }
 }
