@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../customer/customerProfile.dart';
+
 class BookingRequestPage extends StatefulWidget {
   final String documentId;
 
@@ -113,11 +115,11 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                     : const Text("Not Found"),
                 ElevatedButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => const LoginOptions()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CustomerProfilePage()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.yellow,

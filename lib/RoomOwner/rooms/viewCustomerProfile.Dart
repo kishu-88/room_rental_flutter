@@ -7,15 +7,15 @@ import 'package:room_rental/authentication/roomOwner/roomOwnerLoginPage.dart';
 import 'package:room_rental/utils/OwnerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class CustomerProfilePage extends StatefulWidget {
+  const CustomerProfilePage({Key? key}) : super(key: key);
   // final String email;
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<CustomerProfilePage> createState() => _CustomerProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _CustomerProfilePageState extends State<CustomerProfilePage> {
   String email = '';
 
   @override
