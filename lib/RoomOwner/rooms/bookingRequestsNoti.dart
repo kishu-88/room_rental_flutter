@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:room_rental/RoomOwner/rooms/bookingRequestPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class bookingRequestNotiPage extends StatefulWidget {
@@ -50,44 +51,50 @@ class _bookingRequestNotiPageState extends State<bookingRequestNotiPage> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                var requester; // Declare the 'requester' variable outside the loop
-                var roomId; // Declare the 'requester' variable outside the loop
-
                 final documents = snapshot.data!.docs;
-                final containsSearchString = documents.any((doc) {
+                final ownerDocuments = documents.where((doc) {
                   final data =
                       doc.data() as Map<String, dynamic>?; // Explicit type cast
                   final ownerName = data?["Owner"];
-                  requester = data?["Requester"];
-                  roomId = data?["RoomId"]; // Explicit type cast
                   var searchString = email;
 
-                   return ownerName != null &&
-            ownerName.contains(searchString) && requester != null;
-                });
+                  return ownerName != null && ownerName.contains(searchString);
+                }).toList();
 
-                if (containsSearchString) {
-                  print(requester);
-                  print(roomId);
+                if (ownerDocuments.isNotEmpty) {
                   return Column(
-                    children: [
-                       ElevatedButton(
-                          onPressed: () {},
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: Container(
-                                  padding: EdgeInsets.all(15),
-                                  child:  Text(
-                                    "You have a booking request from $requester",
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
+                    children: ownerDocuments.map((doc) {
+                      final data = doc.data()
+                          as Map<String, dynamic>?; // Explicit type cast
+                      final requester = data?["Requester"];
+                                        final documentId = doc.id;
+
+
+                      return ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                   BookingRequestPage(documentId:documentId),
+                            ),
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.all(15),
+                                child: Text(
+                                  "You have a booking request from $requester",
+                                  style: const TextStyle(fontSize: 18),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                    ],
+                      );
+                    }).toList(),
                   );
                 } else {
                   return const Center(

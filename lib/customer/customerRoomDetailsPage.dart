@@ -41,8 +41,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
           FirebaseFirestore.instance.collection('Booking Requests');
 
       // Create a new document with a unique ID
-      DocumentReference<Map<String, dynamic>> documentRef =
-          collection.doc(roomId);
+      DocumentReference<Map<String, dynamic>> documentRef = collection.doc();
 
       // Set the data to be added
       await documentRef.set({
@@ -275,18 +274,25 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                       final containsSearchString = docs.any((doc) {
                         final data = doc.data()
                             as Map<String, dynamic>?; // Explicit type cast
+                        String documentId = doc.id;
+                        print(documentId);
+
                         final id = data?["RoomId"]; // Explicit type cast
-                        final requester = data?["Requester"]; // Explicit type cast
+                        final requester =
+                            data?["Requester"]; // Explicit type cast
+                        final owner = data?["Owner"]; // Explicit type cast
                         var searchString = email;
 
                         return id != null &&
-                            id.contains(roomId.toString()) && searchString.contains(requester);
+                            id.contains(roomId.toString()) &&
+                            searchString.contains(requester);
                       });
 
                       if (containsSearchString) {
                         return ElevatedButton(
                           onPressed: () {
-                            removeDocumentFromFirestore(roomId.toString());
+                            var documentId;
+                            removeDocumentFromFirestore(documentId.toString());
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.yellow),
@@ -302,7 +308,10 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.yellow),
-                          child: const Text('Request',style: TextStyle(fontSize: 20, color: Colors.black),),
+                          child: const Text(
+                            'Request',
+                            style: TextStyle(fontSize: 20, color: Colors.black),
+                          ),
                         );
                       }
                     },
