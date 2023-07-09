@@ -17,6 +17,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   String email = '';
   var sexOption;
+  var martialStatusOption;
   DateTime? selectedDate;
 
   @override
@@ -195,6 +196,64 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     const Text(
                       'Female',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Radio<String>(
+                      value: 'Others',
+                      groupValue: sexOption,
+                      onChanged: (String? value) {
+                        setState(() {
+                          sexOption = value;
+                        });
+                      },
+                    ),
+                    const Text(
+                      'Others',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: const Text(
+                      'Martial Status : ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Radio<String>(
+                      value: 'Single',
+                      groupValue: martialStatusOption,
+                      onChanged: (String? value) {
+                        setState(() {
+                          martialStatusOption = value;
+                        });
+                      },
+                    ),
+                    const Text(
+                      'Single',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(width: 20),
+                    Radio<String>(
+                      value: 'Married',
+                      groupValue: sexOption,
+                      onChanged: (String? value) {
+                        setState(() {
+                          sexOption = value;
+                        });
+                      },
+                    ),
+                    const Text(
+                      'Married',
                       style: TextStyle(color: Colors.white),
                     ),
                     Radio<String>(
