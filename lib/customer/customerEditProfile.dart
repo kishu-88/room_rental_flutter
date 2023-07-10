@@ -5,16 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../customer/customerHome.dart';
 import '../../customer/customerProfile.dart';
-import './register.dart';
 
-class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+class EditCustomerProfilePage extends StatefulWidget {
+  const EditCustomerProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
+  State<EditCustomerProfilePage> createState() => _EditCustomerProfilePageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
   String email = '';
   var sexOption;
   var martialStatusOption;
@@ -107,7 +106,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   builder: (context) => const CustomerProfilePage()));
             },
           ),
-          title: const Text('Edit Details'),
+          title: const Text('Complete Profile Setup'),
           backgroundColor: const Color.fromARGB(255, 27, 91, 118),
         ),
         body: SingleChildScrollView(
@@ -121,13 +120,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
               children: [
                 SizedBox(height: screenHeight * 0),
                 TextFormField(
+                  enabled: false,
                   controller: roomCustomerEmailController,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(90.0),
                     ),
-                    labelText: 'Email',
+                    labelText: "E-Mail : $email",
                     labelStyle: const TextStyle(color: Colors.white),
                   ),
                 ),

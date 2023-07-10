@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../rooms/viewCustomerProfile.dart';
 
+import 'customerDetailView.dart';
 class BookingRequestPage extends StatefulWidget {
   final String documentId;
 
@@ -116,12 +116,12 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                 documentData != null
                     ? ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-          builder: (context) => ViewCustomerProfilePage(),
-                            ),
-                          );
+                          var requesterEmail = documentData!['Requester'];
+                             Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CustomerDetailView(requester: requesterEmail,)),
+                      );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.yellow,

@@ -4,7 +4,7 @@ import 'package:room_rental/authentication/login_options.dart';
 import 'package:room_rental/customer/customerHome.dart';
 import 'package:room_rental/utils/customerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../authentication/editprofile.dart';
+import 'customerEditProfile.dart';
 
 class CustomerProfilePage extends StatefulWidget {
   const CustomerProfilePage({Key? key}) : super(key: key);
@@ -128,7 +128,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                   onPressed: () {
                     // Perform edit profile action
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const EditProfilePage()));
+                        builder: (context) => const EditCustomerProfilePage()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.yellow,
