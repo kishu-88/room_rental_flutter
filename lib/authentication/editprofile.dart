@@ -113,7 +113,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(
-              vertical: screenHeight * 0.1,
+              vertical: screenHeight * 0.05,
               horizontal: screenWidth * 0.1,
             ),
             child: Column(
@@ -242,13 +242,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       'Single',
                       style: TextStyle(color: Colors.white),
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 10),
                     Radio<String>(
                       value: 'Married',
-                      groupValue: sexOption,
+                      groupValue: martialStatusOption,
                       onChanged: (String? value) {
                         setState(() {
-                          sexOption = value;
+                          martialStatusOption = value;
                         });
                       },
                     ),
@@ -258,10 +258,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     Radio<String>(
                       value: 'Others',
-                      groupValue: sexOption,
+                      groupValue: martialStatusOption,
                       onChanged: (String? value) {
                         setState(() {
-                          sexOption = value;
+                          martialStatusOption = value;
                         });
                       },
                     ),
