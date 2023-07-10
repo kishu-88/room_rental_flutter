@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
-import '../rooms/bookingRequestPage.dart';
 
 class ViewCustomerProfilePage extends StatefulWidget {
-  const ViewCustomerProfilePage({Key? key}) : super(key: key);
+  final dynamic requester;
+
+  ViewCustomerProfilePage1({required this.requester});
 
   @override
-  State<ViewCustomerProfilePage> createState() => _ViewCustomerProfilePageState();
+  _ViewCustomerProfilePageState createState() => _ViewCustomerProfilePageState();
 }
-
 class _ViewCustomerProfilePageState extends State<ViewCustomerProfilePage> {
   String email = '';
 

@@ -36,6 +36,7 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
         });
 
         var roomId = documentData!['RoomId'];
+        var requesterEmail = documentData!['Requseter'];
 
         DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
             await FirebaseFirestore.instance
@@ -112,30 +113,33 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                         ),
                       )
                     : const Text("Not Found"),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const ViewCustomerProfilePage()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  child: Column(
-                    children: const [
-                      Text(
-                        'View Profile',
-                        style: TextStyle(fontSize: 25, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
+                documentData != null
+                    ? ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+          builder: (context) => ViewCustomerProfilePage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.yellow,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                        ),
+                        child: Column(
+                          children: const [
+                            Text(
+                              'View Profile',
+                              style:
+                                  TextStyle(fontSize: 25, color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      )
+                    : const Text("Not Found")
               ],
             ),
           ),
