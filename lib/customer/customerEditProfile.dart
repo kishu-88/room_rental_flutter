@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// ignore: depend_on_referenced_packages
+import 'package:intl/intl.dart';
 
 import '../../customer/customerHome.dart';
 import '../../customer/customerProfile.dart';
@@ -10,7 +12,8 @@ class EditCustomerProfilePage extends StatefulWidget {
   const EditCustomerProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<EditCustomerProfilePage> createState() => _EditCustomerProfilePageState();
+  State<EditCustomerProfilePage> createState() =>
+      _EditCustomerProfilePageState();
 }
 
 class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
@@ -293,6 +296,16 @@ class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
                       fontSize: screenHeight * 0.025,
                       color: Colors.white,
                     ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  selectedDate == null
+                      ? 'No Date Selected'
+                      : 'Selected Date of Birth: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02),
