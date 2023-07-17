@@ -98,7 +98,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
             Container(
               margin: const EdgeInsets.all(24),
               width: 1000, // Specify the desired width of the rectangle
-              height: 130, // Specify the desired height of the rectangle
+              height: 160, // Specify the desired height of the rectangle
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Color.fromARGB(255, 195, 86, 2),
@@ -106,25 +106,32 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
               alignment: Alignment.center,
 
               child: Column(
-                children:  [
+                children: [
                   const Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Text(
                       'Do you want us to recommend good neighbourhood for you?',
                       style: TextStyle(color: Colors.white, fontSize: 22),
                     ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: const Text(
+                        "Recommend Me",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 195, 86, 2),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: ElevatedButton(onPressed: (){}, child: const Text("Recommend Me",style:TextStyle(color: Color.fromARGB(255, 195, 86, 2),
-),),
-                     style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),),
-                    ),
+                  ),
                 ],
               ),
               // Set the desired color of the rectangle
