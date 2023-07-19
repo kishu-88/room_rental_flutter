@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
@@ -17,6 +17,13 @@ class EditCustomerProfilePage extends StatefulWidget {
 }
 
 class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController fullnameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController religionController = TextEditingController();
+  final TextEditingController occupationController = TextEditingController();
+
   String email = '';
   var sexOption;
   var martialStatusOption;
@@ -59,42 +66,8 @@ class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
     return user;
   }
 
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  final FirebaseAuth auth = FirebaseAuth.instance;
-
-  Future<UserCredential?> signInWithGoogle() async {
-    // Trigger the Google Sign-In flow
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-    if (googleUser != null) {
-      // Obtain the authentication details from the Google user
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      // Create a new credential using the obtained authentication details
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      // Sign in to Firebase using the credential
-      final UserCredential userCredential =
-          await auth.signInWithCredential(credential);
-
-      // Return the user credential
-      return userCredential;
-    }
-
-    return null; // Return null if the Google Sign-In process was canceled
-  }
-
   @override
   Widget build(BuildContext context) {
-    final TextEditingController roomCustomerEmailController =
-        TextEditingController();
-    final TextEditingController roomCustomerPasswordController =
-        TextEditingController();
-
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
 
@@ -124,7 +97,6 @@ class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
                 SizedBox(height: screenHeight * 0),
                 TextFormField(
                   enabled: false,
-                  controller: roomCustomerEmailController,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -136,7 +108,7 @@ class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 TextFormField(
-                  controller: roomCustomerEmailController,
+                  controller: usernameController,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -146,9 +118,33 @@ class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
                     labelStyle: const TextStyle(color: Colors.white),
                   ),
                 ),
+                  SizedBox(height: screenHeight * 0.02),
+                TextFormField(
+                  controller: fullnameController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(90.0),
+                    ),
+                    labelText: 'Fullname',
+                    labelStyle: const TextStyle(color: Colors.white),
+                  ),
+                ),
                 SizedBox(height: screenHeight * 0.02),
                 TextFormField(
-                  controller: roomCustomerEmailController,
+                  controller: phoneController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(90.0),
+                    ),
+                    labelText: 'Phone',
+                    labelStyle: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                  SizedBox(height: screenHeight * 0.02),
+                TextFormField(
+                  controller: ageController,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -310,7 +306,7 @@ class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 TextFormField(
-                  controller: roomCustomerPasswordController,
+                  controller: religionController,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -322,7 +318,7 @@ class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 TextFormField(
-                  controller: roomCustomerPasswordController,
+                  controller: occupationController,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -334,44 +330,7 @@ class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 ElevatedButton(
-                  onPressed: () async {
-                    User? user = await editProfilePage(
-                      email: roomCustomerEmailController.text,
-                      password: roomCustomerPasswordController.text,
-                      context: context,
-                    );
-                    if (user != null) {
-                      String email = roomCustomerEmailController.text.trim();
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      await prefs.setString('email', email);
-
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const CustomerHomePage(),
-                        ),
-                      );
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Login Failed'),
-                            content:
-                                Text('No user found with these credentials.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  },
+                  onPressed: () {submitForm(context);},
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.yellow),
@@ -397,4 +356,81 @@ class _EditCustomerProfilePageState extends State<EditCustomerProfilePage> {
       ),
     );
   }
+void submitForm(BuildContext context) async {
+  final String username = usernameController.text;
+  final String fullname = fullnameController.text;
+  final String phone = phoneController.text;
+  final String age = ageController.text;
+  final String religion = religionController.text;
+  final String occupation = occupationController.text;
+  final String sex = sexOption;
+  final String martialStatus= martialStatusOption;
+
+
+  // Perform form validation here if needed before saving to the database
+
+  try {
+    // Check if the username already exists in any document in the 'users' collection
+    final QuerySnapshot usernameSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: username)
+        .get();
+
+    if (usernameSnapshot.docs.isNotEmpty) {
+      // Username already exists, show an error message or handle accordingly.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Username already exists. Please choose a different one.')),
+      );
+      return;
+    }
+
+    // Check if the phone number already exists in any document in the 'users' collection
+    final QuerySnapshot phoneSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('phone', isEqualTo: phone)
+        .get();
+
+    if (phoneSnapshot.docs.isNotEmpty) {
+      // Phone number already exists, show an error message or handle accordingly.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Phone number already exists. Please use a different one.')),
+      );
+      return;
+    }
+
+    // If both username and phone number are unique, proceed to save the form data to Firebase Firestore
+    await FirebaseFirestore.instance.collection('users').doc(email).set({
+      'email': email, // Assuming email is defined somewhere in your code.
+      'username': username,
+      'fullname': fullname,
+      'phone': phone,
+      'age': age,
+      'religion': religion,
+      'occupation': occupation,
+      'sex': sex,
+      'maritalStatus': martialStatus,
+      // Add more fields as needed
+    });
+
+    // Navigate to the success screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CustomerHomePage()),
+    );
+
+    // Clear the form after successful submission
+    usernameController.clear();
+    phoneController.clear();
+    ageController.clear();
+    religionController.clear();
+    occupationController.clear();
+  } catch (e) {
+    // Handle any errors that might occur during form submission or database write.
+    // For example, show a snackbar with an error message.
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to submit form. Please try again later.')),
+    );
+  }
+}
+
 }

@@ -11,8 +11,14 @@ class CustomerDetailView extends StatefulWidget {
 }
 
 class _CustomerDetailViewState extends State<CustomerDetailView> {
-  String customerName = '';
-  String customerEmail = '';
+  String fullname = '';
+  String email = '';
+  String username = '';
+  String age = '';
+  String sex = '';
+  String religion=  '';
+  String occupation = '';
+  String maritalStatus = '';
   // Add more variables for other customer information
 
   @override
@@ -31,8 +37,14 @@ class _CustomerDetailViewState extends State<CustomerDetailView> {
       if (snapshot.exists) {
         // Retrieve customer information from the document
         setState(() {
-          customerName = snapshot['name'];
-          customerEmail = snapshot['email'];
+          fullname = snapshot['fullname'];
+          email = snapshot['email'];
+          username = snapshot['username'];
+          age = snapshot['age'];
+          sex = snapshot['sex'];
+          religion = snapshot['religion'];
+          maritalStatus = snapshot['maritalStatus'];
+          occupation = snapshot['occupation'];
           // Set other customer information variables here
         });
       }
@@ -51,7 +63,7 @@ class _CustomerDetailViewState extends State<CustomerDetailView> {
         child: Column(
           children: [
             Container(
-              margin: const EdgeInsets.all(24),
+              margin: const EdgeInsets.all(12),
               width: 150,
               height: 150,
               decoration: BoxDecoration(
@@ -68,9 +80,9 @@ class _CustomerDetailViewState extends State<CustomerDetailView> {
                 ),
               ),
             ),
-            Text(widget.requester,style: TextStyle(fontSize: 20,color: Colors.white),),
+            Text(widget.requester,style: TextStyle(fontSize: 25,color: Colors.white),),
            Container(
-              padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: DataTable(
                 columns: const <DataColumn>[
                   DataColumn(label: SizedBox.shrink()),
@@ -80,108 +92,72 @@ class _CustomerDetailViewState extends State<CustomerDetailView> {
                   DataRow(
                     cells: <DataCell>[
                       const DataCell(Text(
-                        "Location : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        "Fullname : ",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       DataCell(Text(
-                        "location",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
-                        "Floor : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        "floor",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        fullname,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),
                   DataRow(
                     cells: <DataCell>[
                       DataCell(Text(
-                        "Size : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        " Username : ",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       DataCell(Text(
-                        "size",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
-                        "Nearest Landmark : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        "landmark",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        username,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),
                   DataRow(
                     cells: <DataCell>[
                       DataCell(Text(
-                        "Parking : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        "Age : ",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       DataCell(Text(
-                        "parking",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
-                        "Preference : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        "preference",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        age,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),
                   DataRow(
                     cells: <DataCell>[
                       DataCell(Text(
-                        "Owner : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        "Sex : ",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       DataCell(Text(
-                        "owner",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
-                        "Rate : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        "rate",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        sex,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),
                   DataRow(
                     cells: <DataCell>[
                       DataCell(Text(
-                        "Is Rate Negotiable : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        "Marital Status : ",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       DataCell(Text(
-                        "negotiability",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        maritalStatus,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      )),
+                    ],
+                  ),
+                  DataRow(
+                    cells: <DataCell>[
+                      DataCell(Text(
+                        "Occupation : ",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      )),
+                      DataCell(Text(
+                        occupation,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),
