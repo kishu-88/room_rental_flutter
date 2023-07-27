@@ -31,6 +31,8 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
 
   var parkingOption;
 
+  var wifiOption;
+
   var negotiability;
 
   var id = DateTime.now().millisecondsSinceEpoch;
@@ -97,8 +99,9 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
 
   bool agreeToTerms = false;
 
-  String dropdownvalue = 'Choose Your Preference';
+  String dropdownvaluePreference = 'Choose Your Preference';
 
+  String dropdownvalueLocation = 'Choose Your Preference';
   String email = '';
 
   @override
@@ -116,6 +119,22 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('email');
   }
+
+
+  // List of preferences items in our dropdown menu
+  var locations = [
+    'Choose Your Preference',
+    'Golpark',
+    'Sukkhanagar',
+    'Chauraha',
+    'Kalikanagar',
+    'Devinagar',
+    'Yogikuti',
+    'Shankarnagar',
+    'Drivertole',
+    'Manigram',
+    'Manglapur',
+  ]; 
 
   // List of preferences items in our dropdown menu
   var items = [
@@ -149,21 +168,40 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: TextField(
-                            controller: areaController,
-                            decoration: InputDecoration(
-                              focusColor: Colors.white,
-                              hoverColor: Colors.white,
-                              // hoverColor: Colors.amber,
-                              // filled: true,
-                              // fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(90.0),
-                              ),
-                            ),
-                          ),
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  // decoration: BoxDecoration(
+                  //   // color: Colors.amber,
+                  //   border: Border.all(color: Colors.black, width: 1),
+                  //   borderRadius: BorderRadius.circular(90.0),
+                  // ),
+                  child: DropdownButton(
+                    // Initial Value
+                    value: dropdownvalueLocation,
+
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
+
+                    // Array list of items
+                    items: locations.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(
+                          items,
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 13, 79, 71)),
                         ),
+                      );
+                    }).toList(),
+                    // After selecting the desired option,it will
+                    // change button value to selected value
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownvalueLocation = newValue!;
+                      });
+                    },
+                  ),
+                ),
                       ],
                     ),
                   ),
@@ -271,6 +309,58 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                   ),
                 ),
                 Container(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Wi-Fi',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white)),
+                            Row(
+                              children: [
+                                Radio<String>(
+                                  value: 'Available',
+                                  groupValue: parkingOption,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      wifiOption = value;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  'Available',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                const SizedBox(width: 20),
+                                Radio<String>(
+                                  value: 'Not Available',
+                                  groupValue: parkingOption,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      wifiOption = value;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  'Not Available',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ))
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
                   width: double.infinity,
                   margin: const EdgeInsets.only(top: 20),
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -281,7 +371,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                   ),
                   child: DropdownButton(
                     // Initial Value
-                    value: dropdownvalue,
+                    value: dropdownvaluePreference,
 
                     // Down Arrow Icon
                     icon: const Icon(Icons.keyboard_arrow_down),
@@ -301,7 +391,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                     // change button value to selected value
                     onChanged: (String? newValue) {
                       setState(() {
-                        dropdownvalue = newValue!;
+                        dropdownvaluePreference = newValue!;
                       });
                     },
                   ),
@@ -511,14 +601,15 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
               Map<String, dynamic> data = {
                 "id": id,
                 "Owner": email,
-                "Location": areaController.text,
+                "Location": dropdownvalueLocation,
                 "Size": sizeController.text,
                 "Floor": floorController.text,
                 "Nearest Landmark": landmarkController.text,
                 "Rate": rateController.text,
                 "Negotiability": negotiability,
-                "Preference": dropdownvalue,
+                "Preference": dropdownvaluePreference,
                 "Parking": parkingOption,
+                "wi-fi":wifiOption
               };
               FirebaseFirestore.instance
                   .collection('Rooms')
@@ -528,7 +619,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                 // Navigation logic to another page on success
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => OwnerHomePage()),
+                  MaterialPageRoute(builder: (context) => const OwnerHomePage()),
                 );
               });
             }
