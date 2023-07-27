@@ -53,6 +53,8 @@ class _CustomerDetailViewState extends State<CustomerDetailView> {
     }
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +82,7 @@ class _CustomerDetailViewState extends State<CustomerDetailView> {
                 ),
               ),
             ),
-            Text(widget.requester,style: TextStyle(fontSize: 25,color: Colors.white),),
+            Text(widget.requester,style: const TextStyle(fontSize: 25,color: Colors.white),),
            Container(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: DataTable(
@@ -97,67 +99,67 @@ class _CustomerDetailViewState extends State<CustomerDetailView> {
                       )),
                       DataCell(Text(
                         fullname,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style: const TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),
                   DataRow(
                     cells: <DataCell>[
-                      DataCell(Text(
-                        " Username : ",
+                      const DataCell(Text(
+                        "Username : ",
                         style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       DataCell(Text(
-                        username,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      username.isEmpty ? 'Loading...' : username,
+                        style: const TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),
                   DataRow(
                     cells: <DataCell>[
-                      DataCell(Text(
+                      const DataCell(Text(
                         "Age : ",
                         style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       DataCell(Text(
                         age,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style: const TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),
                   DataRow(
                     cells: <DataCell>[
-                      DataCell(Text(
+                      const DataCell(Text(
                         "Sex : ",
                         style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       DataCell(Text(
                         sex,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style: const TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),
                   DataRow(
                     cells: <DataCell>[
-                      DataCell(Text(
+                     const DataCell(Text(
                         "Marital Status : ",
                         style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       DataCell(Text(
                         maritalStatus,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style: const TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),
                   DataRow(
                     cells: <DataCell>[
-                      DataCell(Text(
+                      const DataCell(Text(
                         "Occupation : ",
                         style: TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       DataCell(Text(
                         occupation,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style: const TextStyle(fontSize: 20, color: Colors.white),
                       )),
                     ],
                   ),

@@ -56,9 +56,10 @@ class _bookingRequestNotiPageState extends State<bookingRequestNotiPage> {
                   final data =
                       doc.data() as Map<String, dynamic>?; // Explicit type cast
                   final ownerName = data?["Owner"];
+                  final roomStatus = data?["Status"];
                   var searchString = email;
-
-                  return ownerName != null && ownerName.contains(searchString);
+                  const status = "Open";
+                  return ownerName != null && ownerName.contains(searchString) && roomStatus.contains(status);
                 }).toList();
 
                 if (ownerDocuments.isNotEmpty) {

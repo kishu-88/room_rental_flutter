@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:room_rental/RoomOwner/ownerHome.dart';
 
 import 'customerDetailView.dart';
+
 class BookingRequestPage extends StatefulWidget {
   final String documentId;
 
@@ -57,6 +59,35 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
     }
   }
 
+  void successRequest() {
+    // Reference to the Firestore collection (replace 'data' with your desired collection name)
+    CollectionReference collection =
+        FirebaseFirestore.instance.collection('Booking Requests');
+
+    // Set the data into Firestore
+    collection
+        .doc(widget
+            .documentId) // Replace 'document_id' with a unique document ID or leave it empty to let Firestore generate one
+        .update({'Status': 'Success'}).then((value) {
+      print("Data successfully saved to Firestore!");
+    }).catchError((error) {
+      print("Error saving data to Firestore: $error");
+    });
+  }
+
+  void deleteDocument() {
+  // Reference to the Firestore collection
+  CollectionReference collection = FirebaseFirestore.instance.collection('Booking Requests');
+
+  // Delete the document with the specified documentId
+  collection.doc(widget.documentId).delete().then((value) {
+    print("Document successfully deleted from Firestore!");
+  }).catchError((error) {
+    print("Error deleting document from Firestore: $error");
+  });
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +123,7 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                 )
               : const Text("room Data is null"),
           Container(
-            margin: EdgeInsets.only(top: 20),
+            margin: const EdgeInsets.only(top: 20),
             height: 120,
             width: double.infinity,
             decoration: const BoxDecoration(
@@ -117,11 +148,13 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                     ? ElevatedButton(
                         onPressed: () {
                           var requesterEmail = documentData!['Requester'];
-                             Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CustomerDetailView(requester: requesterEmail,)),
-                      );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CustomerDetailView(
+                                      requester: requesterEmail,
+                                    )),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.yellow,
@@ -153,11 +186,13 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                   margin: EdgeInsets.only(left: 60),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => const LoginOptions()),
-                      // );
+                      successRequest();
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const OwnerHomePage()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.yellow,
@@ -176,14 +211,15 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 50),
+                  margin: const EdgeInsets.only(left: 50),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => const LoginOptions()),
-                      // );
+                      deleteDocument();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const OwnerHomePage()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.yellow,

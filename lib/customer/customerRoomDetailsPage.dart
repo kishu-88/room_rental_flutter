@@ -42,13 +42,15 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
 
       // Create a new document with a unique ID
       DocumentReference<Map<String, dynamic>> documentRef = collection.doc();
-
+      DateTime now = DateTime.now();
       // Set the data to be added
       await documentRef.set({
         'RoomId': roomId,
         'Requester': email,
         'Owner': user,
         'Status': "Open",
+        'Created At:':now,
+
       });
 
       print('Information added to Firestore successfully!');
