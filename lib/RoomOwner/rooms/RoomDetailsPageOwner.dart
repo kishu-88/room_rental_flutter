@@ -158,6 +158,18 @@ class RoomDetailsPageOwner extends StatelessWidget {
                     ),
                   ],
                 ),
+                Row(
+                  children: [
+                    const Text(
+                      "Status : ",
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                    Text(
+                      document['Status'],
+                      style: const TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
