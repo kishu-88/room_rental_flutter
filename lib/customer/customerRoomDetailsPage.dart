@@ -53,6 +53,19 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
 
       });
 
+      // Now, update the 'Status' field in the 'rooms' collection
+    CollectionReference<Map<String, dynamic>> roomsCollection =
+        FirebaseFirestore.instance.collection('Rooms');
+
+    // Get a reference to the specific room document based on the 'roomId'
+    DocumentReference<Map<String, dynamic>> roomDocRef =
+        roomsCollection.doc(roomId);
+
+    // Update the 'Status' field to "Open" in the room document
+    await roomDocRef.set({'Status': 'Open'}, SetOptions(merge: true));
+
+    print('Status field added to the room document successfully!');
+
       print('Information added to Firestore successfully!');
     } catch (e) {
       print('Error adding information to Firestore: $e');

@@ -70,6 +70,22 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
             .documentId) // Replace 'document_id' with a unique document ID or leave it empty to let Firestore generate one
         .update({'Status': 'Success'}).then((value) {
       print("Data successfully saved to Firestore!");
+        // Reference to the Firestore collection 'Rooms'
+      CollectionReference<Map<String, dynamic>> roomsCollection =
+          FirebaseFirestore.instance.collection('Rooms');
+
+      // Get the roomId from the booking request widget or any other source
+        var roomId = documentData!['RoomId'];
+
+      // Update the status of the room to 'On Rent'
+      roomsCollection
+          .doc(roomId)
+          .update({'Status': 'On Rent'}).then((_) {
+        print("Room status updated to 'On Rent'!");
+      }).catchError((error) {
+        print("Error updating room status: $error");
+      });
+
     }).catchError((error) {
       print("Error saving data to Firestore: $error");
     });
@@ -183,7 +199,7 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
             child: Row(
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 60),
+                  margin: const EdgeInsets.only(left: 60),
                   child: ElevatedButton(
                     onPressed: () {
                       successRequest();
@@ -222,7 +238,7 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.yellow,
+                      backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.0),
                       ),
@@ -231,7 +247,7 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                       children: const [
                         Text(
                           'Deny',
-                          style: TextStyle(fontSize: 25, color: Colors.black),
+                          style: TextStyle(fontSize: 25, color: Colors.white),
                         ),
                       ],
                     ),

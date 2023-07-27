@@ -143,22 +143,24 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final documents = snapshot.data!.docs;
-                    final currentUserEmail = email;
-
-                    final filteredDocuments = documents.where((doc) {
+                    final ownerDocuments = documents.where((doc) {
                       final data = doc.data()
                           as Map<String, dynamic>?; // Explicit type cast
-                      final fieldValue =
-                          data?["Owner"] as String?; // Explicit type cast
-
-                      return fieldValue != currentUserEmail;
+                      final ownerName = data?["Owner"];
+                      final roomStatus = data?["Status"];
+                      var searchString = email;
+                      const status = "Open";
+                      return ownerName != null &&
+                          !ownerName.contains(searchString) &&
+                          roomStatus?.contains(status) ==
+                              true; // Use null-aware operator
                     }).toList();
                     return GridView.count(
                       crossAxisCount: 2,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                       padding: const EdgeInsets.all(10),
-                      children: filteredDocuments.map((document) {
+                      children: ownerDocuments.map((document) {
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(

@@ -3,6 +3,7 @@ import 'package:room_rental/RoomOwner/rooms/bookingRequestsNoti.dart';
 
 import '../RoomOwner/ownerProfile.dart';
 import '../RoomOwner/rooms/choose_category_page.dart';
+import '../RoomOwner/rooms/ownerRoomsOnRent.dart';
 
 class OwnerSidebar extends StatefulWidget {
   const OwnerSidebar({super.key});
@@ -127,6 +128,31 @@ class _OwnerSidebarState extends State<OwnerSidebar> {
                   ),
                 ),
               ),
+               const Divider(
+                height: 10,
+                thickness: 1,
+                endIndent: 0,
+                color: Colors.white,
+              ),
+              ListTile(
+                title: const Text(
+                  'Rooms on Rent',
+                  style: TextStyle(
+                    color: Color(0xFFFFFFFF),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const OwnerRoomsOnRent(),
+                    ),
+                  );
+                },
+               leading: const Icon(
+                    Icons.verified_user,
+                    color: Color(0xFFFFFFFF),
+                  )),
               const Divider(
                 height: 10,
                 thickness: 1,
