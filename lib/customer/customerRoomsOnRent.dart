@@ -7,15 +7,15 @@ import 'package:room_rental/customer/customerRoomDetailsPage.dart';
 import 'package:room_rental/utils/customerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CustomerHomePage extends StatefulWidget {
+class customerRoomsOnRent extends StatefulWidget {
   // final String email;
-  const CustomerHomePage({Key? key}) : super(key: key);
+  const customerRoomsOnRent({Key? key}) : super(key: key);
 
   @override
-  State<CustomerHomePage> createState() => _CustomerHomePageState();
+  State<customerRoomsOnRent> createState() => _customerRoomsOnRentState();
 }
 
-class _CustomerHomePageState extends State<CustomerHomePage> {
+class _customerRoomsOnRentState extends State<customerRoomsOnRent> {
   String email = '';
 
   @override
@@ -40,39 +40,11 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   int currentPage = 0;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: const Color.fromARGB(255, 27, 91, 118),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color.fromARGB(255, 27, 91, 118),
-          selectedItemColor: Color.fromARGB(255, 106, 238, 243),
-          unselectedItemColor: Colors.white,
-          selectedIconTheme: IconThemeData(size: 28),
-          unselectedIconTheme: IconThemeData(size: 24),
-          selectedLabelStyle: TextStyle(fontSize: 14),
-          unselectedLabelStyle: TextStyle(fontSize: 12),
-        ),
-        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blue),
-      ),
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(
               255, 27, 91, 118), // Set the desired background color here
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(
-                  Icons.menu,
-                  color: Color(0xFFFFFFFF),
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              );
-            },
-          ),
-          title: const Text('Hamro Room'),
+          title: const Text('Rooms on Rent'),
           centerTitle: true,
           actions: [
             IconButton(
@@ -95,47 +67,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         ),
         body: Column(
           children: [
-            Container(
-              margin: const EdgeInsets.all(24),
-              width: 1000, // Specify the desired width of the rectangle
-              height: 160, // Specify the desired height of the rectangle
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Color.fromARGB(255, 195, 86, 2),
-              ),
-              alignment: Alignment.center,
-
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      'Do you want us to recommend good neighbourhood for you?',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "Recommend Me",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 195, 86, 2),
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              // Set the desired color of the rectangle
-            ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream:
@@ -146,13 +77,13 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                     final ownerDocuments = documents.where((doc) {
                       final data = doc.data()
                           as Map<String, dynamic>?; // Explicit type cast
-                      final ownerName = data?["Owner"];
+                      final ownerName = data?["Renter"];
                       final roomStatus = data?["Status"];
                       final id = data?['id'];
                       var searchString = email;
-                      const status = "Open";
+                      const status = "On Rent";
                       return ownerName != null &&
-                          !ownerName.contains(searchString) &&
+                          ownerName.contains(searchString) &&
                           roomStatus?.contains(status) ==
                               true; // Use null-aware operator
                     }).toList();
@@ -258,8 +189,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
           },
         ),
         backgroundColor: const Color(0xFF2284AE),
-        drawer: const CustomerSidebar(),
-      ),
-    );
+      );
   }
 }

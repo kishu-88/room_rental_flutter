@@ -38,7 +38,7 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
         });
 
         var roomId = documentData!['RoomId'];
-        var requesterEmail = documentData!['Requseter'];
+        var requesterEmail = documentData!['Requester'];
 
         DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
             await FirebaseFirestore.instance
@@ -80,7 +80,7 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
       // Update the status of the room to 'On Rent'
       roomsCollection
           .doc(roomId)
-          .update({'Status': 'On Rent'}).then((_) {
+          .update({'Status': 'On Rent','Renter':documentData!['Requester']}).then((_) {
         print("Room status updated to 'On Rent'!");
       }).catchError((error) {
         print("Error updating room status: $error");

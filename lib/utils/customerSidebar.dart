@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:room_rental/customer/customerProfile.dart';
 
+import '../customer/customerRoomsOnRent.dart';
+import '../customer/customerbookingRequestsNoti.dart';
+
 class CustomerSidebar extends StatefulWidget {
   const CustomerSidebar({super.key});
 
@@ -133,18 +136,43 @@ class _CustomerSidebarState extends State<CustomerSidebar> {
               // ),
               ListTile(
                   title: const Text(
+                    'Rooms On Rent',
+                    style: TextStyle(
+                      color: Color(0xFFFFFFFF),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const customerRoomsOnRent(),
+                    ),
+                  );
+                  },
+                  leading: const Icon(
+                    Icons.verified_outlined,
+                    color: Color(0xFFFFFFFF),
+                  )),
+              const Divider(
+                height: 10,
+                thickness: 1,
+                endIndent: 0,
+                color: Colors.white,
+              ),
+              ListTile(
+                  title: const Text(
                     'My Booking Requests',
                     style: TextStyle(
                       color: Color(0xFFFFFFFF),
                     ),
                   ),
                   onTap: () {
-                  //   Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const bookingRequestNotiPage(),
-                  //   ),
-                  // );
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const customerBookingRequestsNoti(),
+                    ),
+                  );
                   },
                   leading: const Icon(
                     Icons.arrow_circle_up,

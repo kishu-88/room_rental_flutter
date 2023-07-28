@@ -1,12 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:room_rental/customer/customerProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerRoomDetails extends StatefulWidget {
-  final QueryDocumentSnapshot<Object?> document;
 
-  const CustomerRoomDetails({required this.document});
+  final String documentId;
+
+  CustomerRoomDetails({required this.documentId});
   final String fieldName = "your_field_name";
 
   @override
@@ -14,6 +17,9 @@ class CustomerRoomDetails extends StatefulWidget {
 }
 
 class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
+  Map<String, dynamic>? data;
+  bool isLoading = true;
+
   @override
   bool isFavorite = false;
   String email = '';
@@ -21,11 +27,48 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
   @override
   void initState() {
     super.initState();
+     fetchDocumentData();
     getEmail().then((value) {
       setState(() {
         email = value ?? '';
       });
     });
+  }
+
+  Future<void> fetchDocumentData() async {
+    try {
+        print(widget.documentId);
+
+      // Get a reference to the Firestore document using the provided ID
+      DocumentReference<Map<String, dynamic>> documentRef =
+          FirebaseFirestore.instance.collection('Rooms').doc(widget.documentId);
+
+      // Fetch the document data
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await documentRef.get();
+
+      if (snapshot.exists) {
+        // Document data is available
+        setState(() {
+          data = snapshot.data();
+                  isLoading = false;
+
+        });
+      } else {
+        // Document doesn't exist
+        print("document doesn't exist");
+        setState(() {
+          data = null;
+                  isLoading = false;
+
+        });
+      }
+    } catch (e) {
+      print('Error fetching document from Firestore: $e');
+      setState(() {
+        data = null;
+        isLoading = false;
+      });
+    }
   }
 
   Future<String?> getEmail() async {
@@ -72,39 +115,65 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
     }
   }
 
-  Future<void> removeDocumentFromFirestore(String documentId) async {
+  Future<void> removeDocumentFromFirestore(String roomId) async {
+    print(roomId);
     try {
-      // Get a reference to the Firestore collection
-      CollectionReference<Map<String, dynamic>> collection =
-          FirebaseFirestore.instance.collection('Booking Requests');
+    // Get a reference to the Firestore collection
+    CollectionReference<Map<String, dynamic>> collection =
+        FirebaseFirestore.instance.collection('Booking Requests');
 
-      // Get a reference to the document using the provided ID
+    // Query the collection based on the conditions (Requester = email and RoomId = roomId)
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await collection
+        .where('Requester', isEqualTo: email)
+        .where('RoomId', isEqualTo: roomId)
+        .get();
+
+    if (querySnapshot.size > 0) {
+      // Since you mentioned that there might be only one matching document, use the first one
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          querySnapshot.docs.first;
       DocumentReference<Map<String, dynamic>> documentRef =
-          collection.doc(documentId);
+          collection.doc(documentSnapshot.id);
 
       // Delete the document
       await documentRef.delete();
 
       print('Document removed from Firestore successfully!');
-    } catch (e) {
-      print('Error removing document from Firestore: $e');
+    } else {
+      print('No matching document found in Firestore.');
     }
+  } catch (e) {
+    print('Error removing document from Firestore: $e');
+  }
   }
 
   @override
   Widget build(BuildContext context) {
-    final data = widget.document.data() as Map<String, dynamic>?;
-    final imageUrl = data?['imageUrl'];
-    final location = data?['Location'];
-    final floor = data?['Floor'];
-    final landmark = data?['Nearest Landmark'];
-    final parking = data?['Parking'];
-    final negotiability = data?['Negotiability'];
-    final preference = data?['Preference'];
-    final rate = data?['Rate'];
-    final size = data?['Size'];
-    final owner = data?['Owner'];
-    final roomId = data?['id'];
+      if (isLoading) {
+      // You can show a loading indicator while data is being fetched
+      return Container(
+        height: 100,
+        decoration: const BoxDecoration(
+          color: Colors.blue,
+        ),
+        child: const CircularProgressIndicator(),
+      );
+    } else if (data != null)  {
+      final imageUrl = data!['imageUrl'];
+      final location = data!['Location'];
+      final floor = data!['Floor'];
+      final landmark = data!['Nearest Landmark'];
+      final parking = data!['Parking'];
+      final negotiability = data!['Negotiability'];
+      final preference = data!['Preference'];
+      final rate = data!['Rate'];
+      final size = data!['Size'];
+      final owner = data!['Owner'];
+      final roomId = data!['id'];
+
+      // Continue building your UI using the fetched data
+      // ...
+
 
     // Use the document data to display room details
     return Scaffold(
@@ -149,10 +218,10 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
             Container(
               padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
               child: DataTable(
-                columns: const <DataColumn>[
-                  DataColumn(label: SizedBox.shrink()),
-                  DataColumn(label: SizedBox.shrink()),
-                ],
+                columns: <DataColumn>[
+                const DataColumn(label: Text('Rate',style: TextStyle(fontSize: 20),)),
+                DataColumn(label: Text('Rs '+ rate,style: const TextStyle(fontSize: 20),)),
+              ],  
                 rows: <DataRow>[
                   DataRow(
                     cells: <DataCell>[
@@ -162,7 +231,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                       )),
                       DataCell(Text(
                         location,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        style: const TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
                   ),
@@ -241,18 +310,6 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                   DataRow(
                     cells: <DataCell>[
                       DataCell(Text(
-                        "Rate : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        rate,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
                         "Is Rate Negotiable : ",
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
@@ -306,8 +363,8 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                       if (containsSearchString) {
                         return ElevatedButton(
                           onPressed: () {
-                            var documentId;
-                            removeDocumentFromFirestore(documentId.toString());
+                            print("fdsfdsfsd");
+                            removeDocumentFromFirestore(roomId.toString());
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.yellow),
@@ -353,5 +410,8 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
       ),
       backgroundColor: const Color(0xFF2284AE),
     );
+  }else{
+    return const Text("no data found");
   }
+}
 }
