@@ -128,9 +128,9 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
                         }).toList();
                       return GridView.count(
                         crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        padding: const EdgeInsets.all(10),
+                        crossAxisSpacing:10,
+                        mainAxisSpacing: 15,
+                        padding: const EdgeInsets.all(20),
                         children: filteredDocuments.map((document) {
                           return GestureDetector(
                               onTap: () {
@@ -147,40 +147,45 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
                                   borderRadius: BorderRadius.circular(10),
                                   color: const Color.fromARGB(255, 27, 91, 118),
                                 ),
-                                child: Center(
-                                  child: Column(
-                                    children: [
-                                      Image.network(
-                                        document['imageUrl'],
-                                        height: 140,
-                                        width: 180,
-                                        fit: BoxFit.fill,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            document['Location'],
-                                            style: const TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white),
+                                child: SizedBox(
+                                height: 50, // You can adjust this height as needed
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Image.network(
+                                            document['imageUrl'],
+                                            height: double.infinity, // Take full height of the container
+                                                width: double.infinity, // Take full width of the container
+                                                fit: BoxFit.cover, // Maintain aspect ratio and cover the container
                                           ),
-                                          const Text(
-                                            ' | Rs ',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white),
-                                          ),
-                                          Text(
-                                            document['Rate'],
-                                            style: const TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              document['Location'],
+                                              style: const TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                            const Text(
+                                              ' | Rs ',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                            Text(
+                                              document['Rate'],
+                                              style: const TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ));

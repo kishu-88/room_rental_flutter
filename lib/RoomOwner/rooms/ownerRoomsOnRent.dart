@@ -92,19 +92,19 @@ class _OwnerRoomsOnRentState extends State<OwnerRoomsOnRent> {
                                         Text(
                                           document['Location'],
                                           style: const TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 10,
                                               color: Colors.white),
                                         ),
                                         const Text(
                                           ' | Rs ',
                                           style: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 10,
                                               color: Colors.white),
                                         ),
                                         Text(
                                           document['Rate'],
                                           style: const TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 10,
                                               color: Colors.white),
                                         ),
                                       ],

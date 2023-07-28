@@ -36,12 +36,12 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   var negotiability;
 
   var id = DateTime.now().millisecondsSinceEpoch;
-
+  
   get downloadUrl => null;
 
   Future<String> uploadImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       final file = File(pickedFile.path);
@@ -75,8 +75,10 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
           'Rate': '',
           'Negotiability': '',
           'Preference': '',
-          'Parking': '',
-        });
+          'Parking': '',        
+          'Status':'Open'
+          },
+          );
         print("babaal...........");
 
         return downloadUrl; // Return the download URL as a String
@@ -327,7 +329,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                               children: [
                                 Radio<String>(
                                   value: 'Available',
-                                  groupValue: parkingOption,
+                                  groupValue: wifiOption,
                                   onChanged: (String? value) {
                                     setState(() {
                                       wifiOption = value;
@@ -341,7 +343,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                                 const SizedBox(width: 20),
                                 Radio<String>(
                                   value: 'Not Available',
-                                  groupValue: parkingOption,
+                                  groupValue: wifiOption,
                                   onChanged: (String? value) {
                                     setState(() {
                                       wifiOption = value;
@@ -608,8 +610,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                 "Rate": rateController.text,
                 "Negotiability": negotiability,
                 "Preference": dropdownvaluePreference,
-                "Parking": parkingOption,
-                "wi-fi":wifiOption
+                "Parking": parkingOption
               };
               FirebaseFirestore.instance
                   .collection('Rooms')

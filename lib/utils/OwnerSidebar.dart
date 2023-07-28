@@ -24,7 +24,8 @@ class _OwnerSidebarState extends State<OwnerSidebar> {
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
-              Image.asset('images/logo_opaque.png'),
+              Image.asset('images/logo_opaque.png',height: 200,width: 200,fit: BoxFit.cover, // Maintain aspect ratio and cover the container
+),
               // const DrawerHeader(
 
               //   decoration: BoxDecoration(

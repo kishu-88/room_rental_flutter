@@ -111,7 +111,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                     padding: EdgeInsets.all(10.0),
                     child: Text(
                       'Do you want us to recommend good neighbourhood for you?',
-                      style: TextStyle(color: Colors.white, fontSize: 22),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
                   Container(
@@ -157,9 +157,9 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                     }).toList();
                     return GridView.count(
                       crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      padding: const EdgeInsets.all(10),
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      padding: const EdgeInsets.all(5),
                       children: ownerDocuments.map((document) {
                         return GestureDetector(
                           onTap: () {
