@@ -106,7 +106,10 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
         'Renter': documentData!['Requester'],
         'Accepted Date': DateTime.now(),
         'Start Date': dateMonthString,
-        'Rate' : roomData!['Rate']// Replace this with the actual start date of the rent
+        'Rate' : roomData!['Rate'],
+        'Location' : roomData!['Location'],
+        'imageUrl' : roomData!['imageUrl'],
+        'Status':''// Replace this with the actual start date of the rent
         // Add other relevant data related to the rent here
       }).then((_) {
         print("Data added to 'Rents' collection successfully!");

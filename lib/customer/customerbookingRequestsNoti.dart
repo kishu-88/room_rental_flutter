@@ -2,11 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:room_rental/RoomOwner/rooms/bookingRequestPage.dart';
 import 'package:room_rental/customer/customerCurrentRent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'customerRoomDetailsPage.dart';
 
 class customerBookingRequestsNoti extends StatefulWidget {
   const customerBookingRequestsNoti({super.key});
@@ -50,7 +47,7 @@ class _customerBookingRequestsNotiState extends State<customerBookingRequestsNot
           ),
           child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
-                .collection('Booking Requests')
+                .collection('Rents')
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -58,12 +55,12 @@ class _customerBookingRequestsNotiState extends State<customerBookingRequestsNot
                 final ownerDocuments = documents.where((doc) {
                   final data =
                       doc.data() as Map<String, dynamic>?; // Explicit type cast
-                  final requesterEmail = data?["Requester"];
-                  final roomStatus = data?["Status"];
+                  final renterEmail = data?["Renter"];
+                  final rentStatus = data?["Status"];
                   var searchString = email;
-                  const status = "Success";
-                  return requesterEmail != null && requesterEmail
-                  .contains(searchString) && roomStatus.contains(status);
+                  const status = "Active";
+                  return renterEmail != null && renterEmail
+                  .contains(searchString) && !rentStatus.contains(status);
                 }).toList();
 
                 if (ownerDocuments.isNotEmpty) {
@@ -80,7 +77,7 @@ class _customerBookingRequestsNotiState extends State<customerBookingRequestsNot
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                   CustomerRentDetailsPage(documentId:roomId),
+                                   CustomerRentDetailsPage(documentId:documentId,roomId:roomId),
                             ),
                           );
                         },

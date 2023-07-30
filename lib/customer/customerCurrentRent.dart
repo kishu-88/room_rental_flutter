@@ -2,14 +2,19 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:room_rental/customer/customerProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerRentDetailsPage extends StatefulWidget {
 
-  final String documentId;
+    final String documentId;
+  final String roomId;
 
-  CustomerRentDetailsPage({required this.documentId});
+  CustomerRentDetailsPage({
+    required this.documentId,
+    required this.roomId,
+  });
 
   @override
   _CustomerRentDetailsPageState createState() => _CustomerRentDetailsPageState();
@@ -35,22 +40,57 @@ class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
     });
   }
 
+  void freeRoom(String roomId,documentId) {
+  print(roomId);
+  // Reference to the document in the 'Rooms' collection with the provided roomId
+  DocumentReference roomRef = FirebaseFirestore.instance.collection('Rooms').doc(roomId);
+  DocumentReference rentRef = FirebaseFirestore.instance.collection('Rents').doc(documentId);
+
+              // Get the current date and time
+          DateTime now = DateTime.now();
+ 
+
+  // Get the month name from the DateTime object
+  String monthName = DateFormat('MMMM').format(now);
+
+  // Merge day and month name as a string
+  String dateMonthString = "${now.day} $monthName";
+  
+  // Update the 'status' field to 'open'
+  roomRef.update({'Status': 'Open','Renter':''});
+  rentRef.update({'Status': 'InActive','Released At':dateMonthString});
+    print('Room status updated successfully to "open" for roomId: $roomId');
+  }
+
   Future<void> fetchDocumentData() async {
     try {
         print(widget.documentId);
 
       // Get a reference to the Firestore document using the provided ID
       DocumentReference<Map<String, dynamic>> roomsdocumentRef =
-          FirebaseFirestore.instance.collection('Rooms').doc(widget.documentId);
 
-      // Fetch the document data
+          FirebaseFirestore.instance.collection('Rooms').doc(widget.roomId);
+
       DocumentSnapshot<Map<String, dynamic>> roomSnapshot = await roomsdocumentRef.get();
 
-      //  DocumentReference<Map<String, dynamic>> rentdocumentRef =
-      //     FirebaseFirestore.instance.collection('Rents').doc(widget.documentId);
+       DocumentReference<Map<String, dynamic>> rentdocumentRef =
+          FirebaseFirestore.instance.collection('Rents').doc(widget.documentId);
 
-      // Fetch the document data
-      // DocumentSnapshot<Map<String, dynamic>> rentSnapshot = await rentdocumentRef.get();
+      DocumentSnapshot<Map<String, dynamic>> rentSnapshot = await rentdocumentRef.get();
+
+      if (rentSnapshot.exists) {
+              // Document data is available
+              setState(() {
+                rentdata = rentSnapshot.data();
+                        // isLoading = false;
+              });
+            } else {
+              // Document doesn't exist
+              print("rent document doesn't exist");
+              setState(() {
+                                  // isLoading = false;
+              });
+            }
 
       if (roomSnapshot.exists) {
         // Document data is available
@@ -62,17 +102,18 @@ class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
         });
       } else {
         // Document doesn't exist
-        print("document doesn't exist");
+        print("room document doesn't exist");
         setState(() {
           data = null;
                   isLoading = false;
 
         });
       }
+
     } catch (e) {
       print('Error fetching document from Firestore: $e');
       setState(() {
-        data = null;
+        // data = null;
         isLoading = false;
       });
     }
@@ -167,13 +208,14 @@ class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
         ),
         child: const CircularProgressIndicator(),
       );
-    } else if (data != null)  {
+    } else if (data != null && rentdata != null)  {
       final imageUrl = data!['imageUrl'];
       final location = data!['Location'];
       final rate = data!['Rate'];
       final owner = data!['Owner'];
       final roomId = data!['id'];
-      // final startedAt = rentdata!['Start Date'];
+
+      final startedAt = rentdata!['Start Date'];
 
       // Continue building your UI using the fetched data
       // ...
@@ -251,86 +293,64 @@ class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
                       )),
                     ],
                   ),
+                   DataRow(
+                    cells: <DataCell>[
+                      DataCell(Text(
+                        "Started At : ",
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      )),
+                      DataCell(Text(
+                        startedAt,
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      )),
+                    ],
+                  ),
                 ],
               ),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   padding: const EdgeInsets.all(5),
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("Booking Requests")
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return const Text('Error: Unable to retrieve data');
-                      }
-
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-
-                      final docs = snapshot.data!.docs;
-                      final containsSearchString = docs.any((doc) {
-                        final data = doc.data()
-                            as Map<String, dynamic>?; // Explicit type cast
-                        String documentId = doc.id;
-                        print(documentId);
-
-                        final id = data?["RoomId"]; // Explicit type cast
-                        final requester =
-                            data?["Requester"]; // Explicit type cast
-                        final owner = data?["Owner"]; // Explicit type cast
-                        var searchString = email;
-
-                        return id != null &&
-                            id.contains(roomId.toString()) &&
-                            searchString.contains(requester);
-                      });
-
-                      if (containsSearchString) {
-                        return ElevatedButton(
-                          onPressed: () {
-                            print("fdsfdsfsd");
-                            removeDocumentFromFirestore(roomId.toString());
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.yellow),
-                          child: const Text(
-                            'Requested',
-                            style: TextStyle(fontSize: 20, color: Colors.black),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue),
+                    child: const Row(
+                      children: [
+                         Icon(Icons.phone,
+                        color: Colors.white,
                           ),
-                        );
-                      } else {
-                        return ElevatedButton(
-                          onPressed: () {
-                            addInfoToFirestore(owner, email, roomId.toString());
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.yellow),
-                          child: const Text(
-                            'Request',
-                            style: TextStyle(fontSize: 20, color: Colors.black),
+                          SizedBox(
+                            width: 10,
                           ),
-                        );
-                      }
-                    },
+                         Text(
+                          'Call',
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () { freeRoom(roomId.toString(),widget.documentId);},
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.yellow),
-                    child: const Text(
-                      'Call',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    child: Row(
+                      children: [
+                          Icon(Icons.login,
+                        color: Colors.black,
+                          ),
+                         Text(
+                          '  Free Rent',
+                          style: TextStyle(fontSize: 20, color: Colors.black),
+                        ),
+                      ],
                     ),
                   ),
                 ),
