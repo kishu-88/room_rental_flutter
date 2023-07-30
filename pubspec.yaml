@@ -42,6 +42,10 @@ dependencies:
   url_launcher: ^6.1.11
   flutter_launcher_icons: ^0.13.1
   intl: ^0.17.0
+  flutter_local_notifications: ^15.1.0+1
+  firebase_messaging: ^14.6.5
+  http: ^1.1.0
+  
  
 
 

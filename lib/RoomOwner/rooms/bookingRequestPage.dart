@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:room_rental/RoomOwner/ownerHome.dart';
 
 import 'customerDetailView.dart';
@@ -60,49 +61,79 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
   }
 
   void successRequest() {
-    // Reference to the Firestore collection (replace 'data' with your desired collection name)
-    CollectionReference collection =
-        FirebaseFirestore.instance.collection('Booking Requests');
+  // Reference to the Firestore collection (replace 'data' with your desired collection name)
+  CollectionReference collection =
+      FirebaseFirestore.instance.collection('Booking Requests');
 
-    // Set the data into Firestore
-    collection
-        .doc(widget
-            .documentId) // Replace 'document_id' with a unique document ID or leave it empty to let Firestore generate one
-        .update({'Status': 'Success'}).then((value) {
-      print("Data successfully saved to Firestore!");
-        // Reference to the Firestore collection 'Rooms'
-      CollectionReference<Map<String, dynamic>> roomsCollection =
-          FirebaseFirestore.instance.collection('Rooms');
+  // Set the data into Firestore
+  collection
+      .doc(widget.documentId) // Replace 'document_id' with a unique document ID or leave it empty to let Firestore generate one
+      .update({'Status': 'Success'}).then((value) {
+    print("Data successfully saved to Firestore!");
 
-      // Get the roomId from the booking request widget or any other source
-        var roomId = documentData!['RoomId'];
+    // Reference to the Firestore collection 'Rooms'
+    CollectionReference<Map<String, dynamic>> roomsCollection =
+        FirebaseFirestore.instance.collection('Rooms');
 
-      // Update the status of the room to 'On Rent'
-      roomsCollection
-          .doc(roomId)
-          .update({'Status': 'On Rent','Renter':documentData!['Requester']}).then((_) {
-        print("Room status updated to 'On Rent'!");
+    // Get the roomId from the booking request widget or any other source
+    var roomId = documentData!['RoomId'];
+
+    // Update the status of the room to 'On Rent'
+    roomsCollection.doc(roomId).update({
+      'Status': 'On Rent',
+      'Renter': documentData!['Requester']
+    }).then((_) {
+      print("Room status updated to 'On Rent'!");
+
+      // Reference to the Firestore collection 'Rents'
+      CollectionReference<Map<String, dynamic>> rentsCollection =
+          FirebaseFirestore.instance.collection('Rents');
+
+                  // Get the current date and time
+          DateTime now = DateTime.now();
+ 
+
+  // Get the month name from the DateTime object
+  String monthName = DateFormat('MMMM').format(now);
+
+  // Merge day and month name as a string
+  String dateMonthString = "${now.day} $monthName";
+
+      // Add data to the 'Rents' collection
+      rentsCollection.add({
+        'RoomId': roomId,
+        'Owner': documentData!['Owner'],
+        'Renter': documentData!['Requester'],
+        'Accepted Date': DateTime.now(),
+        'Start Date': dateMonthString,
+        'Rate' : roomData!['Rate']// Replace this with the actual start date of the rent
+        // Add other relevant data related to the rent here
+      }).then((_) {
+        print("Data added to 'Rents' collection successfully!");
       }).catchError((error) {
-        print("Error updating room status: $error");
+        print("Error adding data to 'Rents' collection: $error");
       });
-
     }).catchError((error) {
-      print("Error saving data to Firestore: $error");
+      print("Error updating room status: $error");
     });
-  }
-
-  void deleteDocument() {
-  // Reference to the Firestore collection
-  CollectionReference collection = FirebaseFirestore.instance.collection('Booking Requests');
-
-  // Delete the document with the specified documentId
-  collection.doc(widget.documentId).delete().then((value) {
-    print("Document successfully deleted from Firestore!");
   }).catchError((error) {
-    print("Error deleting document from Firestore: $error");
+    print("Error saving data to Firestore: $error");
   });
 }
 
+
+  void deleteDocument() {
+    // Reference to the Firestore collection
+    CollectionReference collection =
+        FirebaseFirestore.instance.collection('Booking Requests');
+
+    // Delete the document with the specified documentId
+    collection.doc(widget.documentId).delete().then((value) {
+      print("Document successfully deleted from Firestore!");
+    }).catchError((error) {
+      print("Error deleting document from Firestore: $error");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:room_rental/RoomOwner/rooms/bookingRequestPage.dart';
+import 'package:room_rental/customer/customerCurrentRent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'customerRoomDetailsPage.dart';
@@ -60,7 +61,7 @@ class _customerBookingRequestsNotiState extends State<customerBookingRequestsNot
                   final requesterEmail = data?["Requester"];
                   final roomStatus = data?["Status"];
                   var searchString = email;
-                  const status = "Open";
+                  const status = "Success";
                   return requesterEmail != null && requesterEmail
                   .contains(searchString) && roomStatus.contains(status);
                 }).toList();
@@ -79,7 +80,7 @@ class _customerBookingRequestsNotiState extends State<customerBookingRequestsNot
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                   CustomerRoomDetails(documentId:roomId),
+                                   CustomerRentDetailsPage(documentId:roomId),
                             ),
                           );
                         },
@@ -89,7 +90,7 @@ class _customerBookingRequestsNotiState extends State<customerBookingRequestsNot
                               child: Container(
                                 padding: const EdgeInsets.all(15),
                                 child: Text(
-                                  "You have requested to book a room from $owner",
+                                  "$owner have accepted room booking request.",
                                   style: const TextStyle(fontSize: 18),
                                 ),
                               ),

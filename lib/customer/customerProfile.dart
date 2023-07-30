@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:room_rental/RoomOwner/ownerHome.dart';
 import 'package:room_rental/authentication/login_options.dart';
-// import 'package:room_rental/customer.dart';
+import 'package:room_rental/customer/customerEditProfile.dart';
 import 'package:room_rental/customer/customerHome.dart';
-import 'package:room_rental/utils/customerSidebar.dart';
+// import 'package:room_rental/customer.dart';
+import 'package:room_rental/utils/OwnerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'customerEditProfile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CustomerProfilePage extends StatefulWidget {
   const CustomerProfilePage({Key? key}) : super(key: key);
@@ -15,21 +17,53 @@ class CustomerProfilePage extends StatefulWidget {
 }
 
 class _CustomerProfilePageState extends State<CustomerProfilePage> {
-  String email = '';
+    String email = '';
+  String fullname = "";
+  String imageUrl = "";
 
   @override
   void initState() {
     super.initState();
-    getEmail().then((value) {
-      setState(() {
-        email = value ?? '';
-      });
+    fetchEmailAndCustomerInfo();
+  }
+Future<void> fetchEmailAndCustomerInfo() async {
+    // Fetch email from SharedPreferences
+    String? userEmail = await getEmail();
+    setState(() {
+      email = userEmail ?? '';
     });
+
+    // Fetch customer info using the retrieved email
+    fetchCustomerInfo();
   }
 
   Future<String?> getEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('email');
+  }
+
+  void fetchCustomerInfo() async {
+    print("fetch customer");
+    print("${email}hi");
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(email)
+          .get();
+
+      if (snapshot.exists) {
+        print("found document");
+        // Retrieve customer information from the document
+        setState(() {
+          fullname = snapshot['fullname'];
+          email = snapshot['email'];
+          imageUrl = snapshot['imageUrl'];
+          // Set other customer information variables here
+        });
+      }
+    } catch (error) {
+      print('Error fetching customer info: $error');
+    }
   }
 
   int currentPage = 1;
@@ -42,6 +76,8 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+      String image = imageUrl;
+      bool imageIsSet = image != ""; // 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -104,15 +140,19 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                 alignment: Alignment.center,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: Image.asset(
-                    'images/profile_pic.jpg',
-                    height: 100,
-                    width: 100,
+                  child: Visibility(
+                    visible : imageIsSet,
+                    child: Image.network(
+                       imageUrl,
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-              const Text(
-                "Kishu88",
+               Text(
+                fullname,
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               Container(
@@ -127,8 +167,8 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                 child: ElevatedButton(
                   onPressed: () {
                     // Perform edit profile action
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const EditCustomerProfilePage()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const EditCustomerProfile()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.yellow,
@@ -304,7 +344,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           },
         ),
         backgroundColor: const Color(0xFF2284AE),
-        drawer: const CustomerSidebar(),
+        drawer: const OwnerSidebar(),
       ),
     );
   }

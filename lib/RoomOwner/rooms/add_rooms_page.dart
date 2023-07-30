@@ -36,7 +36,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   var negotiability;
 
   var id = DateTime.now().millisecondsSinceEpoch;
-  
+
   get downloadUrl => null;
 
   Future<String> uploadImage() async {
@@ -64,21 +64,22 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
         await FirebaseFirestore.instance
             .collection('Rooms')
             .doc(id.toString())
-            .set({
-          'imageUrl': downloadUrl,
-          'Location': '',
-          'id': '',
-          'Owner': '',
-          'Size': '',
-          'Floor': '',
-          'Nearest Landmark': '',
-          'Rate': '',
-          'Negotiability': '',
-          'Preference': '',
-          'Parking': '',        
-          'Status':'Open'
+            .set(
+          {
+            'imageUrl': downloadUrl,
+            'Location': '',
+            'id': '',
+            'Owner': '',
+            'Size': '',
+            'Floor': '',
+            'Nearest Landmark': '',
+            'Rate': '',
+            'Negotiability': '',
+            'Preference': '',
+            'Parking': '',
+            'Status': 'Open'
           },
-          );
+        );
         print("babaal...........");
 
         return downloadUrl; // Return the download URL as a String
@@ -122,7 +123,6 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
     return prefs.getString('email');
   }
 
-
   // List of preferences items in our dropdown menu
   var locations = [
     'Choose Your Preference',
@@ -136,7 +136,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
     'Drivertole',
     'Manigram',
     'Manglapur',
-  ]; 
+  ];
 
   // List of preferences items in our dropdown menu
   var items = [
@@ -170,40 +170,40 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                           ),
                         ),
                         Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  // decoration: BoxDecoration(
-                  //   // color: Colors.amber,
-                  //   border: Border.all(color: Colors.black, width: 1),
-                  //   borderRadius: BorderRadius.circular(90.0),
-                  // ),
-                  child: DropdownButton(
-                    // Initial Value
-                    value: dropdownvalueLocation,
+                          width: double.infinity,
+                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                          // decoration: BoxDecoration(
+                          //   // color: Colors.amber,
+                          //   border: Border.all(color: Colors.black, width: 1),
+                          //   borderRadius: BorderRadius.circular(90.0),
+                          // ),
+                          child: DropdownButton(
+                            // Initial Value
+                            value: dropdownvalueLocation,
 
-                    // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
+                            // Down Arrow Icon
+                            icon: const Icon(Icons.keyboard_arrow_down),
 
-                    // Array list of items
-                    items: locations.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(
-                          items,
-                          style: const TextStyle(
-                              color: Color.fromARGB(255, 13, 79, 71)),
+                            // Array list of items
+                            items: locations.map((String items) {
+                              return DropdownMenuItem(
+                                value: items,
+                                child: Text(
+                                  items,
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(255, 13, 79, 71)),
+                                ),
+                              );
+                            }).toList(),
+                            // After selecting the desired option,it will
+                            // change button value to selected value
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownvalueLocation = newValue!;
+                              });
+                            },
+                          ),
                         ),
-                      );
-                    }).toList(),
-                    // After selecting the desired option,it will
-                    // change button value to selected value
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownvalueLocation = newValue!;
-                      });
-                    },
-                  ),
-                ),
                       ],
                     ),
                   ),
@@ -541,28 +541,28 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
           ),
         ),
         Step(
-            state:
-                _activeStepIndex <= 1 ? StepState.editing : StepState.complete,
-            isActive: _activeStepIndex >= 1,
-            title: const Text('Photo'),
-            content: Container(
-              width: double.infinity,
-              child: Column(children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      String uploadedImageUrl = await uploadImage();
-                      // Use the download URL as needed
-                      print('Image uploaded. URL: $uploadedImageUrl');
-                    } catch (e) {
-                      // Handle any errors
-                      print('Error uploading image: $e');
-                    }
-                  },
-                  child: const Text("Upload Image"),
-                ),
-              ]),
-            )),
+          state: _activeStepIndex <= 1 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 1,
+          title: const Text('Photo'),
+          content: Container(
+            width: double.infinity,
+            child: Column(children: [
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    String uploadedImageUrl = await uploadImage();
+                    // Use the download URL as needed
+                    print('Image uploaded. URL: $uploadedImageUrl');
+                  } catch (e) {
+                    // Handle any errors
+                    print('Error uploading image: $e');
+                  }
+                },
+                child: const Text("Upload Image"),
+              ),
+            ],),
+          ),
+        ),
         Step(
             state: StepState.complete,
             isActive: _activeStepIndex >= 2,
@@ -620,7 +620,8 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
                 // Navigation logic to another page on success
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const OwnerHomePage()),
+                  MaterialPageRoute(
+                      builder: (context) => const OwnerHomePage()),
                 );
               });
             }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:room_rental/RoomOwner/ownerProfile.dart';
 import 'package:room_rental/RoomOwner/rooms/RoomDetailsPageOwner.dart';
@@ -22,6 +23,7 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
   @override
   void initState() {
     super.initState();
+    requestPermission();
     getEmail().then((value) {
       setState(() {
         email = value ?? '';
@@ -29,6 +31,29 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
     });
   }
 
+
+void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert:true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if(settings.authorizationStatus == AuthorizationStatus.authorized){
+      print("User granted permission");
+    }else if(settings.authorizationStatus == AuthorizationStatus.provisional){
+      print("User granted provisional permission");
+    }else{
+      print("User not granted permission");
+    }
+  }
+  
   Future<String?> getEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('email');

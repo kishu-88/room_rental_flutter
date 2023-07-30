@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:room_rental/RoomOwner/ownerHome.dart';
 import 'package:room_rental/authentication/login_options.dart';
 // import 'package:room_rental/customer.dart';
-import 'package:room_rental/RoomOwner/rooms/add_rooms_page.dart';
-import 'package:room_rental/authentication/roomOwner/roomOwnerLoginPage.dart';
 import 'package:room_rental/utils/OwnerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'ownerEditProfile.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -16,21 +16,53 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String email = '';
+    String email = '';
+  String fullname = "";
+  String imageUrl = "";
 
   @override
   void initState() {
     super.initState();
-    getEmail().then((value) {
-      setState(() {
-        email = value ?? '';
-      });
+    fetchEmailAndCustomerInfo();
+  }
+Future<void> fetchEmailAndCustomerInfo() async {
+    // Fetch email from SharedPreferences
+    String? userEmail = await getEmail();
+    setState(() {
+      email = userEmail ?? '';
     });
+
+    // Fetch customer info using the retrieved email
+    fetchCustomerInfo();
   }
 
   Future<String?> getEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('email');
+  }
+
+  void fetchCustomerInfo() async {
+    print("fetch customer");
+    print("${email}hi");
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(email)
+          .get();
+
+      if (snapshot.exists) {
+        print("found document");
+        // Retrieve customer information from the document
+        setState(() {
+          fullname = snapshot['fullname'];
+          email = snapshot['email'];
+          imageUrl = snapshot['imageUrl'];
+          // Set other customer information variables here
+        });
+      }
+    } catch (error) {
+      print('Error fetching customer info: $error');
+    }
   }
 
   int currentPage = 1;
@@ -43,6 +75,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+      String image = imageUrl;
+      bool imageIsSet = image != ""; // 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -105,15 +139,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 alignment: Alignment.center,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: Image.asset(
-                    'images/profile_pic.jpg',
-                    height: 100,
-                    width: 100,
+                  child: Visibility(
+                    visible : imageIsSet,
+                    child: Image.network(
+                       imageUrl,
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-              const Text(
-                "Kishu88",
+               Text(
+                fullname,
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               Container(
@@ -128,6 +166,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: ElevatedButton(
                   onPressed: () {
                     // Perform edit profile action
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const EditOwnerProfilePage()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.yellow,

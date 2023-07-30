@@ -59,7 +59,9 @@ class _bookingRequestNotiPageState extends State<bookingRequestNotiPage> {
                   final roomStatus = data?["Status"];
                   var searchString = email;
                   const status = "Open";
-                  return ownerName != null && ownerName.contains(searchString) && roomStatus.contains(status);
+                  return ownerName != null &&
+                      ownerName.contains(searchString) &&
+                      roomStatus.contains(status);
                 }).toList();
 
                 if (ownerDocuments.isNotEmpty) {
@@ -68,8 +70,7 @@ class _bookingRequestNotiPageState extends State<bookingRequestNotiPage> {
                       final data = doc.data()
                           as Map<String, dynamic>?; // Explicit type cast
                       final requester = data?["Requester"];
-                                        final documentId = doc.id;
-
+                      final documentId = doc.id;
 
                       return ElevatedButton(
                         onPressed: () {
@@ -77,7 +78,7 @@ class _bookingRequestNotiPageState extends State<bookingRequestNotiPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                   BookingRequestPage(documentId:documentId),
+                                  BookingRequestPage(documentId: documentId),
                             ),
                           );
                         },
@@ -99,9 +100,21 @@ class _bookingRequestNotiPageState extends State<bookingRequestNotiPage> {
                   );
                 } else {
                   return const Center(
-                    child: Text(
-                      "You have not added any room requests!",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    child: Column(
+                      children: [
+                         Icon(
+                          Icons.mood_bad_outlined,
+                          color: Colors.red,
+                          size: 100
+                        ),
+                        SizedBox(
+                            width:
+                               50), 
+                        Text(
+                          "Nothing Here!!",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ],
                     ),
                   );
                 }

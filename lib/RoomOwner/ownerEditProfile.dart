@@ -13,14 +13,14 @@ import '../RoomOwner/ownerHome.dart';
 import '../RoomOwner/ownerProfile.dart';
 import 'package:image_picker/image_picker.dart';
 
-class EditCustomerProfile extends StatefulWidget {
-  const EditCustomerProfile({Key? key}) : super(key: key);
+class EditOwnerProfilePage extends StatefulWidget {
+  const EditOwnerProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<EditCustomerProfile> createState() => _EditCustomerProfileState();
+  State<EditOwnerProfilePage> createState() => _EditOwnerProfilePageState();
 }
 
-class _EditCustomerProfileState extends State<EditCustomerProfile> {
+class _EditOwnerProfilePageState extends State<EditOwnerProfilePage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController fullnameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();

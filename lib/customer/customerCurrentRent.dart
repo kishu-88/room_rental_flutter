@@ -5,19 +5,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:room_rental/customer/customerProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CustomerRoomDetails extends StatefulWidget {
+class CustomerRentDetailsPage extends StatefulWidget {
 
   final String documentId;
 
-  CustomerRoomDetails({required this.documentId});
-  final String fieldName = "your_field_name";
+  CustomerRentDetailsPage({required this.documentId});
 
   @override
-  _CustomerRoomDetailsState createState() => _CustomerRoomDetailsState();
+  _CustomerRentDetailsPageState createState() => _CustomerRentDetailsPageState();
 }
 
-class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
+class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
   Map<String, dynamic>? data;
+  Map<String, dynamic>? rentdata;
   bool isLoading = true;
 
   @override
@@ -40,16 +40,23 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
         print(widget.documentId);
 
       // Get a reference to the Firestore document using the provided ID
-      DocumentReference<Map<String, dynamic>> documentRef =
+      DocumentReference<Map<String, dynamic>> roomsdocumentRef =
           FirebaseFirestore.instance.collection('Rooms').doc(widget.documentId);
 
       // Fetch the document data
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await documentRef.get();
+      DocumentSnapshot<Map<String, dynamic>> roomSnapshot = await roomsdocumentRef.get();
 
-      if (snapshot.exists) {
+      //  DocumentReference<Map<String, dynamic>> rentdocumentRef =
+      //     FirebaseFirestore.instance.collection('Rents').doc(widget.documentId);
+
+      // Fetch the document data
+      // DocumentSnapshot<Map<String, dynamic>> rentSnapshot = await rentdocumentRef.get();
+
+      if (roomSnapshot.exists) {
         // Document data is available
         setState(() {
-          data = snapshot.data();
+          data = roomSnapshot.data();
+          // rentdata = rentSnapshot.data();
                   isLoading = false;
 
         });
@@ -163,15 +170,10 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
     } else if (data != null)  {
       final imageUrl = data!['imageUrl'];
       final location = data!['Location'];
-      final floor = data!['Floor'];
-      final landmark = data!['Nearest Landmark'];
-      final parking = data!['Parking'];
-      final negotiability = data!['Negotiability'];
-      final preference = data!['Preference'];
       final rate = data!['Rate'];
-      final size = data!['Size'];
       final owner = data!['Owner'];
       final roomId = data!['id'];
+      // final startedAt = rentdata!['Start Date'];
 
       // Continue building your UI using the fetched data
       // ...
@@ -240,83 +242,11 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                   DataRow(
                     cells: <DataCell>[
                       DataCell(Text(
-                        "Floor : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        floor,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
-                        "Size : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        size,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
-                        "Nearest Landmark : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        landmark,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
-                        "Parking : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        parking,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
-                        "Preference : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        preference,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
                         "Owner : ",
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
                         owner,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(
-                        "Is Rate Negotiable : ",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )),
-                      DataCell(Text(
-                        negotiability,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
