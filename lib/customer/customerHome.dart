@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // import 'package:room_rental/RoomOwner/profile.dart';
 import 'package:room_rental/customer/customerProfile.dart';
+import 'package:room_rental/customer/customerRecommendPage.dart';
 import 'package:room_rental/customer/customerRoomDetailsPage.dart';
 // import 'package:room_rental/rooms/add_rooms_page.dart';
 import 'package:room_rental/utils/customerSidebar.dart';
@@ -117,7 +118,14 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                   Container(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const customerRecommendPage(),
+                          ),
+                        );
+                      },
                       child: const Text(
                         "Recommend Me",
                         style: TextStyle(
@@ -167,8 +175,8 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    CustomerRoomDetails(documentId: document['id'].toString()),
+                                builder: (context) => CustomerRoomDetails(
+                                    documentId: document['id'].toString()),
                               ),
                             );
                           },

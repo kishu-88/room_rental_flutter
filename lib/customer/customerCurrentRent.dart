@@ -265,8 +265,8 @@ class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
               padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
               child: DataTable(
                 columns: <DataColumn>[
-                const DataColumn(label: Text('Rate',style: TextStyle(fontSize: 20),)),
-                DataColumn(label: Text('Rs '+ rate,style: const TextStyle(fontSize: 20),)),
+                const DataColumn(label: Text('Rate',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                DataColumn(label: Text('Rs '+ rate,style: const TextStyle(fontSize: 20,color: Colors.white),)),
               ],  
                 rows: <DataRow>[
                   DataRow(

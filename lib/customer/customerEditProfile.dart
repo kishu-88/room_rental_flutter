@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:room_rental/customer/customerHome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -12,6 +13,21 @@ import 'package:intl/intl.dart';
 import '../RoomOwner/ownerHome.dart';
 import '../RoomOwner/ownerProfile.dart';
 import 'package:image_picker/image_picker.dart';
+
+// Assuming you have a list of occupation options
+List<String> occupationOptions = [
+  "Choose Your Occupation", // Placeholder item
+    'Driver',
+    'Student',
+    'Businessman',
+    'Doctor',
+    'Teacher',
+    'Musicians',
+    'Engineers',
+    'Journalists',
+    'Politicians'
+  // Add more occupation options here
+];
 
 class EditCustomerProfile extends StatefulWidget {
   const EditCustomerProfile({Key? key}) : super(key: key);
@@ -32,13 +48,14 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
 
   final picker = ImagePicker();
 
+  String selectedOccupation = "Choose Your Occupation"; // Default value
+
   String email = '';
   var sexOption;
   var martialStatusOption;
   DateTime? selectedDate;
 
-    var id = DateTime.now().millisecondsSinceEpoch;
-
+  var id = DateTime.now().millisecondsSinceEpoch;
 
   Future<String> uploadUserImage() async {
     final picker = ImagePicker();
@@ -49,7 +66,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
 
       try {
         // Upload the image to Firebase Storage
-        final storageRef = FirebaseStorage.instance.ref().child('userImages/$id.jpg');
+        final storageRef =
+            FirebaseStorage.instance.ref().child('userImages/$id.jpg');
         final uploadTask = storageRef.putFile(file);
         await uploadTask;
 
@@ -61,12 +79,9 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
         // Store the image URL in Firebase Cloud Firestore
         final firestoreInstance = FirebaseFirestore.instance;
 
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(email)
-            .update(
+        await FirebaseFirestore.instance.collection('users').doc(email).update(
           {
-            'imageUrl':downloadUrl,
+            'imageUrl': downloadUrl,
           },
         );
         return downloadUrl; // Return the download URL as a String
@@ -75,7 +90,8 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
             'Image upload failed.'); // Throw an exception if there's an error
       }
     }
-    throw Exception('Image upload failed.'); // Throw an exception if there's an error
+    throw Exception(
+        'Image upload failed.'); // Throw an exception if there's an error
   }
 
   onUploadComplete(String downloadUrl) {
@@ -127,18 +143,16 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const ProfilePage()));
-            },
-          ),
-          title: const Text('Complete Profile Setup'),
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back),
+          //   onPressed: () {
+          //     Navigator.of(context).pushReplacement(
+          //         MaterialPageRoute(builder: (context) => const ProfilePage()));
+          //   },
+          // ),
+          title: const Text('Customer Profile Setup'),
           backgroundColor: const Color.fromARGB(255, 27, 91, 118),
         ),
         body: SingleChildScrollView(
@@ -150,42 +164,29 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: screenHeight * 0),
-                TextFormField(
-                  enabled: false,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(90.0),
-                    ),
-                    labelText: "Edit Profile Picture",
-                    labelStyle: const TextStyle(color: Colors.white),
+                Container(
+                  width: double.infinity,
+                  child: Row(
+                    // Use Row to place the label and upload button in the same line
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              String uploadedImageUrl = await uploadUserImage();
+                              // Use the download URL as needed
+                              print('Image uploaded. URL: $uploadedImageUrl');
+                            } catch (e) {
+                              // Handle any errors
+                              print('Error uploading image: $e');
+                            }
+                          },
+                          child: const Text("Upload Image"),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                 Container(
-                      width: double.infinity,
-                      child: Row(
-                        // Use Row to place the label and upload button in the same line
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                try {
-                                  String uploadedImageUrl = await uploadUserImage();
-                                  // Use the download URL as needed
-                                  print(
-                                      'Image uploaded. URL: $uploadedImageUrl');
-                                } catch (e) {
-                                  // Handle any errors
-                                  print('Error uploading image: $e');
-                                }
-                              },
-                              child: const Text("Upload Image"),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                 SizedBox(height: screenHeight * 0),
                 TextFormField(
                   enabled: false,
@@ -289,20 +290,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                       'Female',
                       style: TextStyle(color: Colors.white),
                     ),
-                    Radio<String>(
-                      value: 'Others',
-                      groupValue: sexOption,
-                      onChanged: (String? value) {
-                        setState(() {
-                          sexOption = value;
-                        });
-                      },
-                    ),
-                    const Text(
-                      'Others',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
+                            ],
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 Align(
@@ -345,19 +333,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                     ),
                     const Text(
                       'Married',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Radio<String>(
-                      value: 'Others',
-                      groupValue: martialStatusOption,
-                      onChanged: (String? value) {
-                        setState(() {
-                          martialStatusOption = value;
-                        });
-                      },
-                    ),
-                    const Text(
-                      'Others',
                       style: TextStyle(color: Colors.white),
                     ),
                   ],
@@ -409,16 +384,19 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02),
-                TextFormField(
-                  controller: occupationController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(90.0),
-                    ),
-                    labelText: 'Occupation',
-                    labelStyle: const TextStyle(color: Colors.white),
-                  ),
+                DropdownButton<String>(
+                  value: selectedOccupation,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedOccupation = newValue!;
+                    });
+                  },
+                  items: occupationOptions.map((occupation) {
+                    return DropdownMenuItem(
+                      value: occupation,
+                      child: Text(occupation),
+                    );
+                  }).toList(),
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 ElevatedButton(
@@ -447,8 +425,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
           ),
         ),
         backgroundColor: const Color.fromARGB(255, 27, 91, 118),
-      ),
-    );
+      );
   }
 
   void submitForm(BuildContext context) async {
@@ -458,7 +435,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     final String phone = phoneController.text;
     final String age = ageController.text;
     final String religion = religionController.text;
-    final String occupation = occupationController.text;
+    final String occupation = selectedOccupation;
     final String sex = sexOption;
     final String martialStatus = martialStatusOption;
 
@@ -470,59 +447,59 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     //       .where('username', isEqualTo: username)
     //       .get();
 
-      // if (usernameSnapshot.docs.isNotEmpty) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(
-      //         content: Text(
-      //             'Username already exists. Please choose a different one.')),
-      //   );
-      //   return;
-      // }
-
-      // Check if the phone number already exists in any document in the 'users' collection
-      // final QuerySnapshot phoneSnapshot = await FirebaseFirestore.instance
-      //     .collection('users')
-      //     .where('phone', isEqualTo: phone)
-      //     .get();
-
-      // if (phoneSnapshot.docs.isNotEmpty) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(
-      //         content: Text(
-      //             'Phone number already exists. Please use a different one.')),
-      //   );
-      //   return;
-      // }
-
-      // If both username and phone number are unique, proceed to save the form data to Firebase Firestore
-      await FirebaseFirestore.instance.collection('users').doc(email).update({
-        'email': email, // Assuming email is defined somewhere in your code.
-        'username': username,
-        'fullname': fullname,
-        'phone': phone,
-        'age': age,
-        'religion': religion,
-        'occupation': occupation,
-        'sex': sex,
-        'maritalStatus': martialStatus,
-        // Add more fields as needed
-      });
-      print("nice");
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const OwnerHomePage()),
-      );
-      // Clear the form after successful submission
-      usernameController.clear();
-      phoneController.clear();
-      ageController.clear();
-      religionController.clear();
-      occupationController.clear();
-    } 
-    // catch (e) {
+    // if (usernameSnapshot.docs.isNotEmpty) {
     //   ScaffoldMessenger.of(context).showSnackBar(
     //     SnackBar(
-    //         content: Text('Failed to submit form. Please try again later.')),
+    //         content: Text(
+    //             'Username already exists. Please choose a different one.')),
     //   );
+    //   return;
     // }
+
+    // Check if the phone number already exists in any document in the 'users' collection
+    // final QuerySnapshot phoneSnapshot = await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .where('phone', isEqualTo: phone)
+    //     .get();
+
+    // if (phoneSnapshot.docs.isNotEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //         content: Text(
+    //             'Phone number already exists. Please use a different one.')),
+    //   );
+    //   return;
+    // }
+
+    // If both username and phone number are unique, proceed to save the form data to Firebase Firestore
+    await FirebaseFirestore.instance.collection('users').doc(email).update({
+      'email': email, // Assuming email is defined somewhere in your code.
+      'username': username,
+      'fullname': fullname,
+      'phone': phone,
+      'age': age,
+      'religion': religion,
+      'occupation': occupation,
+      'sex': sex,
+      'maritalStatus': martialStatus,
+      // Add more fields as needed
+    });
+    print("nice");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CustomerHomePage()),
+    );
+    // Clear the form after successful submission
+    usernameController.clear();
+    phoneController.clear();
+    ageController.clear();
+    religionController.clear();
+    occupationController.clear();
   }
+  // catch (e) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //         content: Text('Failed to submit form. Please try again later.')),
+  //   );
+  // }
+}

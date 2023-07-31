@@ -58,9 +58,8 @@ class _customerBookingRequestsNotiState extends State<customerBookingRequestsNot
                   final renterEmail = data?["Renter"];
                   final rentStatus = data?["Status"];
                   var searchString = email;
-                  const status = "Active";
                   return renterEmail != null && renterEmail
-                  .contains(searchString) && !rentStatus.contains(status);
+                  .contains(searchString) &&  rentStatus=="Active";;
                 }).toList();
 
                 if (ownerDocuments.isNotEmpty) {
@@ -99,9 +98,21 @@ class _customerBookingRequestsNotiState extends State<customerBookingRequestsNot
                   );
                 } else {
                   return const Center(
-                    child: Text(
-                      "You have not added any room requests!",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    child: Column(
+                      children: [
+                         Icon(
+                          Icons.mood_bad_outlined,
+                          color: Colors.red,
+                          size: 100
+                        ),
+                        SizedBox(
+                            width:
+                               50), 
+                        Text(
+                          "Nothing Here!!",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ],
                     ),
                   );
                 }

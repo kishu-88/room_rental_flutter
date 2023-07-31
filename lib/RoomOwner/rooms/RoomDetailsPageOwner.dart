@@ -241,7 +241,7 @@ void freeRoom(String roomId) {
                             width:
                                 8), // Add some spacing between the icon and text
                         Text(
-                          'Edit Room',
+                          'Edit',
                           style: TextStyle(fontSize: 15, color: Colors.black),
                         ),
                       ],
@@ -343,7 +343,7 @@ void freeRoom(String roomId) {
                           width: 8,
                         ), // Add some spacing between the icon and text
                         Text(
-                          'Delete Room',
+                          'Delete',
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                       ],
@@ -371,7 +371,7 @@ void freeRoom(String roomId) {
                               width:
                                   2), // Add some spacing between the icon and text
                           Text(
-                            'Free Room',
+                            'Free',
                             style: TextStyle(fontSize: 15, color: Colors.black),
                           ),
                         ],

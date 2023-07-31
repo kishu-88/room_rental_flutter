@@ -83,11 +83,9 @@ final id= '';
                       final roomStatus = data?["Status"];
                       final id = data?['RoomId'];
                       var searchString = email;
-                      const status = "On Rent";
                       return renterName != null &&
                           renterName.contains(searchString) &&
-                          roomStatus?.contains(status) ==
-                              true; // Use null-aware operator
+                          roomStatus=="Active";
                     }).toList();
 
                   return GridView.count(
