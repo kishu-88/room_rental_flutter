@@ -123,8 +123,8 @@ class _MyAppState extends State<MyApp> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                   ),
-                  child: Column(
-                    children: const [
+                  child: const Column(
+                    children: [
                       Text(
                         'Get Started',
                         style: TextStyle(fontSize: 25, color: Colors.black),

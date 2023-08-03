@@ -95,6 +95,8 @@ Future<void> fetchEmailAndCustomerInfo() async {
       ),
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color.fromARGB(
+              255, 27, 91, 118),
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(

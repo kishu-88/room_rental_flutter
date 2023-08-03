@@ -587,58 +587,68 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+           backgroundColor: const Color.fromARGB(
+              255, 27, 91, 118),
         title: Title(
             color: const Color(0xFFFFFFFF), child: const Text("Add Room")),
       ),
-      body: Stepper(
-          type: StepperType.horizontal,
-          currentStep: _activeStepIndex,
-          steps: stepList(),
-          onStepContinue: () {
-            if (_activeStepIndex < (stepList().length - 1)) {
+      body: Theme(
+    data: ThemeData(
+                  // accentColor: Colors.orange,
+                  primarySwatch: Colors.orange,
+                            colorScheme: Theme.of(context).colorScheme.copyWith(primary: Colors.orange),
+
+                ),
+    child: Stepper(
+            type: StepperType.horizontal,
+            currentStep: _activeStepIndex,
+            steps: stepList(),
+            onStepContinue: () {
+              if (_activeStepIndex < (stepList().length - 1)) {
+                setState(() {
+                  _activeStepIndex += 1;
+                });
+              } else {
+                Map<String, dynamic> data = {
+                  "id": id,
+                  "Owner": email,
+                  "Location": dropdownvalueLocation,
+                  "Size": sizeController.text,
+                  "Floor": floorController.text,
+                  "Nearest Landmark": landmarkController.text,
+                  "Rate": rateController.text,
+                  "Negotiability": negotiability,
+                  "Preference": dropdownvaluePreference,
+                  "Parking": parkingOption
+                };
+                FirebaseFirestore.instance
+                    .collection('Rooms')
+                    .doc(id.toString())
+                    .update(data)
+                    .then((_) {
+                  // Navigation logic to another page on success
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const OwnerHomePage()),
+                  );
+                });
+              }
+            },
+            onStepCancel: () {
+              if (_activeStepIndex == 0) {
+                return;
+              }
               setState(() {
-                _activeStepIndex += 1;
+                _activeStepIndex -= 1;
               });
-            } else {
-              Map<String, dynamic> data = {
-                "id": id,
-                "Owner": email,
-                "Location": dropdownvalueLocation,
-                "Size": sizeController.text,
-                "Floor": floorController.text,
-                "Nearest Landmark": landmarkController.text,
-                "Rate": rateController.text,
-                "Negotiability": negotiability,
-                "Preference": dropdownvaluePreference,
-                "Parking": parkingOption
-              };
-              FirebaseFirestore.instance
-                  .collection('Rooms')
-                  .doc(id.toString())
-                  .update(data)
-                  .then((_) {
-                // Navigation logic to another page on success
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const OwnerHomePage()),
-                );
+            },
+            onStepTapped: (int index) {
+              setState(() {
+                _activeStepIndex = index;
               });
-            }
-          },
-          onStepCancel: () {
-            if (_activeStepIndex == 0) {
-              return;
-            }
-            setState(() {
-              _activeStepIndex -= 1;
-            });
-          },
-          onStepTapped: (int index) {
-            setState(() {
-              _activeStepIndex = index;
-            });
-          }),
+            }),
+      ),
       backgroundColor: const Color(0xFF2284AE),
     );
   }

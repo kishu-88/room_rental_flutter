@@ -44,8 +44,8 @@ final id= '';
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(
-            255, 27, 91, 118), // Set the desired background color here
+          backgroundColor: const Color.fromARGB(
+              255, 27, 91, 118), // Set the desired background color here
         title: const Text('Rooms on Rent'),
         centerTitle: true,
         actions: [

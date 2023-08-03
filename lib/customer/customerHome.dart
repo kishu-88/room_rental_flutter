@@ -19,6 +19,9 @@ class CustomerHomePage extends StatefulWidget {
 class _CustomerHomePageState extends State<CustomerHomePage> {
   String email = '';
 
+   TextEditingController _searchController = TextEditingController();
+  String _searchText = '';
+
   @override
   void initState() {
     super.initState();
@@ -58,60 +61,68 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(
-              255, 27, 91, 118), // Set the desired background color here
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
+        title: const Text('Hamro Room'),
+         backgroundColor: const Color.fromARGB(
+              255, 27, 91, 118), //
+               centerTitle: true,
+            actions: [
+              IconButton(
                 icon: const Icon(
-                  Icons.menu,
-                  color: Color(0xFFFFFFFF),
+                  Icons.person,
+                  color: Colors.white,
                 ),
                 onPressed: () {
-                  Scaffold.of(context).openDrawer();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CustomerProfilePage()),
+                  );
                 },
-              );
-            },
-          ),
-          title: const Text('Hamro Room'),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.person_2_outlined,
-                color: Color(0xFFFFFFFF),
               ),
-              onPressed: () {
-                // Perform notifications action
-                // Navigate to the new page/screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CustomerProfilePage(),
-                  ),
-                );
-              },
-            ),
-          ],
+            ],
         ),
         body: Column(
           children: [
             Container(
-              margin: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(20),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search Locations',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {},
+                  ),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  // Set the background color of the TextField here
+                  filled: true,
+                  fillColor: Colors.grey[200], // Replace this color with the desired background color
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _searchText = value.trim();
+                  });
+                },
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 10),
               width: 1000, // Specify the desired width of the rectangle
               height: 160, // Specify the desired height of the rectangle
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Color.fromARGB(255, 195, 86, 2),
+                color: const Color.fromARGB(255, 195, 86, 2),
               ),
               alignment: Alignment.center,
-
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Padding(
-                    padding: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(25.0),
                     child: Text(
-                      'Do you want us to recommend good neighbourhood for you?',
+                      'Do you want us to recommend a good neighborhood for you?',
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
@@ -126,16 +137,16 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                           ),
                         );
                       },
-                      child: const Text(
-                        "Recommend Me",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 195, 86, 2),
-                        ),
-                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                      child: const Text(
+                        "Recommend Me",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 195, 86, 2),
                         ),
                       ),
                     ),
@@ -146,14 +157,12 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    FirebaseFirestore.instance.collection('Rooms').snapshots(),
+                stream: FirebaseFirestore.instance.collection('Rooms').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final documents = snapshot.data!.docs;
                     final ownerDocuments = documents.where((doc) {
-                      final data = doc.data()
-                          as Map<String, dynamic>?; // Explicit type cast
+                      final data = doc.data() as Map<String, dynamic>?; // Explicit type cast
                       final ownerName = data?["Owner"];
                       final roomStatus = data?["Status"];
                       final id = data?['id'];
@@ -161,22 +170,30 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                       const status = "Open";
                       return ownerName != null &&
                           !ownerName.contains(searchString) &&
-                          roomStatus?.contains(status) ==
-                              true; // Use null-aware operator
+                          roomStatus?.contains(status) == true;
                     }).toList();
+              
+                    // Filter the documents based on search text
+                    final filteredDocuments = ownerDocuments.where((document) {
+                      final location = document['Location'].toString().toLowerCase();
+                      final searchQuery = _searchText.toLowerCase();
+                      return location.contains(searchQuery);
+                    }).toList();
+              
                     return GridView.count(
                       crossAxisCount: 2,
                       crossAxisSpacing: 5,
-                      mainAxisSpacing: 5,
-                      padding: const EdgeInsets.all(5),
-                      children: ownerDocuments.map((document) {
+                      mainAxisSpacing: 10,
+                      padding: const EdgeInsets.all(15),
+                      children: filteredDocuments.map((document) {
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CustomerRoomDetails(
-                                    documentId: document['id'].toString()),
+                                  documentId: document['id'].toString(),
+                                ),
                               ),
                             );
                           },
@@ -190,8 +207,8 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                                 children: [
                                   Image.network(
                                     document['imageUrl'],
-                                    height: 140,
-                                    width: 180,
+                                    height: 130,
+                                    width: 140,
                                     fit: BoxFit.fill,
                                   ),
                                   Row(
@@ -199,18 +216,15 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                                     children: [
                                       Text(
                                         document['Location'],
-                                        style: const TextStyle(
-                                            fontSize: 15, color: Colors.white),
+                                        style: const TextStyle(fontSize: 12, color: Colors.white),
                                       ),
                                       const Text(
                                         ' | Rs',
-                                        style: TextStyle(
-                                            fontSize: 15, color: Colors.white),
+                                        style: TextStyle(fontSize: 12, color: Colors.white),
                                       ),
                                       Text(
                                         document['Rate'],
-                                        style: const TextStyle(
-                                            fontSize: 15, color: Colors.white),
+                                        style: const TextStyle(fontSize: 12, color: Colors.white),
                                       ),
                                     ],
                                   ),
@@ -222,52 +236,56 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                       }).toList(),
                     );
                   }
-
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-          currentIndex: currentPage,
-          onTap: (int index) {
-            setState(() {
-              currentPage = index;
-            });
-
-            if (index == 0) {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => const CustomerHomePage(),
-              //   ),
-              // );
-            } else if (index == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CustomerProfilePage(),
+              
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
                 ),
-              );
-            }
-          },
+              ),
+            ],
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+            BottomNavigationBarItem(
+          icon: Icon(Icons.person, color: Colors.white),
+          label: 'Profile',
+          // Set the color for the label text
+          )
+          
+            ],
+            currentIndex: currentPage,
+            onTap: (int index) {
+              setState(() {
+                currentPage = index;
+              });
+          
+              if (index == 0) {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const CustomerHomePage(),
+                //   ),
+                // );
+              } else if (index == 1) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CustomerProfilePage(),
+                  ),
+                );
+              }
+            },
+            backgroundColor: const Color.fromARGB(
+              255, 27, 91, 118), //
+          ),
+          backgroundColor: const Color(0xFF2284AE),
+          drawer: const CustomerSidebar(),
         ),
-        backgroundColor: const Color(0xFF2284AE),
-        drawer: const CustomerSidebar(),
-      ),
     );
   }
 }
