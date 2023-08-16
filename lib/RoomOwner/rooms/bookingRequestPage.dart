@@ -78,11 +78,11 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
             roomData = roomSnapshot.data();
           });
         } else {
-          print('Error fetching room:');
+          // print('Error fetching room:');
         }
       }
     } catch (e) {
-      print('Error fetching document: $e');
+      // print('Error fetching document: $e');
     }
 
     
@@ -99,7 +99,7 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
         .doc(widget
             .documentId) // Replace 'document_id' with a unique document ID or leave it empty to let Firestore generate one
         .update({'Status': 'Success'}).then((value) {
-      print("Data successfully saved to Firestore!");
+      // print("Data successfully saved to Firestore!");
 
       // Reference to the Firestore collection 'Rooms'
       CollectionReference<Map<String, dynamic>> roomsCollection =
@@ -113,7 +113,7 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
         'Status': 'On Rent',
         'Renter': documentData!['Requester']
       }).then((_) {
-        print("Room status updated to 'On Rent'!");
+        // print("Room status updated to 'On Rent'!");
 
         // Reference to the Firestore collection 'Rents'
         CollectionReference<Map<String, dynamic>> rentsCollection =
@@ -127,7 +127,7 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
 
         // Merge day and month name as a string
         String dateMonthString = "${now.day} $monthName";
-        print(userData!['occupation']);
+        // print(userData!['occupation']);
         // Add data to the 'Rents' collection
         rentsCollection.add({
           'RoomId': roomId,
@@ -143,15 +143,15 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
               'Active' // Replace this with the actual start date of the rent
           // Add other relevant data related to the rent here
         }).then((_) {
-          print("Data added to 'Rents' collection successfully!");
+          // print("Data added to 'Rents' collection successfully!");
         }).catchError((error) {
-          print("Error adding data to 'Rents' collection: $error");
+          // print("Error adding data to 'Rents' collection: $error");
         });
       }).catchError((error) {
-        print("Error updating room status: $error");
+        // print("Error updating room status: $error");
       });
     }).catchError((error) {
-      print("Error saving data to Firestore: $error");
+      // print("Error saving data to Firestore: $error");
     });
   }
 
@@ -162,9 +162,9 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
 
     // Delete the document with the specified documentId
     collection.doc(widget.documentId).delete().then((value) {
-      print("Document successfully deleted from Firestore!");
+      // print("Document successfully deleted from Firestore!");
     }).catchError((error) {
-      print("Error deleting document from Firestore: $error");
+      // print("Error deleting document from Firestore: $error");
     });
   }
 
@@ -243,8 +243,8 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                               borderRadius: BorderRadius.circular(25.0),
                             ),
                           ),
-                          child: Column(
-                            children: const [
+                          child: const Column(
+                            children: [
                               Text(
                                 'View Profile',
                                 style: TextStyle(
@@ -281,8 +281,8 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                       ),
-                      child: Column(
-                        children: const [
+                      child: const Column(
+                        children: [
                           Text(
                             'Accept',
                             style: TextStyle(fontSize: 25, color: Colors.black),
@@ -308,8 +308,8 @@ class _BookingRequestPageState extends State<BookingRequestPage> {
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                       ),
-                      child: Column(
-                        children: const [
+                      child: const Column(
+                        children: [
                           Text(
                             'Deny',
                             style: TextStyle(fontSize: 25, color: Colors.white),

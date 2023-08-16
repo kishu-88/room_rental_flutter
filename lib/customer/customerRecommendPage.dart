@@ -1,22 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:room_rental/customer/customerCurrentRent.dart';
 // import 'package:room_rental/RoomOwner/profile.dart';
-import 'package:room_rental/customer/customerProfile.dart';
 import 'package:room_rental/customer/customerRoomDetailsPage.dart';
 // import 'package:room_rental/rooms/add_rooms_page.dart';
-import 'package:room_rental/utils/customerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class customerRecommendPage extends StatefulWidget {
+class CustomerRecommendPage extends StatefulWidget {
   // final String email;
-  const customerRecommendPage({Key? key}) : super(key: key);
+  const CustomerRecommendPage({Key? key}) : super(key: key);
 
   @override
-  State<customerRecommendPage> createState() => _customerRecommendPageState();
+  State<CustomerRecommendPage> createState() => _CustomerRecommendPageState();
 }
 
-class _customerRecommendPageState extends State<customerRecommendPage> {
+class _CustomerRecommendPageState extends State<CustomerRecommendPage> {
   String? preferredLocation; // Declare the variable here
 
   String email = '';
@@ -85,12 +82,14 @@ class _customerRecommendPageState extends State<customerRecommendPage> {
       // Step 4: Find the most preferred location by the occupation group
       String? mostPreferredLocation;
       int maxCount = 0;
-      locationCount.forEach((location, count) {
-        if (count > maxCount) {
-          mostPreferredLocation = location;
-          maxCount = count;
-        }
-      });
+      locationCount.forEach(
+        (location, count) {
+          if (count > maxCount) {
+            mostPreferredLocation = location;
+            maxCount = count;
+          }
+        },
+      );
       setState(() {
         preferredLocation = mostPreferredLocation; // Set the value here
       });
@@ -132,28 +131,28 @@ class _customerRecommendPageState extends State<customerRecommendPage> {
                 child: Column(
                   children: [
                     AnimatedContainer(
-                      duration: Duration(
+                      duration: const Duration(
                           seconds: 10), // Adjust the duration as desired
                       width: MediaQuery.of(context).size.width,
                       curve: Curves.bounceIn,
-                      child: Icon(
+                      child: const Icon(
                         Icons.mood,
                         size: 100,
                         color: Colors.white,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "Please Wait Creating Magic For You",
                       style: TextStyle(color: Colors.white),
                     ),
-                    CircularProgressIndicator()
+                    const CircularProgressIndicator()
                   ],
                 ),
               ),
               Visibility(
                 visible: showDetail,
                 child: Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   decoration: const BoxDecoration(
                     color: Colors.orange,
                     borderRadius: BorderRadius.all(

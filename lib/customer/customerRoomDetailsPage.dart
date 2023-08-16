@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:room_rental/customer/customerProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerRoomDetails extends StatefulWidget {
@@ -36,7 +33,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
 
   Future<void> fetchDocumentData() async {
     try {
-      print(widget.documentId);
+      // print(widget.documentId);
 
       // Get a reference to the Firestore document using the provided ID
       DocumentReference<Map<String, dynamic>> documentRef =
@@ -53,14 +50,14 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
         });
       } else {
         // Document doesn't exist
-        print("document doesn't exist");
+        // print("document doesn't exist");
         setState(() {
           data = null;
           isLoading = false;
         });
       }
     } catch (e) {
-      print('Error fetching document from Firestore: $e');
+      // print('Error fetching document from Firestore: $e');
       setState(() {
         data = null;
         isLoading = false;
@@ -103,16 +100,16 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
       // Update the 'Status' field to "Open" in the room document
       await roomDocRef.set({'Status': 'Open'}, SetOptions(merge: true));
 
-      print('Status field added to the room document successfully!');
+      // print('Status field added to the room document successfully!');
 
-      print('Information added to Firestore successfully!');
+      // print('Information added to Firestore successfully!');
     } catch (e) {
-      print('Error adding information to Firestore: $e');
+      // print('Error adding information to Firestore: $e');
     }
   }
 
   Future<void> removeDocumentFromFirestore(String roomId) async {
-    print(roomId);
+    // print(roomId);
     try {
       // Get a reference to the Firestore collection
       CollectionReference<Map<String, dynamic>> collection =
@@ -134,12 +131,12 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
         // Delete the document
         await documentRef.delete();
 
-        print('Document removed from Firestore successfully!');
+        // print('Document removed from Firestore successfully!');
       } else {
-        print('No matching document found in Firestore.');
+        // print('No matching document found in Firestore.');
       }
     } catch (e) {
-      print('Error removing document from Firestore: $e');
+      // print('Error removing document from Firestore: $e');
     }
   }
 
@@ -221,7 +218,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                     )),
                     DataColumn(
                         label: Text(
-                      'Rs ' + rate,
+                      'Rs $rate',
                       style: const TextStyle(fontSize: 20, color: Colors.white),
                     )),
                   ],
@@ -354,7 +351,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                           final data = doc.data()
                               as Map<String, dynamic>?; // Explicit type cast
                           String documentId = doc.id;
-                          print(documentId);
+                          // print(documentId);
 
                           final id = data?["RoomId"]; // Explicit type cast
                           final requester =
@@ -370,7 +367,7 @@ class _CustomerRoomDetailsState extends State<CustomerRoomDetails> {
                         if (containsSearchString) {
                           return ElevatedButton(
                             onPressed: () {
-                              print("fdsfdsfsd");
+                              // print("fdsfdsfsd");
                               removeDocumentFromFirestore(roomId.toString());
                             },
                             style: ElevatedButton.styleFrom(

@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:room_rental/RoomOwner/rooms/bookingRequestPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class bookingRequestNotiPage extends StatefulWidget {
-  const bookingRequestNotiPage({super.key});
+class BookingRequestNotiPage extends StatefulWidget {
+  const BookingRequestNotiPage({super.key});
 
   @override
-  State<bookingRequestNotiPage> createState() => _bookingRequestNotiPageState();
+  State<BookingRequestNotiPage> createState() => _BookingRequestNotiPageState();
 }
 
-class _bookingRequestNotiPageState extends State<bookingRequestNotiPage> {
+class _BookingRequestNotiPageState extends State<BookingRequestNotiPage> {
   String email = '';
 
   @override

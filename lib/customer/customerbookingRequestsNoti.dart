@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:room_rental/customer/customerCurrentRent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class customerBookingRequestsNoti extends StatefulWidget {
-  const customerBookingRequestsNoti({super.key});
+class CustomerBookingRequestsNoti extends StatefulWidget {
+  const CustomerBookingRequestsNoti({super.key});
 
   @override
-  State<customerBookingRequestsNoti> createState() => _customerBookingRequestsNotiState();
+  State<CustomerBookingRequestsNoti> createState() => _CustomerBookingRequestsNotiState();
 }
 
-class _customerBookingRequestsNotiState extends State<customerBookingRequestsNoti> {
+class _CustomerBookingRequestsNotiState extends State<CustomerBookingRequestsNoti> {
   String email = '';
 
   @override

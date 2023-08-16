@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'RoomDetailsPageOwner.dart';
-import 'choose_category_page.dart';
 
 class OwnerRoomsOnRent extends StatefulWidget {
   const OwnerRoomsOnRent({super.key});
@@ -116,8 +115,8 @@ class _OwnerRoomsOnRentState extends State<OwnerRoomsOnRent> {
                       }).toList(),
                     );
                   } else {
-                    return Column(
-                      children: const [
+                    return const Column(
+                      children: [
                         Text(
                           "No any rooms on Rent!",
                           style: TextStyle(color: Colors.black, fontSize: 18),

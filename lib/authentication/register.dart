@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:room_rental/authentication/login_options.dart';
 
-
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
 
@@ -21,34 +20,70 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign Up'),
+        backgroundColor: const Color.fromARGB(
+              255, 27, 91, 118), // Set the d
+        title: const Text('Register'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                labelStyle: const TextStyle(color: Colors.white),
+            const Text(
+              "Let's",
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.left,
+            ),
+            Container(
+              padding: const EdgeInsets.only(top: 10),
+              child: const Text(
+                "Register",
+                style: TextStyle(color: Colors.blue, fontSize: 45),
+                textAlign: TextAlign.left,
               ),
             ),
-            SizedBox(height: 16.0),
+            Container(
+              padding: const EdgeInsets.only(top: 10),
+              child: const Text(
+                "before we begin!!",
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(top: 30),
+              child: TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
-                labelStyle: const TextStyle(color: Colors.white),
+                labelStyle: TextStyle(color: Colors.white),
               ),
               obscureText: true,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             _isLoading
                 ? CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: _signUp,
-                    child: Text('Sign Up'),
+                    style:ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.yellow),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(90.0),
+                      ),
+                    ),
+                  ),
+                    child: const Text('Sign Up',style: TextStyle(color: Colors.black),),
                   ),
           ],
         ),
@@ -72,24 +107,25 @@ class _SignupPageState extends State<SignupPage> {
         password: password,
       );
 
- FirebaseFirestore firestore = FirebaseFirestore.instance;
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    // Add a document with a generated ID
-    firestore.collection('users').doc(email).set({
-      'email': email,
-    });
+      // Add a document with a generated ID
+      firestore.collection('users').doc(email).set({
+        'email': email,
+      });
       // Registration successful, navigate to the home page or another screen
       print('User registered: ${userCredential.user!.uid}');
 
       setState(() {
         _isLoading = false;
       });
-        // Navigate to the home page or another screen
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginOptions()), // Replace 'HomePage' with your desired screen
-            );
-
+      // Navigate to the home page or another screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                LoginOptions()), // Replace 'HomePage' with your desired screen
+      );
     } catch (e) {
       setState(() {
         _isLoading = false;

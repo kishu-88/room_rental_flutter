@@ -3,20 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:room_rental/customer/customerCurrentRent.dart';
 // import 'package:room_rental/RoomOwner/profile.dart';
 import 'package:room_rental/customer/customerProfile.dart';
-import 'package:room_rental/customer/customerRoomDetailsPage.dart';
 // import 'package:room_rental/rooms/add_rooms_page.dart';
-import 'package:room_rental/utils/customerSidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class customerRoomsOnRent extends StatefulWidget {
+class CustomerRoomsOnRent extends StatefulWidget {
   // final String email;
-  const customerRoomsOnRent({Key? key}) : super(key: key);
+  const CustomerRoomsOnRent({Key? key}) : super(key: key);
 
   @override
-  State<customerRoomsOnRent> createState() => _customerRoomsOnRentState();
+  State<CustomerRoomsOnRent> createState() => _CustomerRoomsOnRentState();
 }
 
-class _customerRoomsOnRentState extends State<customerRoomsOnRent> {
+class _CustomerRoomsOnRentState extends State<CustomerRoomsOnRent> {
   String email = '';
 
 final id= '';

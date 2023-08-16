@@ -171,7 +171,7 @@ class _OwnerSidebarState extends State<OwnerSidebar> {
                     Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const bookingRequestNotiPage(),
+                      builder: (context) => const BookingRequestNotiPage(),
                     ),
                   );
                   },

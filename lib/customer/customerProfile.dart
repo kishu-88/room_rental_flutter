@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:room_rental/RoomOwner/ownerHome.dart';
 import 'package:room_rental/authentication/login_options.dart';
 import 'package:room_rental/customer/customerEditProfile.dart';
 import 'package:room_rental/customer/customerHome.dart';
@@ -43,8 +42,8 @@ Future<void> fetchEmailAndCustomerInfo() async {
   }
 
   void fetchCustomerInfo() async {
-    print("fetch customer");
-    print("${email}hi");
+    // print("fetch customer");
+    // print("${email}hi");
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -52,7 +51,7 @@ Future<void> fetchEmailAndCustomerInfo() async {
           .get();
 
       if (snapshot.exists) {
-        print("found document");
+        // print("found document");
         // Retrieve customer information from the document
         setState(() {
           fullname = snapshot['fullname'];
@@ -62,7 +61,7 @@ Future<void> fetchEmailAndCustomerInfo() async {
         });
       }
     } catch (error) {
-      print('Error fetching customer info: $error');
+      // print('Error fetching customer info: $error');
     }
   }
 
@@ -155,13 +154,13 @@ Future<void> fetchEmailAndCustomerInfo() async {
               ),
                Text(
                 fullname,
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 5),
                 child: Text(
                   email,
-                  style: TextStyle(color: Colors.white, fontSize: 15),
+                  style: const TextStyle(color: Colors.white, fontSize: 15),
                 ),
               ),
               Container(

@@ -133,7 +133,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const customerRecommendPage(),
+                            builder: (context) => const CustomerRecommendPage(),
                           ),
                         );
                       },

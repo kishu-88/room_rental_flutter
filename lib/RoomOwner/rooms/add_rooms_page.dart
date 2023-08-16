@@ -80,7 +80,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
             'Status': 'Open'
           },
         );
-        print("babaal...........");
+        // print("babaal...........");
 
         return downloadUrl; // Return the download URL as a String
       } catch (e) {
@@ -96,7 +96,7 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
   onUploadComplete(String downloadUrl) {
     // Use the downloadUrl as needed
     String uploadedImageUrl = downloadUrl;
-    print('Image download URL: $uploadedImageUrl');
+    // print('Image download URL: $uploadedImageUrl');
     return uploadedImageUrl;
   }
 
@@ -546,60 +546,65 @@ class _AddRoomsPageState extends State<AddRoomsPage> {
           title: const Text('Photo'),
           content: Container(
             width: double.infinity,
-            child: Column(children: [
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    String uploadedImageUrl = await uploadImage();
-                    // Use the download URL as needed
-                    print('Image uploaded. URL: $uploadedImageUrl');
-                  } catch (e) {
-                    // Handle any errors
-                    print('Error uploading image: $e');
-                  }
-                },
-                child: const Text("Upload Image"),
-              ),
-            ],),
+            child: Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      String uploadedImageUrl = await uploadImage();
+                      // Use the download URL as needed
+                      // print('Image uploaded. URL: $uploadedImageUrl');
+                    } catch (e) {
+                      // Handle any errors
+                      // print('Error uploading image: $e');
+                    }
+                  },
+                  child: const Text("Upload Image"),
+                ),
+              ],
+            ),
           ),
         ),
         Step(
-            state: StepState.complete,
-            isActive: _activeStepIndex >= 2,
-            title: const Text('Confirm'),
-            content:
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Checkbox(
-                value: agreeToTerms,
-                onChanged: (bool? value) {
-                  setState(() {
-                    agreeToTerms = value ?? false;
-                  });
-                },
-              ),
-              const Text(
-                'I agree to the terms and conditions',
-                style: TextStyle(fontSize: 20.0),
-              ),
-            ])),
+          state: StepState.complete,
+          isActive: _activeStepIndex >= 2,
+          title: const Text('Confirm'),
+          content: Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Checkbox(
+      value: agreeToTerms,
+      onChanged: (bool? value) {
+        setState(() {
+          agreeToTerms = value ?? false;
+        });
+      },
+    ),
+    const Text(
+      'I agree to the terms and conditions',
+      style: TextStyle(fontSize: 15.0,color: Colors.white),
+    ),
+  ],
+),
+
+        ),
       ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-           backgroundColor: const Color.fromARGB(
-              255, 27, 91, 118),
+        backgroundColor: const Color.fromARGB(255, 27, 91, 118),
         title: Title(
             color: const Color(0xFFFFFFFF), child: const Text("Add Room")),
       ),
       body: Theme(
-    data: ThemeData(
-                  // accentColor: Colors.orange,
-                  primarySwatch: Colors.orange,
-                            colorScheme: Theme.of(context).colorScheme.copyWith(primary: Colors.orange),
-
-                ),
-    child: Stepper(
+        data: ThemeData(
+          // accentColor: Colors.orange,
+          primarySwatch: Colors.orange,
+          colorScheme:
+              Theme.of(context).colorScheme.copyWith(primary: Colors.orange),
+        ),
+        child: Stepper(
             type: StepperType.horizontal,
             currentStep: _activeStepIndex,
             steps: stepList(),

@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:room_rental/customer/customerProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerRentDetailsPage extends StatefulWidget {
@@ -164,7 +161,7 @@ class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
   }
 
   Future<void> removeDocumentFromFirestore(String roomId) async {
-    print(roomId);
+    // print(roomId);
     try {
     // Get a reference to the Firestore collection
     CollectionReference<Map<String, dynamic>> collection =
@@ -186,12 +183,12 @@ class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
       // Delete the document
       await documentRef.delete();
 
-      print('Document removed from Firestore successfully!');
+      // print('Document removed from Firestore successfully!');
     } else {
-      print('No matching document found in Firestore.');
+      // print('No matching document found in Firestore.');
     }
   } catch (e) {
-    print('Error removing document from Firestore: $e');
+    // print('Error removing document from Firestore: $e');
   }
   }
 
@@ -266,7 +263,7 @@ class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
               child: DataTable(
                 columns: <DataColumn>[
                 const DataColumn(label: Text('Rate',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                DataColumn(label: Text('Rs '+ rate,style: const TextStyle(fontSize: 20,color: Colors.white),)),
+                DataColumn(label: Text('Rs , $rate',style: const TextStyle(fontSize: 20,color: Colors.white),)),
               ],  
                 rows: <DataRow>[
                   DataRow(
@@ -283,25 +280,25 @@ class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
                   ),
                   DataRow(
                     cells: <DataCell>[
-                      DataCell(Text(
+                      const DataCell(Text(
                         "Owner : ",
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
                         owner,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        style: const TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
                   ),
                    DataRow(
                     cells: <DataCell>[
-                      DataCell(Text(
+                      const DataCell(Text(
                         "Started At : ",
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )),
                       DataCell(Text(
                         startedAt,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                        style:const TextStyle(fontSize: 15, color: Colors.white),
                       )),
                     ],
                   ),
@@ -341,7 +338,7 @@ class _CustomerRentDetailsPageState extends State<CustomerRentDetailsPage> {
                     onPressed: () { freeRoom(roomId.toString(),widget.documentId);},
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.yellow),
-                    child: Row(
+                    child: const Row(
                       children: [
                           Icon(Icons.login,
                         color: Colors.black,

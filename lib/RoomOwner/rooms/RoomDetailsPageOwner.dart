@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:room_rental/RoomOwner/ownerHome.dart';
-import 'package:room_rental/RoomOwner/ownerProfile.dart';
 
-class RoomDetailsPageOwner extends StatelessWidget {
-  bool isFavorite = false;
-
+class RoomDetailsPageOwner extends StatefulWidget {
   final QueryDocumentSnapshot document;
 
   RoomDetailsPageOwner(this.document, {super.key});
+
+  @override
+  State<RoomDetailsPageOwner> createState() => _RoomDetailsPageOwnerState();
+}
+
+class _RoomDetailsPageOwnerState extends State<RoomDetailsPageOwner> {
+  bool isFavorite = false;
 
   Future<bool> deleteRoom(String roomId, String status) async {
     try {
@@ -43,9 +47,10 @@ void freeRoom(String roomId) {
     print('Error updating room status: $error');
   });
 }
+
   @override
   Widget build(BuildContext context) {
-    String rentStatus = document['Status'];
+    String rentStatus = widget.document['Status'];
     bool rentButtonVisibility =
         rentStatus == "On Rent"; // Use the condition directly
     // Use the document data to display room details
@@ -71,7 +76,7 @@ void freeRoom(String roomId) {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.network(
-              document['imageUrl'],
+              widget.document['imageUrl'],
               height: 300,
               width: double.infinity,
               fit: BoxFit.fill,
@@ -98,7 +103,7 @@ void freeRoom(String roomId) {
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       Text(
-                        document['Location'],
+                        widget.document['Location'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -111,7 +116,7 @@ void freeRoom(String roomId) {
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       Text(
-                        document['Floor'],
+                        widget.document['Floor'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -124,7 +129,7 @@ void freeRoom(String roomId) {
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       Text(
-                        document['Size'],
+                        widget.document['Size'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -137,7 +142,7 @@ void freeRoom(String roomId) {
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       Text(
-                        document['Nearest Landmark'],
+                        widget.document['Nearest Landmark'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -150,7 +155,7 @@ void freeRoom(String roomId) {
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       Text(
-                        document['Parking'],
+                        widget.document['Parking'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -163,7 +168,7 @@ void freeRoom(String roomId) {
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       Text(
-                        document['Preference'],
+                        widget.document['Preference'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -176,7 +181,7 @@ void freeRoom(String roomId) {
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       Text(
-                        document['Owner'],
+                        widget.document['Owner'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -189,7 +194,7 @@ void freeRoom(String roomId) {
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       Text(
-                        document['Rate'],
+                        widget.document['Rate'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -202,7 +207,7 @@ void freeRoom(String roomId) {
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       Text(
-                        document['Negotiability'],
+                        widget.document['Negotiability'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -215,7 +220,7 @@ void freeRoom(String roomId) {
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       Text(
-                        document['Status'],
+                        widget.document['Status'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -231,9 +236,15 @@ void freeRoom(String roomId) {
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Row(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Colors.yellow, // Set the background color to yellow
+                      padding: const EdgeInsets.all(10), // Adjust padding as needed
+                      // You can customize other properties here, such as textStyle, shape, elevation, etc.
+                    ),
+                    child: const Row(
                       children: [
-                        Icon(
+                         Icon(
                           Icons.edit,
                           color: Colors.black,
                         ),
@@ -246,12 +257,7 @@ void freeRoom(String roomId) {
                         ),
                       ],
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Colors.yellow, // Set the background color to yellow
-                      padding: EdgeInsets.all(10), // Adjust padding as needed
-                      // You can customize other properties here, such as textStyle, shape, elevation, etc.
-                    ),
+                    
                   ),
                 ),
                 Container(
@@ -259,15 +265,15 @@ void freeRoom(String roomId) {
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
                     onPressed: () {
-                      var roomId = document['id'];
+                      var roomId = widget.document['id'];
                       String status =
-                          document['Status']; // Replace with the actual roomId
+                          widget.document['Status']; // Replace with the actual roomId
                       // Show a confirmation dialog before proceeding with deletion
                       showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text('Confirm Deletion'),
+                            title: const Text('Confirm Deletion'),
                             content: StatefulBuilder(
                               // Wrap the content with StatefulBuilder to update the dialog content
                               builder: (context, setState) {
@@ -278,21 +284,21 @@ void freeRoom(String roomId) {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                         'Are you sure you want to delete this room?'),
                                     if (errorMessage.isNotEmpty)
                                       Text(
                                         errorMessage,
-                                        style: TextStyle(color: Colors.red),
+                                        style: const TextStyle(color: Colors.red),
                                       ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.of(context).pop(),
-                                          child: Text('Cancel'),
+                                          child: const Text('Cancel'),
                                         ),
                                         ElevatedButton(
                                           onPressed: () async {
@@ -317,7 +323,7 @@ void freeRoom(String roomId) {
                                           },
                                           style: ElevatedButton.styleFrom(
                                               backgroundColor: Colors.red),
-                                          child: Text('Delete'),
+                                          child: const Text('Delete'),
                                         ),
                                       ],
                                     ),
@@ -357,7 +363,7 @@ void freeRoom(String roomId) {
                     padding: const EdgeInsets.all(5),
                     child: ElevatedButton(
                       onPressed: () {
-                        var roomId = document['id'];
+                        var roomId = widget.document['id'];
                         freeRoom(roomId.toString(),
                         );
                       },

@@ -164,7 +164,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: double.infinity,
                   child: Row(
                     // Use Row to place the label and upload button in the same line
@@ -175,10 +175,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                             try {
                               String uploadedImageUrl = await uploadUserImage();
                               // Use the download URL as needed
-                              print('Image uploaded. URL: $uploadedImageUrl');
+                              // print('Image uploaded. URL: $uploadedImageUrl');
                             } catch (e) {
                               // Handle any errors
-                              print('Error uploading image: $e');
+                              // print('Error uploading image: $e');
                             }
                           },
                           child: const Text("Upload Image"),
@@ -251,7 +251,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    margin: EdgeInsets.only(left: 10),
+                    margin: const EdgeInsets.only(left: 10),
                     child: const Text(
                       'Sex : ',
                       style: TextStyle(
@@ -296,7 +296,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    margin: EdgeInsets.only(left: 10),
+                    margin: const EdgeInsets.only(left: 10),
                     child: const Text(
                       'Martial Status : ',
                       style: TextStyle(
@@ -361,12 +361,12 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   selectedDate == null
                       ? 'No Date Selected'
                       : 'Selected Date of Birth: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white,
                   ),
@@ -429,7 +429,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
   }
 
   void submitForm(BuildContext context) async {
-    print("clicked");
+    // print("clicked");
     final String username = usernameController.text;
     final String fullname = fullnameController.text;
     final String phone = phoneController.text;
@@ -484,7 +484,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
       'maritalStatus': martialStatus,
       // Add more fields as needed
     });
-    print("nice");
+    // print("nice");
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const CustomerHomePage()),

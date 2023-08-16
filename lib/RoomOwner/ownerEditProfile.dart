@@ -81,7 +81,7 @@ class _EditOwnerProfilePageState extends State<EditOwnerProfilePage> {
   onUploadComplete(String downloadUrl) {
     // Use the downloadUrl as needed
     String uploadedImageUrl = downloadUrl;
-    print('Image download URL: $uploadedImageUrl');
+    // print('Image download URL: $uploadedImageUrl');
     return uploadedImageUrl;
   }
 
@@ -132,7 +132,7 @@ class _EditOwnerProfilePageState extends State<EditOwnerProfilePage> {
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const ProfilePage()));

@@ -145,7 +145,7 @@ class _CustomerSidebarState extends State<CustomerSidebar> {
                     Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const customerRoomsOnRent(),
+                      builder: (context) => const CustomerRoomsOnRent(),
                     ),
                   );
                   },
@@ -170,7 +170,7 @@ class _CustomerSidebarState extends State<CustomerSidebar> {
                     Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const customerBookingRequestsNoti(),
+                      builder: (context) => const CustomerBookingRequestsNoti(),
                     ),
                   );
                   },

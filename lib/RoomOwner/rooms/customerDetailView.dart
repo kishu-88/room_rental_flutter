@@ -49,7 +49,7 @@ class _CustomerDetailViewState extends State<CustomerDetailView> {
         });
       }
     } catch (error) {
-      print('Error fetching customer info: $error');
+      // print('Error fetching customer info: $error');
     }
   }
 
