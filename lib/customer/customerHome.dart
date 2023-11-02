@@ -19,7 +19,7 @@ class CustomerHomePage extends StatefulWidget {
 class _CustomerHomePageState extends State<CustomerHomePage> {
   String email = '';
 
-   TextEditingController _searchController = TextEditingController();
+  TextEditingController _searchController = TextEditingController();
   String _searchText = '';
 
   @override
@@ -61,24 +61,24 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
       ),
       home: Scaffold(
         appBar: AppBar(
-        title: const Text('Hamro Room'),
-         backgroundColor: const Color.fromARGB(
-              255, 27, 91, 118), //
-               centerTitle: true,
-            actions: [
-              IconButton(
-                icon: const Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const CustomerProfilePage()),
-                  );
-                },
+          title: const Text('Hamro Room'),
+          backgroundColor: const Color.fromARGB(255, 27, 91, 118), //
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.person,
+                color: Colors.white,
               ),
-            ],
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CustomerProfilePage()),
+                );
+              },
+            ),
+          ],
         ),
         body: Column(
           children: [
@@ -97,7 +97,8 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                   ),
                   // Set the background color of the TextField here
                   filled: true,
-                  fillColor: Colors.grey[200], // Replace this color with the desired background color
+                  fillColor: Colors.grey[
+                      200], // Replace this color with the desired background color
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -107,12 +108,19 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 10),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, top: 0, bottom: 10),
               width: 1000, // Specify the desired width of the rectangle
               height: 160, // Specify the desired height of the rectangle
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: const Color.fromARGB(255, 195, 86, 2),
+                gradient: const RadialGradient(
+                    colors: [
+                      Color.fromARGB(255, 9, 89, 139),
+                      Color.fromARGB(255, 11, 52, 74)
+                    ], // Define your gradient colors
+                    center: Alignment.center,
+                    radius: 1.75),
               ),
               alignment: Alignment.center,
               child: Column(
@@ -157,12 +165,14 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('Rooms').snapshots(),
+                stream:
+                    FirebaseFirestore.instance.collection('Rooms').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final documents = snapshot.data!.docs;
                     final ownerDocuments = documents.where((doc) {
-                      final data = doc.data() as Map<String, dynamic>?; // Explicit type cast
+                      final data = doc.data()
+                          as Map<String, dynamic>?; // Explicit type cast
                       final ownerName = data?["Owner"];
                       final roomStatus = data?["Status"];
                       final id = data?['id'];
@@ -172,14 +182,15 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                           !ownerName.contains(searchString) &&
                           roomStatus?.contains(status) == true;
                     }).toList();
-              
+
                     // Filter the documents based on search text
                     final filteredDocuments = ownerDocuments.where((document) {
-                      final location = document['Location'].toString().toLowerCase();
+                      final location =
+                          document['Location'].toString().toLowerCase();
                       final searchQuery = _searchText.toLowerCase();
                       return location.contains(searchQuery);
                     }).toList();
-              
+
                     return GridView.count(
                       crossAxisCount: 2,
                       crossAxisSpacing: 5,
@@ -216,15 +227,18 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                                     children: [
                                       Text(
                                         document['Location'],
-                                        style: const TextStyle(fontSize: 12, color: Colors.white),
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
                                       ),
                                       const Text(
                                         ' | Rs',
-                                        style: TextStyle(fontSize: 12, color: Colors.white),
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.white),
                                       ),
                                       Text(
                                         document['Rate'],
-                                        style: const TextStyle(fontSize: 12, color: Colors.white),
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
                                       ),
                                     ],
                                   ),
@@ -236,56 +250,54 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                       }).toList(),
                     );
                   }
-              
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                ),
+
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
-            ],
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-            BottomNavigationBarItem(
-          icon: Icon(Icons.person, color: Colors.white),
-          label: 'Profile',
-          // Set the color for the label text
-          )
-          
-            ],
-            currentIndex: currentPage,
-            onTap: (int index) {
-              setState(() {
-                currentPage = index;
-              });
-          
-              if (index == 0) {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => const CustomerHomePage(),
-                //   ),
-                // );
-              } else if (index == 1) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CustomerProfilePage(),
-                  ),
-                );
-              }
-            },
-            backgroundColor: const Color.fromARGB(
-              255, 27, 91, 118), //
-          ),
-          backgroundColor: const Color(0xFF2284AE),
-          drawer: const CustomerSidebar(),
+            ),
+          ],
         ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person, color: Colors.white),
+              label: 'Profile',
+              // Set the color for the label text
+            )
+          ],
+          currentIndex: currentPage,
+          onTap: (int index) {
+            setState(() {
+              currentPage = index;
+            });
+
+            if (index == 0) {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const CustomerHomePage(),
+              //   ),
+              // );
+            } else if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CustomerProfilePage(),
+                ),
+              );
+            }
+          },
+          backgroundColor: const Color.fromARGB(255, 27, 91, 118), //
+        ),
+        backgroundColor: const Color(0xFF2284AE),
+        drawer: const CustomerSidebar(),
+      ),
     );
   }
 }
